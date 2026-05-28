@@ -41,7 +41,6 @@ pkg_check_modules(CURL REQUIRED libcurl)
 # --- spdlog (header-only) : libs/spdlog/spdlog.h ---
 add_library(spdlog INTERFACE)
 target_include_directories(spdlog INTERFACE ${CMAKE_SOURCE_DIR}/libs)
-target_compile_definitions(spdlog INTERFACE SPDLOG_HEADER_ONLY)
 
 # --- uni-algo (header-only) : libs/uni-algo/... ---
 add_library(uni-algo INTERFACE)
@@ -51,6 +50,10 @@ target_compile_definitions(uni-algo INTERFACE UNI_ALGO_STATIC_DATA)
 # --- stduuid (header-only) : libs/stduuid/uuid.h ---
 add_library(stduuid INTERFACE)
 target_include_directories(stduuid INTERFACE ${CMAKE_SOURCE_DIR}/libs)
+
+# --- Catch2 v2 (header-only) : libs/catch2/catch.hpp ---
+add_library(catch2 INTERFACE)
+target_include_directories(catch2 INTERFACE ${CMAKE_SOURCE_DIR}/libs)
 
 
 # ==============================================================================
@@ -67,6 +70,7 @@ function(carscraper_configure_target TARGET)
         spdlog
         uni-algo
         stduuid
+        catch2
     )
     target_compile_options(${TARGET} PRIVATE
         $<$<CXX_COMPILER_ID:GNU,Clang>: -Wall -Wextra -Wpedantic>
@@ -107,10 +111,19 @@ carscraper_configure_target(${PROJECT_NAME})
 # Tests
 # ==============================================================================
 
+# Remplacer le bloc Tests existant par :
+set(TEST_ENTITY_SOURCES
+    tests/test_Entity.cpp
+    src/core/models/Entity.cpp
+    src/core/Logger/Logger.cpp
+)
+add_executable(TestEntity ${TEST_ENTITY_SOURCES})
+carscraper_configure_target(TestEntity)
+
+# Garder le test HttpClient existant
 set(TEST_SOURCES
     tests/test_HttpClient.cpp
     src/io/HttpClient/HttpClient.cpp
 )
-
 add_executable(CarScraperTests ${TEST_SOURCES})
 carscraper_configure_target(CarScraperTests)
