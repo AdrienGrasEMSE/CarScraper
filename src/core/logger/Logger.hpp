@@ -14,36 +14,31 @@
  */
 namespace CarScraper {
 
-    // ============================================================
-    // Logger — Wrapper singleton autour de spdlog
-    // Fournit un point d'accès unique aux logs pour tout le projet.
-    //
-    // Niveaux disponibles : trace, debug, info, warn, error, critical
-    // Sinks actifs        : stdout (coloré) + fichier rotatif (logs/)
-    // ============================================================
-
-
     /**
      * Class Logger:
-     * - Singleton : instance statique accessible via Logger::get()
-     * - Initialisation : Logger::init(logFile) à appeler au démarrage
-     * - Méthodes de log : Logger::info("Message {}", arg)
-     * - Usage avancé : accès direct à l'instance spdlog pour config fine
      * 
-     * Niveaux de log :
-     * - trace    : informations très détaillées, utiles pour le débogage approfondi    | Un setter qui accepte une valeur
-     * - debug    : informations de débogage générales, utiles pour le développement    | Valeur parsée d'un EXCEL
-     * - info     : informations générales sur le déroulement de l'application          | Exécution d'une méthode importante
-     * - warn     : avertissements sur des situations potentiellement problématiques    | Setter qui refuse une valeur
-     * - error    : erreurs qui ne provoquent pas l'arrêt de l'application              | Requête HTTP échouée
-     * - critical : erreurs critiques qui provoquent l'arrêt de l'application           | Impossible d'initialiser une dépendance critique
+     * Log levels :
+     * - trace    : detailed information, useful for debugging              | A setter that accepts a value
+     * - debug    : general debugging information, useful for development   | Parsed value from an Excel file
+     * - info     : general information about the application's operation   | Execution of an important method
+     * - warn     : warnings about potentially problematic situations       | A setter that refuses a value
+     * - error    : errors that do not cause the application to stop        | Failed HTTP request
+     * - critical : critical errors that cause the application to stop      | Unable to initialize a critical dependency
      */
     class Logger {
 
-        // ============================= PRIVATE =============================
+        // =========================================================================
+        // Private data and methods
+        // =========================================================================
         private:
+
+            // Singleton instance of the logger
             static std::shared_ptr<spdlog::logger> _instance;
 
+
+            // -------------------------------------------------------------------------
+            // Constructor / Destructor : private to enforce singleton pattern
+            // -------------------------------------------------------------------------
             Logger()  = delete;
             ~Logger() = delete;
 
@@ -51,78 +46,131 @@ namespace CarScraper {
 
             
 
-        // ============================= PUBLIC ==============================
+        // =========================================================================
+        // Public data and methods
+        // =========================================================================
         public:
 
-            // --- Initialisation ---
+            /**
+             * Initializes the logger instance with a console sink and a rotating file sink.
+             *
+             * @param logFile The path to the log file (for the rotating file sink).
+             */
             static void init(const std::string& logFile = "logs/car-scraper.log");
 
 
-            // --- Accès à l'instance brute (usage avancé) ---
+
+            /**
+             * Gets the logger instance.
+             *
+             * @return The logger instance.
+             */
             static std::shared_ptr<spdlog::logger> get();
 
 
+
             /**
-             * Raccourcis pour les appels de log, redirigeant vers l'instance spdlog.
+             * Shortcuts for logging calls, redirecting to the spdlog instance.
              * 
              * Type : TRACE
              */
             template<typename... Args>
+            /**
+             * Logs a message with the TRACE level.
+             *
+             * @param fmt The format string.
+             * @param args The arguments for the format string.
+             */
             static void trace(fmt::format_string<Args...> fmt, Args&&... args) {
                 _instance->trace(fmt, std::forward<Args>(args)...);
             }
 
 
+
             /**
-             * Raccourcis pour les appels de log, redirigeant vers l'instance spdlog.
+             * Shortcuts for logging calls, redirecting to the spdlog instance.
              * 
              * Type : DEBUG
              */
             template<typename... Args>
+            /**
+             * Logs a message with the DEBUG level.
+             *
+             * @param fmt The format string.
+             * @param args The arguments for the format string.
+             */
             static void debug(fmt::format_string<Args...> fmt, Args&&... args) {
                 _instance->debug(fmt, std::forward<Args>(args)...);
             }
 
 
+
             /**
-             * Raccourcis pour les appels de log, redirigeant vers l'instance spdlog.
+             * Shortcuts for logging calls, redirecting to the spdlog instance.
              * 
              * Type : INFO
              */
             template<typename... Args>
+            /**
+             * Logs a message with the INFO level.
+             *
+             * @param fmt The format string.
+             * @param args The arguments for the format string.
+             */
             static void info(fmt::format_string<Args...> fmt, Args&&... args) {
                 _instance->info(fmt, std::forward<Args>(args)...);
             }
 
 
+
             /**
-             * Raccourcis pour les appels de log, redirigeant vers l'instance spdlog.
+             * Shortcuts for logging calls, redirecting to the spdlog instance.
              * 
              * Type : WARNING
              */
             template<typename... Args>
+            /**
+             * Logs a message with the WARNING level.
+             *
+             * @param fmt The format string.
+             * @param args The arguments for the format string.
+             */
             static void warn(fmt::format_string<Args...> fmt, Args&&... args) {
                 _instance->warn(fmt, std::forward<Args>(args)...);
             }
 
 
+
             /**
-             * Raccourcis pour les appels de log, redirigeant vers l'instance spdlog.
+             * Shortcuts for logging calls, redirecting to the spdlog instance.
              * 
              * Type : ERROR
              */
             template<typename... Args>
+            /**
+             * Logs a message with the ERROR level.
+             *
+             * @param fmt The format string.
+             * @param args The arguments for the format string.
+             */
             static void error(fmt::format_string<Args...> fmt, Args&&... args) {
                 _instance->error(fmt, std::forward<Args>(args)...);
             }
 
 
+
             /**
-             * Raccourcis pour les appels de log, redirigeant vers l'instance spdlog.
+             * Shortcuts for logging calls, redirecting to the spdlog instance.
              * 
              * Type : CRITICAL
              */
             template<typename... Args>
+            /**
+             * Logs a message with the CRITICAL level.
+             *
+             * @param fmt The format string.
+             * @param args The arguments for the format string.
+             */
             static void critical(fmt::format_string<Args...> fmt, Args&&... args) {
                 _instance->critical(fmt, std::forward<Args>(args)...);
             }

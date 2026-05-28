@@ -13,13 +13,19 @@ namespace CarScraper {
     // Constructor / Destructor
     // =========================================================================
 
-    // Constructor
+    /**
+     * Constructor for the Entity class.
+     */
     Entity::Entity() : Entity("UNDEFINED") {
         // Delegating constructor to set the undefined prefix
     }
 
 
-    // Constructor with prefix
+    /**
+     * Constructor for the Entity class.
+     *
+     * @param prefix The prefix for the entity.
+     */
     Entity::Entity(const std::string& prefix) {
 
         // UUID generation (random v4)
@@ -36,7 +42,9 @@ namespace CarScraper {
     }
 
 
-    // Destructor
+    /**
+     * Destructor for the Entity class.
+     */
     Entity::~Entity(){
         Logger::debug("[{}] Instance destroyed", getFullId());
     }

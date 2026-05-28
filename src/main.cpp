@@ -15,7 +15,7 @@
 int main() {
 
     // Debug
-    CarScraper::Logger::init();
+    CarScraper::Logger::init("logs/log.txt");
     CarScraper::Logger::info("MAIN : Application start");
 
 
