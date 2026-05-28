@@ -1,0 +1,43 @@
+car-scraper/
+│
+├── CMakeLists.txt                  #
+├── README.md
+├── .gitignore
+│
+├── build/                          # Build principal
+│
+├── src/                            # Code source
+│   ├── main.cpp                    # Point d'entrée
+│   │
+│   ├── core/                       # Logique métier pure (sans UI, sans I/O)
+│   │   ├── models/
+│   │   |   ├── Entity.hpp/cpp      # Entité de base
+│   │   |   └── Car.hpp/cpp         # Classe des données voiture
+│   │   │
+│   │   └── Logger/
+│   │       └── Logger.hpp/cpp      # Init centralisée + accesseur global
+│   │
+│   ├── io/                         # Tout ce qui touche aux fichiers et réseau
+│   │   ├── ExcelReader/
+│   │   |   └── ExcelReader.hpp/cpp # Extraction de données de Excel
+│   │   └── HttpClient/
+│   │       └── HttpClient.hpp/cpp  # Client HTTP pour l'extraction d'HTML
+│   │
+│   │
+│   ├── cli/                        # Interface ligne de commande (phase 1)
+│   │
+│   └── gui/                        # Interface graphique (phase 2, dossier vide pour l'instant)
+│
+├── libs/                           # Dépendances tierces (si non gérées par CMake)
+│   ├── stduuid/                    # Gestion des UUID
+│   │       └── uuid.h              #
+│   ├── spdlog/                     # Gestion des logs
+│   └── uni_algo/                   # Gestion des texte UTF8 avec opérations
+│
+├── tests/                          # Tests unitaires
+│
+├── data/                           # Fichiers d'exemple / jeu de test
+│
+└── logs/                           # Sortie des logs (gitignore ce dossier)
+
+

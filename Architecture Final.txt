@@ -1,0 +1,66 @@
+car-scraper/
+│
+├── CMakeLists.txt                  # Build principal
+├── README.md
+├── .gitignore
+│
+├── build/                          # 
+│
+├── src/                            # Code source
+│   ├── main.cpp                    # Point d'entrée
+│   │
+│   ├── core/                       # Logique métier pure (sans UI, sans I/O)
+│   │   ├── models/
+│   │   │   ├── Car.hpp             # Classe des données voiture
+│   │   │   └── ScrapeResult.hpp    # Résultat d'un scraping (succès/erreur/données)
+│   │   │
+│   │   ├── Logger/
+│   │   │   └── Logger.hpp/cpp      # Init centralisée + accesseur global
+│   │   │
+│   │   ├── scraper/
+│   │   │   ├── IScraper.hpp        # Interface abstraite (facilite les tests et extensions)
+│   │   │   ├── ArgusScraper.hpp
+│   │   │   └── ArgusScraper.cpp    # Scraping des fiches L'Argus
+│   │   │
+│   │   └── search/                 # Pour la phase 2 (recherche par modèle)
+│   │       ├── ISearchProvider.hpp
+│   │       └── ArgusSearchProvider.cpp
+│   │
+│   ├── io/                         # Tout ce qui touche aux fichiers et réseau
+│   │   ├── excel/
+│   │   │   ├── ExcelReader.hpp     # Lecture du fichier Excel en entrée
+│   │   │   ├── ExcelReader.cpp
+│   │   │   ├── ExcelWriter.hpp     # Écriture du fichier Excel en sortie
+│   │   │   └── ExcelWriter.cpp
+│   │   │
+│   │   ├── http/
+│   │   │   ├── HttpClient.hpp      # Wrapper autour de libcurl
+│   │   │   └── HttpClient.cpp
+│   │   │
+│   │   └── logger/
+│   │       ├── Logger.hpp          # Interface de log (niveaux : DEBUG, INFO, ERROR)
+│   │       ├── Logger.cpp
+│   │       └── FileLogger.cpp      # Implémentation → écriture dans .txt/.log
+│   │
+│   ├── cli/                        # Interface ligne de commande (phase 1)
+│   │   ├── CliApp.hpp
+│   │   └── CliApp.cpp              # Orchestre lecture excel → scraping → écriture
+│   │
+│   └── gui/                        # Interface graphique (phase 2, dossier vide pour l'instant)
+│       └── .gitkeep
+│
+├── libs/                           # Dépendances tierces (si non gérées par CMake)
+│   └── .gitkeep
+│
+├── tests/                          # Tests unitaires
+│   ├── CMakeLists.txt
+│   ├── test_scraper.cpp
+│   ├── test_excel_reader.cpp
+│   └── test_logger.cpp
+│
+├── data/                           # Fichiers d'exemple / jeu de test
+│   ├── input_example.xlsx
+│   └── output_example.xlsx
+│
+└── logs/                           # Sortie des logs (gitignore ce dossier)
+    └── .gitkeep
