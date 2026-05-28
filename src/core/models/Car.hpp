@@ -3,6 +3,7 @@
 
 
 // Imports
+#include "Entity.hpp"
 #include <string>
 #include <ostream>
 #include <iomanip>
@@ -17,11 +18,9 @@
 namespace CarScraper {
 
     /**
-     * Class Car:
+     * Class Car (exetension of Entity):
      *
      * Represents a car with the following characteristics:
-     * - UUID: unique identifier for the car (generated automatically)
-     *      -> uuid             | string    | ex: "123e45..."       | no unit
      * - General:
      *      -> brand            | string    | ex: "Renault"         | no unit
      *      -> model            | string    | ex: "Clio"            | no unit
@@ -53,15 +52,12 @@ namespace CarScraper {
      *      -> yearEnd          | string    | ex: "2019"            | no unit
      *
      */
-    class Car {
+    class Car : public Entity {
 
         // =========================================================================
         // Private data and methods
         // =========================================================================
         private:
-
-            // UUID
-            std::string     _uuid;
 
             // General
             std::string     _brand;
@@ -111,7 +107,6 @@ namespace CarScraper {
             // Constructor / Destructor
             // -------------------------------------------------------------------------
             Car();
-            ~Car();
 
 
 
@@ -120,9 +115,6 @@ namespace CarScraper {
             // -------------------------------------------------------------------------
             // Getters
             // -------------------------------------------------------------------------
-
-            // UUID
-            const std::string&  getUuid()               const { return _uuid; }
 
             // General
             const std::string&  getBrand()              const { return _brand; }
@@ -212,7 +204,7 @@ namespace CarScraper {
 
             // Returns true if the car data has been properly filled (no default values or error values)
             bool isComplete() const;
-            bool isError() const;
+            bool isValid() const;
 
             // Debug display
             std::string toString() const;

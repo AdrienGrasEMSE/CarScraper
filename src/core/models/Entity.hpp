@@ -19,6 +19,11 @@ namespace CarScraper {
      * - UUID: unique identifier for the entity (generated automatically)
      *      -> prefix   | string    | ex: "CAR"
      *      -> uuid     | string    | ex: "123e45..."
+     * 
+     * Methods:
+     * - getUuid()       : returns the UUID of the entity       | ex: "123e45..."
+     * - getPrefix()     : returns the prefix of the entity     | ex: "CAR"
+     * - getFullId()     : returns the full ID of the entity    | ex: "CAR-123e45..."
      *
      */
     class Entity {

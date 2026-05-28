@@ -21,13 +21,13 @@ int main() {
 
 
     // New Enity
-    CarScraper::Entity entity1;
-    CarScraper::Entity entity2 = CarScraper::Entity("TEST");
+    //CarScraper::Entity entity1;
+    //CarScraper::Entity entity2 = CarScraper::Entity("TEST");
 
 
     // New Car
-    //CarScraper::Car car;
-    //std::cout << car << std::endl;
+    CarScraper::Car car;
+    std::cout << car << std::endl;
 
 
     // Get the raw HTML of a car listing page (for testing purposes)

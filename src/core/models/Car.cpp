@@ -31,13 +31,7 @@ namespace CarScraper {
     /**
      * Default constructor: initializes all the car data with default values
      */
-    Car::Car() {
-
-        // UUID generation (random v4)
-        std::random_device  rd;
-        std::mt19937        engine{rd()};
-        uuids::uuid_random_generator gen{engine};
-        _uuid               = uuids::to_string(gen());
+    Car::Car() : Entity("CAR") {
 
         // General
         _brand              = DEFAULT_STR;
@@ -73,18 +67,6 @@ namespace CarScraper {
         // Years
         _yearStart          = DEFAULT_STR;
         _yearEnd            = DEFAULT_STR;
-
-        // Debug
-        Logger::info("CAR — NEW: \"{}\"", _uuid);
-
-    }
-
-
-    // Destructor
-    Car::~Car() {
-
-        // Debug
-        Logger::info("CAR — DELETE: \"{}\"", _uuid);
 
     }
 
@@ -453,7 +435,7 @@ namespace CarScraper {
     /**
      * Returns true if the car data has been properly filled (no error sentinel values)
      */
-    bool Car::isError() const {
+    bool Car::isValid() const {
         return _brand           != ERROR_STR
             && _model           != ERROR_STR
             && _generation      != ERROR_STR
@@ -502,7 +484,7 @@ namespace CarScraper {
 
         os << std::fixed << std::setprecision(2);
 
-        os << "Car :\n";
+        os << car.getFullId() << "\"\n";
 
         // General
         os << "- General\n";

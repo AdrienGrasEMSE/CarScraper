@@ -15,7 +15,7 @@ namespace CarScraper {
 
     // Constructor
     Entity::Entity() : Entity("UNDEFINED") {
-        // Delegating constructor to set the default prefix
+        // Delegating constructor to set the undefined prefix
     }
 
 
