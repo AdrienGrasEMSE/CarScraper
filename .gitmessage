@@ -1,0 +1,13 @@
+# Type:
+# feat      -> nouvelle fonctionnalité
+# fix       -> correction de bug
+# refactor  -> amélioration interne
+# docs      -> documentation
+# test      -> tests
+# chore     -> maintenance
+# 
+# [type]<scope>: ...
+[]<>: ...
+# - détail 1
+# - détail 2
+# - détail 3
