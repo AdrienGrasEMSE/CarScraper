@@ -1,0 +1,36 @@
+.
+├── Architecture Final.txt
+├── Architecture.txt
+├── CMakeLists.txt
+├── data
+├── generate_tree.sh
+├── libs
+│   └── stduuid
+│       └── uuid.h
+├── log
+├── projectTree.txt
+├── README.md
+├── src
+│   ├── cli
+│   ├── core
+│   │   ├── logger
+│   │   │   ├── Logger.cpp
+│   │   │   └── Logger.hpp
+│   │   └── models
+│   │       ├── Car.cpp
+│   │       ├── Car.hpp
+│   │       ├── Entity.cpp
+│   │       └── Entity.hpp
+│   ├── gui
+│   ├── io
+│   │   ├── ExcelReader
+│   │   │   ├── ExcelReader.cpp
+│   │   │   └── ExcelReader.hpp
+│   │   └── HttpClient
+│   │       ├── HttpClient.cpp
+│   │       └── HttpClient.hpp
+│   └── main.cpp
+└── tests
+    └── test_HttpClient.cpp
+
+15 directories, 19 files
