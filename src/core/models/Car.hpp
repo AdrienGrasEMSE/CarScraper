@@ -1,3 +1,13 @@
+/**
+ * @file Car.hpp
+ * 
+ * @brief This file declares the Car class, which represents a car entity.
+ *
+ * @author Adrien GRAS
+ * @date 2026-05-26
+ */
+
+
 // For only one include
 #pragma once
 
@@ -10,6 +20,8 @@
 #include <uni_algo/case.h>
 #include <uni_algo/norm.h>
 #include <stduuid/uuid.h>
+#include <chrono>
+#include <optional>
 
 
 /**
@@ -18,7 +30,7 @@
 namespace CarScraper {
 
     /**
-     * @class Car (inheriting from @class Entity):
+     * @class Car (inheriting from @class Entity)
      *
      * @attributes:
      * - General:
@@ -47,9 +59,10 @@ namespace CarScraper {
      *  -> fuelConsumption  : (double) Car fuel consumption             | ex: 4.5               | in L/100km
      *  -> co2Emissions     : (int) Car co2 emissions                   | ex: 120               | in g/km
      *  -> co2Class         : (string) Car co2 class                    | ex: "B"
-     * - Years:
-     *  -> yearStart        : (string) Car commercialisation start year | ex: "2012"
-     *  -> yearEnd          : (string) Car commercialisation end year   | ex: "2019"
+     * - Commercialisation :
+     *  -> commercialisationStart : (string) Car commercialisation start year | ex: "2012"
+     *  -> commercialisationEnd   : (string) Car commercialisation end year   | ex: "2019"
+     *  -> stillInSale            : (bool) Car still in sale                  | ex: false
      *
      * @getters:
      * - General:
@@ -78,9 +91,10 @@ namespace CarScraper {
      *  -> getFuelConsumption() : (double) returns the fuel consumption of the car
      *  -> getCo2Emissions()    : (int) returns the CO2 emissions of the car
      *  -> getCo2Class()        : (string) returns the CO2 class of the car
-     * - Years:
-     *  -> getYearStart()       : (string) returns the start year of the car
-     *  -> getYearEnd()         : (string) returns the end year of the car
+     * - Commercialisation :
+     *  -> getCommercialisationStart()  : (string) returns the start year of the car
+     *  -> getCommercialisationEnd()    : (string) returns the end year of the car
+     *  -> getStillInSale()             : (bool) returns whether the car is still in sale
      *
      * @setters:
      * - General:
@@ -109,16 +123,14 @@ namespace CarScraper {
      *  -> setFuelConsumption() : sets the fuel consumption of the car  | min value: 0.0 L/100km, max value: 50.0 L/100km
      *  -> setCo2Emissions()    : sets the CO2 emissions of the car     | min value: 0 g/km, max value: 200 g/km
      *  -> setCo2Class()        : sets the CO2 class of the car         | max length: 10 characters
-     * - Years:
-     *  -> setYearStart()       : sets the start year of the car
-     *  -> setYearEnd()         : sets the end year of the car
+     * - Commercialisation:
+     *  -> setCommercialisationStart()  : sets the start year of the car
+     *  -> setCommercialisationEnd()    : sets the end year of the car
+     *  -> setStillInSale()             : sets whether the car is still in sale
      *
      * @utilities:
      * - isComplete()           : returns true if the car data has been properly filled (no default values or error values)
      * - isValid()              : returns true if the car data is valid (no error values)
-     * - stringValidation()     : validates and normalizes a string value (trimming, length check, UTF-8 normalization)
-     * - intValidation()        : validates an int value (range check)
-     * - doubleValidation()     : validates a double value (range check)
      * - toString()             : returns a string representation of the car (for debugging purposes)
      *
      * @operators:
@@ -162,10 +174,10 @@ namespace CarScraper {
             int             _co2Emissions;
             std::string     _co2Class;
 
-            // Years
-            std::string     _yearStart;
-            std::string     _yearEnd;
-
+            // Commercialisation
+            std::optional<std::chrono::year_month_day>  _commercialisationStart;
+            std::optional<std::chrono::year_month_day>  _commercialisationEnd;
+            bool            _stillInSale;
 
 
 
@@ -188,40 +200,138 @@ namespace CarScraper {
             // Getters
             // -------------------------------------------------------------------------
 
-            // General
+            /** @brief Gets the brand of the car
+             *  @return The brand of the car
+             */
             const std::string&  getBrand()              const { return _brand; }
+
+
+            /** @brief Gets the model of the car
+             *  @return The model of the car
+             */
             const std::string&  getModel()              const { return _model; }
+
+
+            /** @brief Gets the generation of the car
+             *  @return The generation of the car
+             */
             const std::string&  getGeneration()         const { return _generation; }
+
+
+            /** @brief Gets the engine of the car
+             *  @return The engine of the car
+             */
             const std::string&  getEngine()             const { return _engine; }
+
+
+            /** @brief Gets the trim of the car
+             *  @return The trim of the car
+             */
             const std::string&  getTrim()               const { return _trim; }
+
+            
+            /** @brief Gets the price of the car
+             *  @return The price of the car
+             */
             int                 getPrice()              const { return _price; }
 
-            // Dimensions
+            
+            /** @brief Gets the height of the car
+             *  @return The height of the car
+             */
             double              getHeight()             const { return _height; }
+
+
+            /** @brief Gets the length of the car
+             *  @return The length of the car
+             */
             double              getLength()             const { return _length; }
+
+
+            /** @brief Gets the width of the car
+             *  @return The width of the car
+             */
             double              getWidth()              const { return _width; }
+
+
+            /** @brief Gets the trunk volume of the car
+             *  @return The trunk volume of the car
+             */
             int                 getTrunkVolume()        const { return _trunkVolume; }
+
+            
+            /** @brief Gets the weight of the car
+             *  @return The weight of the car
+             */
             int                 getWeight()             const { return _weight; }
+
+
+            /** @brief Gets the seat count of the car
+             *  @return The seat count of the car
+             */
             int                 getSeatCount()          const { return _seatCount; }
 
-            // Transmission
+
+            /** @brief Gets the type of the gearbox
+             *  @return The type of the gearbox
+             */
             const std::string&  getGearboxType()        const { return _gearboxType; }
+
+
+            /** @brief Gets the number of gears
+             *  @return The number of gears
+             */
             int                 getGearCount()          const { return _gearCount; }
 
-            // Power
+
+            /** @brief Gets the type of fuel
+             *  @return The type of fuel
+             */
             const std::string&  getFuelType()           const { return _fuelType; }
             int                 getHorsePower()         const { return _horsePower; }
             int                 getTaxHorsePower()      const { return _taxHorsePower; }
 
-            // Consumption
+            
+            /** @brief Gets the tank capacity of the car
+             *  @return The tank capacity of the car
+             */
             int                 getTankCapacity()       const { return _tankCapacity; }
+
+
+            /** @brief Gets the fuel consumption of the car
+             *  @return The fuel consumption of the car
+             */
             double              getFuelConsumption()    const { return _fuelConsumption; }
+
+
+            /** @brief Gets the CO2 emissions of the car
+             *  @return The CO2 emissions of the car
+             */
             int                 getCo2Emissions()       const { return _co2Emissions; }
+
+
+            /** @brief Gets the CO2 class of the car
+             *  @return The CO2 class of the car
+             */
             const std::string&  getCo2Class()           const { return _co2Class; }
 
-            // Years
-            const std::string&  getYearStart()          const { return _yearStart; }
-            const std::string&  getYearEnd()            const { return _yearEnd; }
+
+            /** @brief Gets the commercialisation start year of the car
+             *  @return The commercialisation start year of the car
+             */
+            const std::optional<std::chrono::year_month_day>  getCommercialisationStart()  const { return _commercialisationStart; }
+
+
+            /** @brief Gets the commercialisation end year of the car
+             *  @return The commercialisation end year of the car
+             */
+            const std::optional<std::chrono::year_month_day>  getCommercialisationEnd()    const { return _commercialisationEnd; }
+
+
+            /** @brief Gets whether the car is still in sale
+             *  @return Whether the car is still in sale
+             */
+            bool                isStillInSale()        const { return _stillInSale; }
 
 
 
@@ -232,39 +342,30 @@ namespace CarScraper {
             // -------------------------------------------------------------------------
 
             // General
-            void setBrand           (const  std::string& brand);
-            void setModel           (const  std::string& model);
-            void setGeneration      (const  std::string& generation);
-            void setEngine          (const  std::string& engine);
-            void setTrim            (const  std::string& trim);
-            void setPrice           (int    price);
-
-            // Dimensions
-            void setHeight          (double height);
-            void setLength          (double length);
-            void setWidth           (double width);
-            void setTrunkVolume     (int    trunkVolume);
-            void setWeight          (int    weight);
-            void setSeatCount       (int    seatCount);
-
-            // Transmission
-            void setGearboxType     (const  std::string& gearboxType);
-            void setGearCount       (int    gearCount);
-
-            // Power
-            void setFuelType        (const  std::string& fuelType);
-            void setHorsePower      (int    horsePower);
-            void setTaxHorsePower   (int    taxHorsePower);
-
-            // Consumption
-            void setTankCapacity    (int    tankCapacity);
-            void setFuelConsumption (double fuelConsumption);
-            void setCo2Emissions    (int    co2Emissions);
-            void setCo2Class        (const  std::string& co2Class);
-
-            // Years
-            void setYearStart       (const  std::string& yearStart);
-            void setYearEnd         (const  std::string& yearEnd);
+            void setBrand           (const  std::string&    brand);
+            void setModel           (const  std::string&    model);
+            void setGeneration      (const  std::string&    generation);
+            void setEngine          (const  std::string&    engine);
+            void setTrim            (const  std::string&    trim);
+            void setPrice           (int                    price);
+            void setHeight          (double                 height);
+            void setLength          (double                 length);
+            void setWidth           (double                 width);
+            void setTrunkVolume     (int                    trunkVolume);
+            void setWeight          (int                    weight);
+            void setSeatCount       (int                    seatCount);
+            void setGearboxType     (const  std::string&    gearboxType);
+            void setGearCount       (int                    gearCount);
+            void setFuelType        (const  std::string&    fuelType);
+            void setHorsePower      (int                    horsePower);
+            void setTaxHorsePower   (int                    taxHorsePower);
+            void setTankCapacity    (int                    tankCapacity);
+            void setFuelConsumption (double                 fuelConsumption);
+            void setCo2Emissions    (int                    co2Emissions);
+            void setCo2Class        (const  std::string&    co2Class);
+            void setCommercialisationStart  (const  std::optional<std::chrono::year_month_day>& commercialisationStart);
+            void setCommercialisationEnd    (const  std::optional<std::chrono::year_month_day>& commercialisationEnd);
+            void setStillInSale     (bool                           stillInSale);
 
 
 
@@ -277,26 +378,6 @@ namespace CarScraper {
             // Returns true if the car data has been properly filled (no default values or error values)
             bool isComplete() const;
             bool isValid() const;
-
-
-            // String validation and normalization
-            static std::string stringValidation(    const std::string&      strVal,
-                                                    const std::string&      attributeName,
-                                                    const long unsigned int maxLength = 255);
-
-            
-            // Int validation
-            static int intValidation(   const int           intVal,
-                                        const std::string&  attributeName,
-                                        const int           minValue = 0,
-                                        const int           maxValue = 9999);
-
-
-            // Double validation
-            static double doubleValidation( const double        doubleVal,
-                                            const std::string&  attributeName,
-                                            const double        minValue = 0.0,
-                                            const double        maxValue = 9999.0);
 
 
             // Debug display

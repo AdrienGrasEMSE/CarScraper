@@ -1,15 +1,11 @@
 /**
- * @file test_Validation.cpp
+ * @file baseEntity.cpp
  *
- * @brief Unit tests for CarScraper::Validation functions.
+ * @brief Unit tests for CarScraper::Entity class.
  *
  * @author Adrien GRAS
  * @date 2026-05-29
  */
-
-
-// Define CATCH_CONFIG_RUNNER to provide our own main function
-#define CATCH_CONFIG_RUNNER
 
 
 // Imports
@@ -161,20 +157,4 @@ TEST_CASE("Entity Inheritance", "[entity][inheritance]") {
         MockEntity m;
         REQUIRE(m.getFullId() == m.getPrefix() + "-" + m.getUuid());
     }
-}
-
-
-
-
-// =============================================================================
-// Main
-// =============================================================================
-int main(int argc, char* argv[]) {
-
-    // Logger Init
-    CarScraper::Logger::init();
-
-    // Catch2 runner
-    return Catch::Session().run(argc, argv);
-
 }

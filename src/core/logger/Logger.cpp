@@ -1,3 +1,13 @@
+/**
+ * @file Logger.cpp
+ * 
+ * @brief This file implements the Logger class, which provides a simple logging interface.
+ *
+ * @author Adrien GRAS
+ * @date 2026-05-26
+ */
+
+
 // Imports
 #include "Logger.hpp"
 #include <spdlog/sinks/stdout_color_sinks.h>
@@ -18,12 +28,18 @@ namespace CarScraper {
     // =========================================================================
 
     /**
-     * Initializes the logger instance with a console sink and a rotating file sink.
+     * @brief Initializes the logger instance with a console sink and a rotating file sink.
      *
      * @param logFile The path to the log file (for the rotating file sink).
      */
     void Logger::init(const std::string& logFile)
     {
+
+        // Security
+        if (_instance != nullptr) {
+            return;
+        }
+
 
         // ----------------------------------------------------------------------
         // Sink 1 : console output
@@ -80,13 +96,31 @@ namespace CarScraper {
 
 
     /**
-     * Get the logger instance.
+     * @brief Gets the logger instance.
      *
      * @return The logger instance.
      */
     std::shared_ptr<spdlog::logger> Logger::get()
     {
         return _instance;
+    }
+
+
+    /**
+     * @brief Safely gets the logger instance.
+     *
+     * @return The logger instance or nullptr if not initialized.
+     */
+    spdlog::logger* Logger::_safeGet() {
+
+        // If the logger instance is not initialized
+        if (!_instance) {
+
+            // Automatic initialization with default log file path
+            init();
+
+        }
+        return _instance.get();
     }
 
 } // namespace CarScraper

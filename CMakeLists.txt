@@ -20,7 +20,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 include(FetchContent)
 
 
-# --- OpenXLSX (compilée — FetchContent obligatoire) ---
+# --- OpenXLSX (compiled — FetchContent mandatory) ---
 FetchContent_Declare(
     OpenXLSX
     GIT_REPOSITORY  https://github.com/troldal/OpenXLSX.git
@@ -29,7 +29,7 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(OpenXLSX)
 
 
-# --- libcurl (bibliothèque système) ---
+# --- libcurl (system library) ---
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(CURL REQUIRED libcurl)
 
@@ -89,15 +89,15 @@ set(SOURCES
     # Core — Utils
     src/core/utils/Validation.cpp
 
+    # Core — Logger
+    src/core/Logger/Logger.cpp
+
     # Core — Models
     src/core/models/Car.cpp
     src/core/models/Entity.cpp
 
-    # Core — Logger
-    src/core/Logger/Logger.cpp
-
     # IO — HttpClient
-    src/io/HttpClient/HttpClient.cpp
+    #src/io/HttpClient/HttpClient.cpp
 )
 
 
@@ -114,27 +114,47 @@ carscraper_configure_target(${PROJECT_NAME})
 # Tests
 # ==============================================================================
 
+# test Logger
+set(TEST_LOGGER_SOURCES
+    tests/mono/testLogger.cpp
+    src/core/Logger/Logger.cpp
+)
+add_executable(TestLogger ${TEST_LOGGER_SOURCES})
+carscraper_configure_target(TestLogger)
+
 # test Validation
 set(TEST_VALIDATION_SOURCES
-    tests/test_Validation.cpp
+    tests/mono/testValidation.cpp
     src/core/utils/Validation.cpp
+    src/core/Logger/Logger.cpp
 )
 add_executable(TestValidation ${TEST_VALIDATION_SOURCES})
 carscraper_configure_target(TestValidation)
 
 # test Entity
 set(TEST_ENTITY_SOURCES
-    tests/test_Entity.cpp
+    tests/mono/testEntity.cpp
     src/core/models/Entity.cpp
     src/core/Logger/Logger.cpp
 )
 add_executable(TestEntity ${TEST_ENTITY_SOURCES})
 carscraper_configure_target(TestEntity)
 
-# test HttpClient
-set(TEST_SOURCES
-    tests/test_HttpClient.cpp
-    src/io/HttpClient/HttpClient.cpp
+# test Car
+set(TEST_CAR_SOURCES
+    tests/mono/testCar.cpp
+    src/core/models/Entity.cpp
+    src/core/utils/Validation.cpp
+    src/core/models/Car.cpp
+    src/core/Logger/Logger.cpp
 )
-add_executable(CarScraperTests ${TEST_SOURCES})
-carscraper_configure_target(CarScraperTests)
+add_executable(TestCar ${TEST_CAR_SOURCES})
+carscraper_configure_target(TestCar)
+
+# test HttpClient
+#set(TEST_SOURCES
+#    tests/test_HttpClient.cpp
+#    src/io/HttpClient/HttpClient.cpp
+#)
+#add_executable(CarScraperTests ${TEST_SOURCES})
+#carscraper_configure_target(CarScraperTests)

@@ -1,15 +1,11 @@
 /**
- * @file test_Validation.cpp
+ * @file baseValidation.cpp
  *
  * @brief Unit tests for CarScraper::Validation functions.
  *
  * @author Adrien GRAS
  * @date 2026-05-29
  */
-
-
-// Define CATCH_CONFIG_RUNNER to provide our own main function
-#define CATCH_CONFIG_RUNNER
 
 
 // Imports
@@ -283,18 +279,4 @@ TEST_CASE("formatDate", "[validation][date][format]") {
         REQUIRE(dmy.value() == ymd.value());
         REQUIRE(dmy.value() == mdy.value());
     }
-}
-
-
-// =============================================================================
-// Main
-// =============================================================================
-int main(int argc, char* argv[]) {
-
-    // Logger Init
-    CarScraper::Logger::init();
-
-    // Catch2 runner
-    return Catch::Session().run(argc, argv);
-    
 }

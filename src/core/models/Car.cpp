@@ -1,5 +1,22 @@
+/**
+ * @file Car.cpp
+ * 
+ * @brief This file implements the Car class, which represents a car entity.
+ *
+ * @author Adrien GRAS
+ * @date 2026-05-26
+ *
+ * @todo Use the date type for commercialisation start and end (instead of string) once the date parsing functions are implemented and tested
+ * @todo Setup an Energy enum for fuel type and a corresponding setter that accepts both string and enum values (with string validation)
+ * @todo Setup a CO2Class enum for CO2 class and a corresponding setter that accepts both string and enum values (with string validation)
+ * @todo Setup a GearboxType enum for gearbox type and a corresponding setter that accepts both string and enum values (with string validation)
+ */
+
+
 // Imports
 #include "Car.hpp"
+#include "core/utils/Constant.hpp"
+#include "core/utils/Validation.hpp"
 #include "core/logger/Logger.hpp"
 #include <sstream>
 #include <uni_algo/case.h>
@@ -12,17 +29,6 @@
  * Namespace CarScraper
  */
 namespace CarScraper {
-
-    // =========================================================================
-    // Default values
-    // =========================================================================
-    static constexpr int         DEFAULT_INT    = 9999;
-    static constexpr double      DEFAULT_DOUBLE = 9999.0;
-    static const     std::string DEFAULT_STR    = "#";
-    static constexpr int         ERROR_INT      = -1;
-    static constexpr double      ERROR_DOUBLE   = -1.0;
-    static const     std::string ERROR_STR      = "error";
-
 
     // =========================================================================
     // Constructor / Destructor
@@ -64,9 +70,10 @@ namespace CarScraper {
         _co2Emissions       = DEFAULT_INT;
         _co2Class           = DEFAULT_STR;
 
-        // Years
-        _yearStart          = DEFAULT_STR;
-        _yearEnd            = DEFAULT_STR;
+        // Commercialisation
+        _commercialisationStart  = std::nullopt;
+        _commercialisationEnd    = std::nullopt;
+        _stillInSale             = false;
 
     }
 
@@ -79,7 +86,7 @@ namespace CarScraper {
     // =========================================================================
 
     /**
-     * Sets the brand value
+     * @brief Sets the brand value
      * 
      * @param brand The brand value
      */
@@ -87,13 +94,13 @@ namespace CarScraper {
 
         // Verification + Normalize UTF-8 (NFC) then apply upper case
         this->_brand = una::cases::to_uppercase_utf8(
-            una::norm::to_nfc_utf8(stringValidation(brand, "Brand", 100)));
+            una::norm::to_nfc_utf8(Validation::stringValidation(brand, this->getFullId(), "Brand", 100)));
 
     }
 
 
     /**
-     * Sets the model value
+     * @brief Sets the model value
      * 
      * @param model The model value
      */
@@ -101,39 +108,39 @@ namespace CarScraper {
 
         // Verification + Normalize UTF-8 (NFC) then apply title case (handles accented chars)
         this->_model = una::cases::to_titlecase_utf8(
-            una::norm::to_nfc_utf8(stringValidation(model, "Model", 200)));
+            una::norm::to_nfc_utf8(Validation::stringValidation(model, this->getFullId(), "Model", 200)));
 
     }
 
 
     /**
-     * Sets the generation value
+     * @brief Sets the generation value
      *
      * @param generation The generation value
      */
     void Car::setGeneration(const std::string& generation) {
 
         // Verification + Normalize UTF-8 (NFC) only — generation is a technical identifier (ex: "4", "IV")
-        this->_generation = una::norm::to_nfc_utf8(stringValidation(generation, "Generation", 50));
+        this->_generation = una::norm::to_nfc_utf8(Validation::stringValidation(generation, this->getFullId(), "Generation", 50));
 
     }
 
 
     /**
-     * Sets the engine value
+     * @brief Sets the engine value
      *
      * @param engine The engine value
      */
     void Car::setEngine(const std::string& engine) {
 
         // Verification + Normalize UTF-8 (NFC) only — engine is a technical identifier (ex: "1.5 dCi 90hp")
-        this->_engine = una::norm::to_nfc_utf8(stringValidation(engine, "Engine", 200));
+        this->_engine = una::norm::to_nfc_utf8(Validation::stringValidation(engine, this->getFullId(), "Engine", 200));
 
     }
 
 
     /**
-     * Sets the trim value
+     * @brief Sets the trim value
      * 
      * @param trim The trim value
      */
@@ -141,98 +148,98 @@ namespace CarScraper {
 
         // Verification + Normalize UTF-8 (NFC) then apply title case (handles accented chars)
         this->_trim = una::cases::to_titlecase_utf8(
-            una::norm::to_nfc_utf8(stringValidation(trim, "Trim", 200)));
+            una::norm::to_nfc_utf8(Validation::stringValidation(trim, this->getFullId(), "Trim", 200)));
     
     }
 
 
     /**
-     * Sets the price value
+     * @brief Sets the price value
      * 
      * @param price The price value
      */
     void Car::setPrice(int price) {
 
         // Verification
-        this->_price = intValidation(price, "Price", 0, 10000000);
+        this->_price = Validation::intValidation(price, this->getFullId(), "Price", 0, 10000000);
 
     }
 
 
     /**
-     * Sets the height value
+     * @brief Sets the height value
      * 
      * @param height The height value
      */
     void Car::setHeight(double height) {
 
         // Verification
-        this->_height = doubleValidation(height, "Height", 0.0, 10.0);
+        this->_height = Validation::doubleValidation(height, this->getFullId(), "Height", 0.0, 10.0);
 
     }
 
 
     /**
-     * Sets the length value
+     * @brief Sets the length value
      * 
      * @param length The length value
      */
     void Car::setLength(double length) {
 
         // Verification
-        this->_length = doubleValidation(length, "Length", 0.0, 10.0);
+        this->_length = Validation::doubleValidation(length, this->getFullId(), "Length", 0.0, 10.0);
 
     }
 
 
     /**
-     * Sets the width value
+     * @brief Sets the width value
      * 
      * @param width The width value
      */
     void Car::setWidth(double width) {
 
         // Verification
-        this->_width = doubleValidation(width, "Width", 0.0, 10.0);
+        this->_width = Validation::doubleValidation(width, this->getFullId(), "Width", 0.0, 10.0);
 
     }
 
 
     /**
-     * Sets the trunk volume value
+     * @brief Sets the trunk volume value
      * 
      * @param trunkVolume The trunk volume value
      */
     void Car::setTrunkVolume(int trunkVolume) {
 
         // Verification
-        this->_trunkVolume = intValidation(trunkVolume, "TrunkVolume", 0, 1000);
+        this->_trunkVolume = Validation::intValidation(trunkVolume, this->getFullId(), "TrunkVolume", 0, 1000);
 
     }
 
 
     /**
-     * Sets the weight value
+     * @brief Sets the weight value
      * 
      * @param weight The weight value
      */
     void Car::setWeight(int weight) {
 
         // Verification
-        this->_weight = intValidation(weight, "Weight", 0, 5000);
+        this->_weight = Validation::intValidation(weight, this->getFullId(), "Weight", 0, 5000);
 
     }
 
 
     /**
-     * Sets the seat count value
+     * @brief Sets the seat count value
      * 
      * @param seatCount The seat count value
      */
     void Car::setSeatCount(int seatCount) {
 
         // Verification
-        this->_seatCount = intValidation(seatCount, "SeatCount", 0, 10);
+        this->_seatCount = Validation::intValidation(seatCount, this->getFullId(), "SeatCount", 0, 10);
 
     }
 
@@ -242,20 +249,20 @@ namespace CarScraper {
 
         // Verification + Normalize UTF-8 (NFC) then apply title case (handles accented chars)
         this->_gearboxType = una::cases::to_titlecase_utf8(
-            una::norm::to_nfc_utf8(stringValidation(gearboxType, "GearboxType", 50)));
+            una::norm::to_nfc_utf8(Validation::stringValidation(gearboxType, this->getFullId(), "GearboxType", 50)));
 
     }
 
 
     /**
-     * Sets the gear count value
+     * @brief Sets the gear count value
      * 
      * @param gearCount The gear count value
      */
     void Car::setGearCount(int gearCount) {
 
         // Verification
-        this->_gearCount = intValidation(gearCount, "GearCount", 0, 20);
+        this->_gearCount = Validation::intValidation(gearCount, this->getFullId(), "GearCount", 0, 20);
 
     }
 
@@ -265,78 +272,78 @@ namespace CarScraper {
 
         // Verification + Normalize UTF-8 (NFC) then apply title case (handles accented chars)
         this->_fuelType = una::cases::to_titlecase_utf8(
-            una::norm::to_nfc_utf8(stringValidation(fuelType, "FuelType", 50)));
+            una::norm::to_nfc_utf8(Validation::stringValidation(fuelType, this->getFullId(), "FuelType", 50)));
 
     }
 
 
     /**
-     * Sets the horse power value
+     * @brief Sets the horse power value
      * 
      * @param horsePower The horse power value
      */
     void Car::setHorsePower(int horsePower) {
 
         // Verification
-        this->_horsePower = intValidation(horsePower, "HorsePower", 0, 3000);
+        this->_horsePower = Validation::intValidation(horsePower, this->getFullId(), "HorsePower", 0, 3000);
 
     }
 
 
     /**
-     * Sets the tax horse power value
+     * @brief Sets the tax horse power value
      * 
      * @param taxHorsePower The tax horse power value
      */
     void Car::setTaxHorsePower(int taxHorsePower) {
 
         // Verification
-        this->_taxHorsePower = intValidation(taxHorsePower, "TaxHorsePower", 0, 200);
+        this->_taxHorsePower = Validation::intValidation(taxHorsePower, this->getFullId(), "TaxHorsePower", 0, 200);
 
     }
 
 
     /**
-     * Sets the tank capacity value
+     * @brief Sets the tank capacity value
      * 
      * @param tankCapacity The tank capacity value
      */
     void Car::setTankCapacity(int tankCapacity) {
 
         // Verification
-        this->_tankCapacity = intValidation(tankCapacity, "TankCapacity", 0, 500);
+        this->_tankCapacity = Validation::intValidation(tankCapacity, this->getFullId(), "TankCapacity", 0, 500);
 
     }
 
 
     /**
-     * Sets the fuel consumption value
+     * @brief Sets the fuel consumption value
      * 
      * @param fuelConsumption The fuel consumption value
      */
     void Car::setFuelConsumption(double fuelConsumption) {
 
         // Verification
-        this->_fuelConsumption = doubleValidation(fuelConsumption, "FuelConsumption", 0.0, 50.0);
+        this->_fuelConsumption = Validation::doubleValidation(fuelConsumption, this->getFullId(), "FuelConsumption", 0.0, 50.0);
 
     }
 
 
     /**
-     * Sets the CO2 emissions value
+     * @brief Sets the CO2 emissions value
      * 
      * @param co2Emissions The CO2 emissions value
      */
     void Car::setCo2Emissions(int co2Emissions) {
 
         // Verification
-        this->_co2Emissions = intValidation(co2Emissions, "Co2Emissions", 0, 200);
+        this->_co2Emissions = Validation::intValidation(co2Emissions, this->getFullId(), "Co2Emissions", 0, 200);
 
     }
 
 
     /**
-     * Sets the CO2 class value
+     * @brief Sets the CO2 class value
      * 
      * @param co2Class The CO2 class value
      */
@@ -344,38 +351,34 @@ namespace CarScraper {
 
         // Verification + Normalize UTF-8 (NFC) then apply upper case (short code like "A", "B+")
         this->_co2Class = una::cases::to_uppercase_utf8(
-            una::norm::to_nfc_utf8(stringValidation(co2Class, "Co2Class", 10)));
+            una::norm::to_nfc_utf8(Validation::stringValidation(co2Class, this->getFullId(), "Co2Class", 10)));
     
     }
 
 
-    // Year start
-    void Car::setYearStart(const std::string& yearStart) {
+    // Commercialisation start
+    void Car::setCommercialisationStart(std::optional<std::chrono::year_month_day> commercialisationStart) {
 
-        // Verification
-        if (yearStart.empty()) {
-            this->_yearStart = ERROR_STR;
-            return;
-        }
-
-        // Normalize UTF-8 (NFC) only — year is a numeric string (ex: "2012")
-        this->_yearStart = una::norm::to_nfc_utf8(yearStart);
+        this->_commercialisationStart = std::nullopt;
 
     }
 
 
-    // Year end
-    void Car::setYearEnd(const std::string& yearEnd) {
+    // Commercialisation end
+    void Car::setCommercialisationEnd(std::optional<std::chrono::year_month_day> commercialisationEnd) {
 
-        // Verification
-        if (yearEnd.empty()) {
-            this->_yearEnd = ERROR_STR;
-            return;
-        }
+        this->_commercialisationEnd = std::nullopt;
 
-        // Normalize UTF-8 (NFC) only — year is a numeric string (ex: "2019")
-        this->_yearEnd = una::norm::to_nfc_utf8(yearEnd);
+    }
 
+
+    /**
+     * Sets the still in sale value
+     * 
+     * @param stillInSale The still in sale value
+     */
+    void Car::setStillInSale(bool stillInSale) {
+        this->_stillInSale = stillInSale;
     }
 
 
@@ -414,8 +417,7 @@ namespace CarScraper {
             && _fuelConsumption != DEFAULT_DOUBLE
             && _co2Emissions    != DEFAULT_INT
             && _co2Class        != DEFAULT_STR
-            && _yearStart       != DEFAULT_STR
-            && _yearEnd         != DEFAULT_STR;
+            && _stillInSale     != true;
     }
 
 
@@ -445,114 +447,7 @@ namespace CarScraper {
             && _tankCapacity    != ERROR_INT
             && _fuelConsumption != ERROR_DOUBLE
             && _co2Emissions    != ERROR_INT
-            && _co2Class        != ERROR_STR
-            && _yearStart       != ERROR_STR
-            && _yearEnd         != ERROR_STR;
-    }
-
-
-    /**
-     * Validates and normalizes a string value
-     * 
-     * @param strVal The string value to validate and normalize
-     * @param attributeName The name of the attribute being validated (for logging purposes)
-     * @param maxLength The maximum allowed length for the string (default: 255)
-     */
-    std::string Car::stringValidation(  const std::string&      strVal,
-                                        const std::string&      attributeName,
-                                        const long unsigned int maxLength) {
-
-        // Check if the string is empty
-        if (strVal.empty()) {
-            Logger::error("Car::set{} got an empty value", attributeName);
-            return ERROR_STR;
-        }
-
-
-        // Check if the string exceeds the maximum length
-        if (strVal.length() > maxLength) {
-            Logger::error(  "Car::set{} got a value that exceeds the maximum length of {} characters",
-                            attributeName, std::to_string(maxLength));
-            return ERROR_STR;
-        }
-
-
-        // String valid
-        Logger::trace("Car::set{} value: \"{}\"", attributeName, strVal);
-        return strVal;
-
-    }
-
-
-    /**
-     * Validates and normalizes an integer value
-     *
-     * @param intVal The integer value to validate and normalize
-     * @param attributeName The name of the attribute being validated (for logging purposes)
-     * @param minValue The minimum allowed value for the integer (default: 0)
-     * @param maxValue The maximum allowed value for the integer (default: 9999)
-     */
-    int Car::intValidation( const int           intVal,
-                            const std::string&  attributeName,
-                            const int           minValue,
-                            const int           maxValue) {
-
-        // Check if the integer is below the minimum value
-        if (intVal < minValue) {
-            Logger::error(  "Car::set{} got a value out of bounds: {} < {}",
-                            attributeName, std::to_string(intVal), std::to_string(minValue));
-            return ERROR_INT;
-        }
-
-
-        // Check if the integer is above the maximum value
-        if (intVal > maxValue) {
-            Logger::error(  "Car::set{} got a value out of bounds: {} > {}",
-                            attributeName, std::to_string(intVal), std::to_string(maxValue));
-            return ERROR_INT;
-        }
-
-
-        // Integer valid
-        Logger::trace("Car::set{} value: {}", attributeName, std::to_string(intVal));
-        return intVal;
-
-    }
-
-
-    /**
-     * Validates and normalizes a double value
-     *
-     * @param doubleVal The double value to validate and normalize
-     * @param attributeName The name of the attribute being validated (for logging purposes)
-     * @param minValue The minimum allowed value for the double (default: 0.0)
-     * @param maxValue The maximum allowed value for the double (default: 9999.0)
-     */
-    double Car::doubleValidation(   const double        doubleVal,
-                                    const std::string&  attributeName,
-                                    const double        minValue,
-                                    const double        maxValue) {
-
-        // Check if the double is below the minimum value
-        if (doubleVal < minValue) {
-            Logger::error(  "Car::set{} got a value out of bounds: {} < {}",
-                            attributeName, std::to_string(doubleVal), std::to_string(minValue));
-            return ERROR_DOUBLE;
-        }
-
-
-        // Check if the double is above the maximum value
-        if (doubleVal > maxValue) {
-            Logger::error(  "Car::set{} got a value out of bounds: {} > {}",
-                            attributeName, std::to_string(doubleVal), std::to_string(maxValue));
-            return ERROR_DOUBLE;
-        }
-
-
-        // Double valid
-        Logger::trace("Car::set{} value: {}", attributeName, std::to_string(doubleVal));
-        return doubleVal;
-
+            && _co2Class        != ERROR_STR;
     }
 
 
@@ -563,8 +458,7 @@ namespace CarScraper {
         std::ostringstream oss;
         oss << "[Car] "     << _brand        << " " << _model   << " (gen. " << _generation << ")"
             << " | "        << _engine      << " | " << _trim
-            << " | "        << _horsePower  << " hp | " << _fuelType
-            << " | "        << _yearStart   << "-" << _yearEnd;
+            << " | "        << _horsePower  << " hp | " << _fuelType;
         return oss.str();
     }
 
@@ -578,7 +472,7 @@ namespace CarScraper {
 
         os << std::fixed << std::setprecision(2);
 
-        os << car.getFullId() << "\"\n";
+        os << car.getFullId() << "\n";
 
         // General
         os << "- General\n";
@@ -616,10 +510,11 @@ namespace CarScraper {
         os << "    -> " << std::left << std::setw(16) << "Co2Emissions"    << ": "      << car.getCo2Emissions()    << " g/km\n";
         os << "    -> " << std::left << std::setw(16) << "Co2Class"        << ": \""    << car.getCo2Class()        << "\"\n";
 
-        // Years
-        os << "- Years\n";
-        os << "    -> " << std::left << std::setw(16) << "YearStart"      << ": \""     << car.getYearStart()       << "\"\n";
-        os << "    -> " << std::left << std::setw(16) << "YearEnd"        << ": \""     << car.getYearEnd()         << "\"\n";
+        // Commercialisation
+        os << "- Commercialisation\n";
+        //os << "    -> " << std::left << std::setw(16) << "Start"           << ": \""    << car.getCommercialisationStart()  << "\"\n";
+        //os << "    -> " << std::left << std::setw(16) << "End"             << ": \""    << car.getCommercialisationEnd()    << "\"\n";
+        os << "    -> " << std::left << std::setw(16) << "Still in Sale"   << ": "      << car.isStillInSale()      << "\n";
 
         return os;
     }

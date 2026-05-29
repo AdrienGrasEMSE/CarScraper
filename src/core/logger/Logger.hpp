@@ -1,3 +1,13 @@
+/**
+ * @file Logger.hpp
+ * 
+ * @brief This file declares the Logger class, which provides a simple logging interface.
+ *
+ * @author Adrien GRAS
+ * @date 2026-05-26
+ */
+
+
 // For only one include
 #pragma once
 
@@ -15,8 +25,11 @@
 namespace CarScraper {
 
     /**
-     * Class Logger:
+     * @class Logger
      * 
+     * @brief A simple logger class using spdlog.
+     * @details This class provides static methods for logging messages at different levels (trace, debug, info, warn, error, critical).
+     *
      * Log levels :
      * - trace    : detailed information, useful for debugging              | A setter that accepts a value
      * - debug    : general debugging information, useful for development   | Parsed value from an Excel file
@@ -32,8 +45,18 @@ namespace CarScraper {
         // =========================================================================
         private:
 
-            // Singleton instance of the logger
+            /**
+             * The singleton instance of the logger.
+             */
             static std::shared_ptr<spdlog::logger> _instance;
+
+
+            /**
+             * @brief Safely gets the logger instance.
+             *
+             * @return The logger instance.
+             */
+            static spdlog::logger* _safeGet();
 
 
             // -------------------------------------------------------------------------
@@ -52,127 +75,96 @@ namespace CarScraper {
         public:
 
             /**
-             * Initializes the logger instance with a console sink and a rotating file sink.
+             * @brief Initializes the logger instance with a console sink and a rotating file sink.
              *
              * @param logFile The path to the log file (for the rotating file sink).
              */
-            static void init(const std::string& logFile = "logs/car-scraper.log");
-
+            static void init(const std::string& logFile = "logs/log.txt");
 
 
             /**
-             * Gets the logger instance.
+             * @brief Gets the logger instance.
              *
              * @return The logger instance.
              */
             static std::shared_ptr<spdlog::logger> get();
 
 
-
             /**
-             * Shortcuts for logging calls, redirecting to the spdlog instance.
-             * 
-             * Type : TRACE
-             */
-            template<typename... Args>
-            /**
-             * Logs a message with the TRACE level.
+             * @brief Logs a message with the TRACE level.
              *
+             * @tparam Args The types of the arguments for the format string.
              * @param fmt The format string.
              * @param args The arguments for the format string.
              */
+            template<typename... Args>
             static void trace(fmt::format_string<Args...> fmt, Args&&... args) {
-                _instance->trace(fmt, std::forward<Args>(args)...);
+                if (auto* l = _safeGet()) l->trace(fmt, std::forward<Args>(args)...);
             }
 
 
-
             /**
-             * Shortcuts for logging calls, redirecting to the spdlog instance.
-             * 
-             * Type : DEBUG
-             */
-            template<typename... Args>
-            /**
-             * Logs a message with the DEBUG level.
+             * @brief Logs a message with the DEBUG level.
              *
+             * @tparam Args The types of the arguments for the format string.
              * @param fmt The format string.
              * @param args The arguments for the format string.
              */
+            template<typename... Args>
             static void debug(fmt::format_string<Args...> fmt, Args&&... args) {
-                _instance->debug(fmt, std::forward<Args>(args)...);
+                if (auto* l = _safeGet()) l->debug(fmt, std::forward<Args>(args)...);
             }
 
 
-
             /**
-             * Shortcuts for logging calls, redirecting to the spdlog instance.
-             * 
-             * Type : INFO
-             */
-            template<typename... Args>
-            /**
-             * Logs a message with the INFO level.
+             * @brief Logs a message with the INFO level.
              *
+             * @tparam Args The types of the arguments for the format string.
              * @param fmt The format string.
              * @param args The arguments for the format string.
              */
+            template<typename... Args>
             static void info(fmt::format_string<Args...> fmt, Args&&... args) {
-                _instance->info(fmt, std::forward<Args>(args)...);
+                if (auto* l = _safeGet()) l->info(fmt, std::forward<Args>(args)...);
             }
 
 
-
             /**
-             * Shortcuts for logging calls, redirecting to the spdlog instance.
-             * 
-             * Type : WARNING
-             */
-            template<typename... Args>
-            /**
-             * Logs a message with the WARNING level.
+             * @brief Logs a message with the WARNING level.
              *
+             * @tparam Args The types of the arguments for the format string.
              * @param fmt The format string.
              * @param args The arguments for the format string.
              */
+            template<typename... Args>
             static void warn(fmt::format_string<Args...> fmt, Args&&... args) {
-                _instance->warn(fmt, std::forward<Args>(args)...);
+                if (auto* l = _safeGet()) l->warn(fmt, std::forward<Args>(args)...);
             }
 
 
-
             /**
-             * Shortcuts for logging calls, redirecting to the spdlog instance.
-             * 
-             * Type : ERROR
-             */
-            template<typename... Args>
-            /**
-             * Logs a message with the ERROR level.
+             * @brief Logs a message with the ERROR level.
              *
+             * @tparam Args The types of the arguments for the format string.
              * @param fmt The format string.
              * @param args The arguments for the format string.
              */
+            template<typename... Args>
             static void error(fmt::format_string<Args...> fmt, Args&&... args) {
-                _instance->error(fmt, std::forward<Args>(args)...);
+                if (auto* l = _safeGet()) l->error(fmt, std::forward<Args>(args)...);
             }
 
 
-
             /**
-             * Shortcuts for logging calls, redirecting to the spdlog instance.
-             * 
-             * Type : CRITICAL
-             */
-            template<typename... Args>
-            /**
-             * Logs a message with the CRITICAL level.
+             * @brief Logs a message with the CRITICAL level.
              *
+             * @tparam Args The types of the arguments for the format string.
              * @param fmt The format string.
              * @param args The arguments for the format string.
              */
+            template<typename... Args>
             static void critical(fmt::format_string<Args...> fmt, Args&&... args) {
-                _instance->critical(fmt, std::forward<Args>(args)...);
+                if (auto* l = _safeGet()) l->critical(fmt, std::forward<Args>(args)...);
             }
 
     };
