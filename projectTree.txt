@@ -18,11 +18,14 @@
 │   │   ├── logger
 │   │   │   ├── Logger.cpp
 │   │   │   └── Logger.hpp
-│   │   └── models
-│   │       ├── Car.cpp
-│   │       ├── Car.hpp
-│   │       ├── Entity.cpp
-│   │       └── Entity.hpp
+│   │   ├── models
+│   │   │   ├── Car.cpp
+│   │   │   ├── Car.hpp
+│   │   │   ├── Entity.cpp
+│   │   │   └── Entity.hpp
+│   │   └── utils
+│   │       ├── Validation.cpp
+│   │       └── Validation.hpp
 │   ├── gui
 │   ├── io
 │   │   ├── ExcelReader
@@ -36,4 +39,4 @@
     ├── test_Entity.cpp
     └── test_HttpClient.cpp
 
-16 directories, 21 files
+17 directories, 23 files
