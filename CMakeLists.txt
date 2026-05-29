@@ -86,6 +86,9 @@ endfunction()
 set(SOURCES
     src/main.cpp
 
+    # Core — Utils
+    src/core/utils/Validation.cpp
+
     # Core — Models
     src/core/models/Car.cpp
     src/core/models/Entity.cpp
@@ -111,7 +114,15 @@ carscraper_configure_target(${PROJECT_NAME})
 # Tests
 # ==============================================================================
 
-# Remplacer le bloc Tests existant par :
+# test Validation
+set(TEST_VALIDATION_SOURCES
+    tests/test_Validation.cpp
+    src/core/utils/Validation.cpp
+)
+add_executable(TestValidation ${TEST_VALIDATION_SOURCES})
+carscraper_configure_target(TestValidation)
+
+# test Entity
 set(TEST_ENTITY_SOURCES
     tests/test_Entity.cpp
     src/core/models/Entity.cpp
@@ -120,7 +131,7 @@ set(TEST_ENTITY_SOURCES
 add_executable(TestEntity ${TEST_ENTITY_SOURCES})
 carscraper_configure_target(TestEntity)
 
-# Garder le test HttpClient existant
+# test HttpClient
 set(TEST_SOURCES
     tests/test_HttpClient.cpp
     src/io/HttpClient/HttpClient.cpp
