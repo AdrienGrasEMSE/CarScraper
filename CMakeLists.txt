@@ -114,47 +114,33 @@ carscraper_configure_target(${PROJECT_NAME})
 # Tests
 # ==============================================================================
 
-# test Logger
-set(TEST_LOGGER_SOURCES
-    tests/mono/testLogger.cpp
+# Lib for tests — to avoid recompiling core files for each test
+add_library(CarScraperLib STATIC
     src/core/Logger/Logger.cpp
+    src/core/utils/Validation.cpp
+    src/core/models/Entity.cpp
 )
+carscraper_configure_target(CarScraperLib)
+
+# test Logger
+set(TEST_LOGGER_SOURCES tests/mono/testLogger.cpp)
 add_executable(TestLogger ${TEST_LOGGER_SOURCES})
-carscraper_configure_target(TestLogger)
+target_link_libraries(TestLogger PRIVATE CarScraperLib)
 
 # test Validation
-set(TEST_VALIDATION_SOURCES
-    tests/mono/testValidation.cpp
-    src/core/utils/Validation.cpp
-    src/core/Logger/Logger.cpp
-)
+set(TEST_VALIDATION_SOURCES tests/mono/testValidation.cpp)
 add_executable(TestValidation ${TEST_VALIDATION_SOURCES})
+target_link_libraries(TestValidation PRIVATE CarScraperLib)
 carscraper_configure_target(TestValidation)
 
 # test Entity
-set(TEST_ENTITY_SOURCES
-    tests/mono/testEntity.cpp
-    src/core/models/Entity.cpp
-    src/core/Logger/Logger.cpp
-)
+set(TEST_ENTITY_SOURCES tests/mono/testEntity.cpp)
 add_executable(TestEntity ${TEST_ENTITY_SOURCES})
+target_link_libraries(TestEntity PRIVATE CarScraperLib)
 carscraper_configure_target(TestEntity)
 
 # test Car
-set(TEST_CAR_SOURCES
-    tests/mono/testCar.cpp
-    src/core/models/Entity.cpp
-    src/core/utils/Validation.cpp
-    src/core/models/Car.cpp
-    src/core/Logger/Logger.cpp
-)
+set(TEST_CAR_SOURCES tests/mono/testCar.cpp)
 add_executable(TestCar ${TEST_CAR_SOURCES})
+target_link_libraries(TestCar PRIVATE CarScraperLib)
 carscraper_configure_target(TestCar)
-
-# test HttpClient
-#set(TEST_SOURCES
-#    tests/test_HttpClient.cpp
-#    src/io/HttpClient/HttpClient.cpp
-#)
-#add_executable(CarScraperTests ${TEST_SOURCES})
-#carscraper_configure_target(CarScraperTests)
