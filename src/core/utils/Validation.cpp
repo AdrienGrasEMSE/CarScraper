@@ -38,19 +38,19 @@ namespace CarScraper::Validation {
      * Log TRACE with the validated value if the string is valid
      * 
      * @param strVal The string value to validate and normalize
-     * @param className The name of the class being validated (for logging purposes)
+     * @param objectID The ID of the object being validated (for logging purposes)
      * @param attributeName The name of the attribute being validated (for logging purposes)
      * @param maxLength The maximum allowed length for the string (default: 255)
      * @return The validated string value
      */
     std::string stringValidation(   const std::string&      strVal,
-                                    const std::string&      className,
+                                    const std::string&      objectID,
                                     const std::string&      attributeName,
                                     const long unsigned int maxLength) {
 
         // Check if the string is empty
         if (strVal.empty()) {
-            Logger::error("{}::set{} got an empty value", className, attributeName);
+            Logger::error("{}::set{} got an empty value", objectID, attributeName);
             return ERROR_STR;
         }
 
@@ -58,13 +58,13 @@ namespace CarScraper::Validation {
         // Check if the string exceeds the maximum length
         if (strVal.length() > maxLength) {
             Logger::error(  "{}::set{} got a value that exceeds the maximum length of {} characters",
-                            className, attributeName, maxLength);
+                            objectID, attributeName, maxLength);
             return ERROR_STR;
         }
 
 
         // String valid
-        Logger::trace("{}::set{} value: \"{}\"", className, attributeName, strVal);
+        Logger::trace("{}::set{} value: \"{}\"", objectID, attributeName, strVal);
         return strVal;
 
     }
@@ -77,14 +77,14 @@ namespace CarScraper::Validation {
      * Log TRACE with the validated value if the integer is valid
      *
      * @param intVal The integer value to validate and normalize
-     * @param className The name of the class being validated (for logging purposes)
+     * @param objectID The ID of the object being validated (for logging purposes)
      * @param attributeName The name of the attribute being validated (for logging purposes)
      * @param minValue The minimum allowed value for the integer (default: 0)
      * @param maxValue The maximum allowed value for the integer (default: 9999)
      * @return The validated integer value
      */
     int intValidation(  const int           intVal,
-                        const std::string&  className,
+                        const std::string&  objectID,
                         const std::string&  attributeName,
                         const int           minValue,
                         const int           maxValue) {
@@ -92,7 +92,7 @@ namespace CarScraper::Validation {
         // Check if the integer is below the minimum value
         if (intVal < minValue) {
             Logger::error(  "{}::set{} got a value out of bounds: {} < {}",
-                            className, attributeName, intVal, minValue);
+                            objectID, attributeName, intVal, minValue);
             return ERROR_INT;
         }
 
@@ -100,13 +100,13 @@ namespace CarScraper::Validation {
         // Check if the integer is above the maximum value
         if (intVal > maxValue) {
             Logger::error(  "{}::set{} got a value out of bounds: {} > {}",
-                            className, attributeName, intVal, maxValue);
+                            objectID, attributeName, intVal, maxValue);
             return ERROR_INT;
         }
 
 
         // Integer valid
-        Logger::trace("{}::set{} value: {}", className, attributeName, intVal);
+        Logger::trace("{}::set{} value: {}", objectID, attributeName, intVal);
         return intVal;
 
     }
@@ -119,14 +119,14 @@ namespace CarScraper::Validation {
      * Log TRACE with the validated value if the double is valid
      *
      * @param doubleVal The double value to validate and normalize
-     * @param className The name of the class being validated (for logging purposes)
+     * @param objectID The ID of the object being validated (for logging purposes)
      * @param attributeName The name of the attribute being validated (for logging purposes)
      * @param minValue The minimum allowed value for the double (default: 0.0)
      * @param maxValue The maximum allowed value for the double (default: 9999.0)
      * @return The validated double value
      */
     double doubleValidation(const double        doubleVal,
-                            const std::string&  className,
+                            const std::string&  objectID,
                             const std::string&  attributeName,
                             const double        minValue,
                             const double        maxValue) {
@@ -134,7 +134,7 @@ namespace CarScraper::Validation {
         // Check if the double is below the minimum value
         if (doubleVal < minValue) {
             Logger::error(  "{}::set{} got a value out of bounds: {} < {}",
-                            className, attributeName, doubleVal, minValue);
+                            objectID, attributeName, doubleVal, minValue);
             return ERROR_DOUBLE;
         }
 
@@ -142,13 +142,13 @@ namespace CarScraper::Validation {
         // Check if the double is above the maximum value
         if (doubleVal > maxValue) {
             Logger::error(  "{}::set{} got a value out of bounds: {} > {}",
-                            className, attributeName, doubleVal, maxValue);
+                            objectID, attributeName, doubleVal, maxValue);
             return ERROR_DOUBLE;
         }
 
 
         // Double valid
-        Logger::trace("{}::set{} value: {}", className, attributeName, doubleVal);
+        Logger::trace("{}::set{} value: {}", objectID, attributeName, doubleVal);
         return doubleVal;
 
     }

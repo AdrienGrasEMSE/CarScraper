@@ -33,33 +33,33 @@ using namespace CarScraper::Validation;
 TEST_CASE("stringValidation", "[validation][string]") {
 
     SECTION("Returns the value when valid") {
-        REQUIRE(stringValidation("Toyota", "Car", "Brand") == "Toyota");
+        REQUIRE(stringValidation("Toyota", "CarID", "Brand") == "Toyota");
     }
 
     SECTION("Returns ERROR_STR when empty") {
-        REQUIRE(stringValidation("", "Car", "Brand") == ERROR_STR);
+        REQUIRE(stringValidation("", "CarID", "Brand") == ERROR_STR);
     }
 
     SECTION("Returns ERROR_STR when exceeds default max length (255)") {
         std::string longStr(256, 'a');
-        REQUIRE(stringValidation(longStr, "Car", "Brand") == ERROR_STR);
+        REQUIRE(stringValidation(longStr, "CarID", "Brand") == ERROR_STR);
     }
 
     SECTION("Returns the value when exactly at max length") {
         std::string exactStr(255, 'a');
-        REQUIRE(stringValidation(exactStr, "Car", "Brand") == exactStr);
+        REQUIRE(stringValidation(exactStr, "CarID", "Brand") == exactStr);
     }
 
     SECTION("Returns ERROR_STR when exceeds custom max length") {
-        REQUIRE(stringValidation("TooLongName", "Car", "Brand", 5) == ERROR_STR);
+        REQUIRE(stringValidation("TooLongName", "CarID", "Brand", 5) == ERROR_STR);
     }
 
     SECTION("Returns the value when within custom max length") {
-        REQUIRE(stringValidation("Ford", "Car", "Brand", 10) == "Ford");
+        REQUIRE(stringValidation("Ford", "CarID", "Brand", 10) == "Ford");
     }
 
     SECTION("Returns ERROR_STR when exactly one char over custom max length") {
-        REQUIRE(stringValidation("abcdef", "Car", "Brand", 5) == ERROR_STR);
+        REQUIRE(stringValidation("abcdef", "CarID", "Brand", 5) == ERROR_STR);
     }
 }
 
@@ -71,35 +71,35 @@ TEST_CASE("stringValidation", "[validation][string]") {
 TEST_CASE("intValidation", "[validation][int]") {
 
     SECTION("Returns the value when within bounds") {
-        REQUIRE(intValidation(100, "Car", "Power", 0, 9999) == 100);
+        REQUIRE(intValidation(100, "CarID", "Power", 0, 9999) == 100);
     }
 
     SECTION("Returns ERROR_INT when below min") {
-        REQUIRE(intValidation(-1, "Car", "Power", 0, 9999) == ERROR_INT);
+        REQUIRE(intValidation(-1, "CarID", "Power", 0, 9999) == ERROR_INT);
     }
 
     SECTION("Returns ERROR_INT when above max") {
-        REQUIRE(intValidation(10000, "Car", "Power", 0, 9999) == ERROR_INT);
+        REQUIRE(intValidation(10000, "CarID", "Power", 0, 9999) == ERROR_INT);
     }
 
     SECTION("Returns the value when exactly at min") {
-        REQUIRE(intValidation(0, "Car", "Power", 0, 9999) == 0);
+        REQUIRE(intValidation(0, "CarID", "Power", 0, 9999) == 0);
     }
 
     SECTION("Returns the value when exactly at max") {
-        REQUIRE(intValidation(9999, "Car", "Power", 0, 9999) == 9999);
+        REQUIRE(intValidation(9999, "CarID", "Power", 0, 9999) == 9999);
     }
 
     SECTION("Returns ERROR_INT when min equals max and value differs") {
-        REQUIRE(intValidation(5, "Car", "Doors", 4, 4) == ERROR_INT);
+        REQUIRE(intValidation(5, "CarID", "Doors", 4, 4) == ERROR_INT);
     }
 
     SECTION("Returns the value when min equals max and value matches") {
-        REQUIRE(intValidation(4, "Car", "Doors", 4, 4) == 4);
+        REQUIRE(intValidation(4, "CarID", "Doors", 4, 4) == 4);
     }
 
     SECTION("Default bounds accept DEFAULT_INT") {
-        REQUIRE(intValidation(DEFAULT_INT, "Car", "Power") == DEFAULT_INT);
+        REQUIRE(intValidation(DEFAULT_INT, "CarID", "Power") == DEFAULT_INT);
     }
 }
 
@@ -111,27 +111,27 @@ TEST_CASE("intValidation", "[validation][int]") {
 TEST_CASE("doubleValidation", "[validation][double]") {
 
     SECTION("Returns the value when within bounds") {
-        REQUIRE(doubleValidation(7.5, "Car", "Consumption", 0.0, 30.0) == 7.5);
+        REQUIRE(doubleValidation(7.5, "CarID", "Consumption", 0.0, 30.0) == 7.5);
     }
 
     SECTION("Returns ERROR_DOUBLE when below min") {
-        REQUIRE(doubleValidation(-0.1, "Car", "Consumption", 0.0, 30.0) == ERROR_DOUBLE);
+        REQUIRE(doubleValidation(-0.1, "CarID", "Consumption", 0.0, 30.0) == ERROR_DOUBLE);
     }
 
     SECTION("Returns ERROR_DOUBLE when above max") {
-        REQUIRE(doubleValidation(30.1, "Car", "Consumption", 0.0, 30.0) == ERROR_DOUBLE);
+        REQUIRE(doubleValidation(30.1, "CarID", "Consumption", 0.0, 30.0) == ERROR_DOUBLE);
     }
 
     SECTION("Returns the value when exactly at min") {
-        REQUIRE(doubleValidation(0.0, "Car", "Consumption", 0.0, 30.0) == 0.0);
+        REQUIRE(doubleValidation(0.0, "CarID", "Consumption", 0.0, 30.0) == 0.0);
     }
 
     SECTION("Returns the value when exactly at max") {
-        REQUIRE(doubleValidation(30.0, "Car", "Consumption", 0.0, 30.0) == 30.0);
+        REQUIRE(doubleValidation(30.0, "CarID", "Consumption", 0.0, 30.0) == 30.0);
     }
 
     SECTION("Default bounds accept DEFAULT_DOUBLE") {
-        REQUIRE(doubleValidation(DEFAULT_DOUBLE, "Car", "Consumption") == DEFAULT_DOUBLE);
+        REQUIRE(doubleValidation(DEFAULT_DOUBLE, "CarID", "Consumption") == DEFAULT_DOUBLE);
     }
 }
 

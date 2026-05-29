@@ -31,13 +31,13 @@ namespace CarScraper::Validation {
      * Validates a string value against a maximum length.
      *
      * @param strVal The string value to validate.
-     * @param className The name of the class being validated.
+     * @param objectID The ID of the object being validated.
      * @param attributeName The name of the attribute being validated.
      * @param maxLength The maximum allowed length for the string.
      * @return The validated string value.
      */
     std::string stringValidation(   const std::string&      strVal,
-                                    const std::string&      className,
+                                    const std::string&      objectID,
                                     const std::string&      attributeName,
                                     const long unsigned int maxLength = 255);
 
@@ -46,14 +46,14 @@ namespace CarScraper::Validation {
      * Validates an integer value against minimum and maximum values.
      *
      * @param intVal The integer value to validate.
-     * @param className The name of the class being validated.
+     * @param objectID The ID of the object being validated.
      * @param attributeName The name of the attribute being validated.
      * @param minValue The minimum allowed value for the integer.
      * @param maxValue The maximum allowed value for the integer.
      * @return The validated integer value.
      */
     int intValidation(  const int           intVal,
-                        const std::string&  className,
+                        const std::string&  objectID,
                         const std::string&  attributeName,
                         const int           minValue = 0,
                         const int           maxValue = 9999);
@@ -63,14 +63,14 @@ namespace CarScraper::Validation {
      * Validates a double value against minimum and maximum values.
      *
      * @param doubleVal The double value to validate.
-     * @param className The name of the class being validated.
+     * @param objectID The ID of the object being validated.
      * @param attributeName The name of the attribute being validated.
      * @param minValue The minimum allowed value for the double.
      * @param maxValue The maximum allowed value for the double.
      * @return The validated double value.
      */
     double doubleValidation(const double        doubleVal,
-                            const std::string&  className,
+                            const std::string&  objectID,
                             const std::string&  attributeName,
                             const double        minValue = 0.0,
                             const double        maxValue = 9999.0);
