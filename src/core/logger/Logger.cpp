@@ -109,7 +109,7 @@ namespace CarScraper {
     /**
      * @brief Safely gets the logger instance.
      *
-     * @return The logger instance or nullptr if not initialized.
+     * @return The logger instance even if not initialized.
      */
     spdlog::logger* Logger::_safeGet() {
 
