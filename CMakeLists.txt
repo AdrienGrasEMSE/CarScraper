@@ -126,6 +126,7 @@ carscraper_configure_target(CarScraperLib)
 set(TEST_LOGGER_SOURCES tests/mono/testLogger.cpp)
 add_executable(TestLogger ${TEST_LOGGER_SOURCES})
 target_link_libraries(TestLogger PRIVATE CarScraperLib)
+carscraper_configure_target(TestLogger)
 
 # test Validation
 set(TEST_VALIDATION_SOURCES tests/mono/testValidation.cpp)
@@ -144,3 +145,9 @@ set(TEST_CAR_SOURCES tests/mono/testCar.cpp)
 add_executable(TestCar ${TEST_CAR_SOURCES})
 target_link_libraries(TestCar PRIVATE CarScraperLib)
 carscraper_configure_target(TestCar)
+
+# testAll (aggregator)
+set(TEST_ALL_SOURCES tests/testAll.cpp)
+add_executable(TestAll ${TEST_ALL_SOURCES})
+target_link_libraries(TestAll PRIVATE CarScraperLib)
+carscraper_configure_target(TestAll)
