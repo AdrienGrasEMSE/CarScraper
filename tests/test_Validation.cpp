@@ -8,12 +8,20 @@
  */
 
 
+// Define CATCH_CONFIG_RUNNER to provide our own main function
 #define CATCH_CONFIG_RUNNER
+
+
+// Imports
 #include <catch2/catch.hpp>
 #include "core/utils/Validation.hpp"
 #include "core/utils/Constant.hpp"
 #include "core/logger/Logger.hpp"
 
+
+/**
+ * Using namespace CarScraper for constants values and logging
+ */
 using namespace CarScraper;
 using namespace CarScraper::Validation;
 
@@ -281,8 +289,12 @@ TEST_CASE("formatDate", "[validation][date][format]") {
 // =============================================================================
 // Main
 // =============================================================================
-
 int main(int argc, char* argv[]) {
+
+    // Logger Init
     CarScraper::Logger::init();
+
+    // Catch2 runner
     return Catch::Session().run(argc, argv);
+    
 }

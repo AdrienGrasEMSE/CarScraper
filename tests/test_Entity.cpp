@@ -1,5 +1,18 @@
-// Imports
+/**
+ * @file test_Validation.cpp
+ *
+ * @brief Unit tests for CarScraper::Validation functions.
+ *
+ * @author Adrien GRAS
+ * @date 2026-05-29
+ */
+
+
+// Define CATCH_CONFIG_RUNNER to provide our own main function
 #define CATCH_CONFIG_RUNNER
+
+
+// Imports
 #include <catch2/catch.hpp>
 #include <regex>
 #include "core/models/Entity.hpp"
