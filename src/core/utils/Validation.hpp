@@ -1,3 +1,13 @@
+/**
+ * @file Validation.hpp
+ * 
+ * @brief This file defines the validation functions used in the CarScraper project.
+ *
+ * @author Adrien GRAS
+ * @date 2026-05-29
+ */
+
+
 // For only one include
 #pragma once
 
@@ -11,8 +21,7 @@
 /**
  * Namespace CarScraper::Validation
  */
- namespace CarScraper::Validation {
-
+namespace CarScraper::Validation {
 
     // =========================================================================
     // String and numeric validations
@@ -22,43 +31,49 @@
      * Validates a string value against a maximum length.
      *
      * @param strVal The string value to validate.
+     * @param className The name of the class being validated.
      * @param attributeName The name of the attribute being validated.
      * @param maxLength The maximum allowed length for the string.
      * @return The validated string value.
      */
-    static std::string stringValidation(    const std::string&      strVal,
-                                            const std::string&      attributeName,
-                                            const long unsigned int maxLength = 255);
+    std::string stringValidation(   const std::string&      strVal,
+                                    const std::string&      className,
+                                    const std::string&      attributeName,
+                                    const long unsigned int maxLength = 255);
 
     
     /**
      * Validates an integer value against minimum and maximum values.
      *
      * @param intVal The integer value to validate.
+     * @param className The name of the class being validated.
      * @param attributeName The name of the attribute being validated.
      * @param minValue The minimum allowed value for the integer.
      * @param maxValue The maximum allowed value for the integer.
      * @return The validated integer value.
      */
-    static int intValidation(   const int           intVal,
-                                const std::string&  attributeName,
-                                const int           minValue = 0,
-                                const int           maxValue = 9999);
+    int intValidation(  const int           intVal,
+                        const std::string&  className,
+                        const std::string&  attributeName,
+                        const int           minValue = 0,
+                        const int           maxValue = 9999);
 
 
     /**
      * Validates a double value against minimum and maximum values.
      *
      * @param doubleVal The double value to validate.
+     * @param className The name of the class being validated.
      * @param attributeName The name of the attribute being validated.
      * @param minValue The minimum allowed value for the double.
      * @param maxValue The maximum allowed value for the double.
      * @return The validated double value.
      */
-    static double doubleValidation( const double        doubleVal,
-                                    const std::string&  attributeName,
-                                    const double        minValue = 0.0,
-                                    const double        maxValue = 9999.0);
+    double doubleValidation(const double        doubleVal,
+                            const std::string&  className,
+                            const std::string&  attributeName,
+                            const double        minValue = 0.0,
+                            const double        maxValue = 9999.0);
 
 
 
