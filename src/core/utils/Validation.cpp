@@ -227,6 +227,11 @@ namespace CarScraper::Validation {
             if (second == v.size() - 1)      return false;  // Separator at the end : invalid format
 
 
+            // Looking for a third separator (not allowed)
+            size_t third = v.find(sep, second + 1);
+            if (third != std::string::npos) return false;
+
+
             // Convert the three parts to integers
             a = std::stoi(v.substr(0, first));
             b = std::stoi(v.substr(first + 1, second - first - 1));
