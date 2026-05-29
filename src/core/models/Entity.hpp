@@ -13,17 +13,16 @@
 namespace CarScraper {
 
     /**
-     * Class Entity:
+     * @class Entity:
      *
-     * Represents an entity with the following characteristics:
-     * - UUID: unique identifier for the entity (generated automatically)
-     *      -> prefix   | string    | ex: "CAR"
-     *      -> uuid     | string    | ex: "123e45..."
+     * @attributes:
+     * - _uuid          : (string) The UUID of the entity.      | Ex : "123e45..."
+     * - _prefix        : (string) The prefix of the entity.    | Ex: "CAR"
      * 
-     * Methods:
-     * - getUuid()       : returns the UUID of the entity       | ex: "123e45..."
-     * - getPrefix()     : returns the prefix of the entity     | ex: "CAR"
-     * - getFullId()     : returns the full ID of the entity    | ex: "CAR-123e45..."
+     * @getters:
+     * - getUuid()      : returns the UUID of the entity        | ex: "123e45..."
+     * - getPrefix()    : returns the prefix of the entity      | ex: "CAR"
+     * - getFullId()    : returns the full ID of the entity     | ex: "CAR-123e45..."
      *
      */
     class Entity {
@@ -51,6 +50,7 @@ namespace CarScraper {
 
         /**
          * Constructor for the Entity class.
+         * - Delegating constructor to set the undefined prefix
          */
         Entity();
 
@@ -58,6 +58,8 @@ namespace CarScraper {
 
         /**
          * Constructor for the Entity class.
+         * - Generates a random UUID for the entity and sets the prefix.
+         * - Logs the creation of the instance with its full ID.
          *
          * @param prefix The prefix for the entity.
          */
@@ -67,6 +69,8 @@ namespace CarScraper {
         
         /**
          * Destructor for the Entity class.
+         *
+         * Logs the destruction of the instance with its full ID.
          */
         virtual ~Entity();
 
@@ -99,7 +103,7 @@ namespace CarScraper {
         /**
          * Returns the full ID of the entity.
          *
-         * @return The full ID of the entity.
+         * @return The full ID of the entity (prefix-uuid).
          */
         std::string        getFullId()     const { return _prefix + "-" + _uuid; }
 

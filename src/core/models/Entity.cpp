@@ -15,14 +15,15 @@ namespace CarScraper {
 
     /**
      * Constructor for the Entity class.
+     * - Delegating constructor to set the undefined prefix
      */
-    Entity::Entity() : Entity("UNDEFINED") {
-        // Delegating constructor to set the undefined prefix
-    }
+    Entity::Entity() : Entity("UNDEFINED") {}
 
 
     /**
      * Constructor for the Entity class.
+     * - Generates a random UUID for the entity and sets the prefix.
+     * - Logs the creation of the instance with its full ID.
      *
      * @param prefix The prefix for the entity.
      */
@@ -44,6 +45,8 @@ namespace CarScraper {
 
     /**
      * Destructor for the Entity class.
+     *
+     * Logs the destruction of the instance with its full ID.
      */
     Entity::~Entity(){
         Logger::debug("[{}] Instance destroyed", getFullId());

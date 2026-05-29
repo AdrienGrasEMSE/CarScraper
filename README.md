@@ -12,7 +12,7 @@ Pour le Minimum Viable Product, il faut que l'application soit capable de :
 - 1 : La classe Entity (v00.01)
 	1. [x] Faire une classe Entity avec UUID
 	3. [x] Journalisation
-	4. [ ] Tests unitaires
+	4. [x] Tests unitaires
 - 1 : La classe Car (v00.02)
 	1. [x] Faire une classe Car pour le stockage des voitures
 	2. [ ] Gestions des erreurs
