@@ -1,10 +1,15 @@
 # Type:
-# feat      -> nouvelle fonctionnalité
-# fix       -> correction de bug
-# refactor  -> amélioration interne
-# docs      -> documentation
-# test      -> tests
-# chore     -> maintenance
+# feat          -> new feature
+# fix           -> bug fix
+# refactor      -> internal improvment
+# docs          -> documentation
+# test          -> tests
+# chore         -> maintenance
+#
+# Scope:
+# projet        -> full projet (ex: tree change)
+# className     -> class change, or new method...
+# folderName    -> new folder with new class
 # 
 # [type]<scope>: ...
 []<>: ...

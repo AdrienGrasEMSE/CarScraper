@@ -35,6 +35,7 @@ namespace CarScraper {
         uuids::uuid_random_generator gen{engine};
         _uuid               = uuids::to_string(gen());
         _prefix             = prefix;
+        _fullId             = _prefix + "-" + _uuid;
 
 
         // Debug

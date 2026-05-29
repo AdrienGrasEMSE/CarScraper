@@ -4,7 +4,6 @@
 
 // Imports
 #include <string>
-#include "stduuid/uuid.h"
 
 
 /**
@@ -17,7 +16,8 @@ namespace CarScraper {
      *
      * @attributes:
      * - _uuid          : (string) The UUID of the entity.      | Ex : "123e45..."
-     * - _prefix        : (string) The prefix of the entity.    | Ex: "CAR"
+     * - _prefix        : (string) The prefix of the entity,    
+                            immutable after construction        | Ex: "CAR"
      * 
      * @getters:
      * - getUuid()      : returns the UUID of the entity        | ex: "123e45..."
@@ -35,17 +35,18 @@ namespace CarScraper {
         // Prefix - UUID
         std::string     _uuid;
         std::string     _prefix;
+        std::string     _fullId;
 
 
 
 
     // =========================================================================
-    // Public data and methods
+    // Protected data and methods
     // =========================================================================
-    public:
+    protected:
 
         // -------------------------------------------------------------------------
-        // Constructor / Destructor
+        // Constructor
         // -------------------------------------------------------------------------
 
         /**
@@ -66,7 +67,18 @@ namespace CarScraper {
         Entity(const std::string& prefix);
 
 
-        
+
+
+
+    // =========================================================================
+    // Public data and methods
+    // =========================================================================
+    public:
+
+        // -------------------------------------------------------------------------
+        // Destructor
+        // -------------------------------------------------------------------------
+
         /**
          * Destructor for the Entity class.
          *
@@ -105,7 +117,7 @@ namespace CarScraper {
          *
          * @return The full ID of the entity (prefix-uuid).
          */
-        std::string        getFullId()     const { return _prefix + "-" + _uuid; }
+        std::string        getFullId()     const { return _fullId; }
 
     };
 
