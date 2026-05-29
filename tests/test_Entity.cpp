@@ -17,12 +17,19 @@ static const std::regex UUID_V4_REGEX(
 );
 
 
-// Minimal mock class to test inheritance
+// Minimal mock class to test Entity via inheritance (constructor is protected)
 class MockEntity : public CarScraper::Entity {
 public:
     MockEntity() : Entity("MOCK") {}
+    MockEntity(const std::string& prefix) : Entity(prefix) {}
 };
 
+
+// Mock class to test the default constructor (UNDEFINED prefix)
+class MockEntityDefault : public CarScraper::Entity {
+public:
+    MockEntityDefault() : Entity() {}
+};
 
 
 
@@ -34,22 +41,21 @@ public:
 TEST_CASE("Entity UUID", "[entity][uuid]") {
 
     SECTION("UUID is not empty after construction") {
-        CarScraper::Entity e("TEST");
+        MockEntity e("TEST");
         REQUIRE_FALSE(e.getUuid().empty());
     }
 
     SECTION("UUID matches v4 format") {
-        CarScraper::Entity e("TEST");
+        MockEntity e("TEST");
         REQUIRE(std::regex_match(e.getUuid(), UUID_V4_REGEX));
     }
 
     SECTION("Two instances have different UUIDs") {
-        CarScraper::Entity e1("TEST");
-        CarScraper::Entity e2("TEST");
+        MockEntity e1("TEST");
+        MockEntity e2("TEST");
         REQUIRE(e1.getUuid() != e2.getUuid());
     }
 }
-
 
 
 
@@ -61,16 +67,23 @@ TEST_CASE("Entity UUID", "[entity][uuid]") {
 TEST_CASE("Entity Prefix", "[entity][prefix]") {
 
     SECTION("Prefix is correctly set when provided") {
-        CarScraper::Entity e("CAR");
+        MockEntity e("CAR");
         REQUIRE(e.getPrefix() == "CAR");
     }
 
     SECTION("Default prefix is UNDEFINED") {
-        CarScraper::Entity e;
+        MockEntityDefault e;
         REQUIRE(e.getPrefix() == "UNDEFINED");
     }
-}
 
+    SECTION("Prefix is immutable — getPrefix() always returns construction value") {
+        MockEntity e("CAR");
+        const std::string& p1 = e.getPrefix();
+        const std::string& p2 = e.getPrefix();
+        REQUIRE(p1 == p2);
+        REQUIRE(p1 == "CAR");
+    }
+}
 
 
 
@@ -82,21 +95,30 @@ TEST_CASE("Entity Prefix", "[entity][prefix]") {
 TEST_CASE("Entity FullId", "[entity][fullid]") {
 
     SECTION("getFullId() starts with the prefix") {
-        CarScraper::Entity e("CAR");
+        MockEntity e("CAR");
         REQUIRE(e.getFullId().rfind("CAR-", 0) == 0);
     }
 
     SECTION("getFullId() contains the UUID") {
-        CarScraper::Entity e("CAR");
+        MockEntity e("CAR");
         REQUIRE(e.getFullId().find(e.getUuid()) != std::string::npos);
     }
 
     SECTION("getFullId() format is PREFIX-UUID") {
-        CarScraper::Entity e("CAR");
+        MockEntity e("CAR");
         REQUIRE(e.getFullId() == "CAR-" + e.getUuid());
     }
-}
 
+    SECTION("getFullId() is stable across multiple calls (cached value)") {
+        MockEntity e("CAR");
+        REQUIRE(e.getFullId() == e.getFullId());
+    }
+
+    SECTION("Default entity getFullId() starts with UNDEFINED-") {
+        MockEntityDefault e;
+        REQUIRE(e.getFullId().rfind("UNDEFINED-", 0) == 0);
+    }
+}
 
 
 
@@ -121,8 +143,12 @@ TEST_CASE("Entity Inheritance", "[entity][inheritance]") {
         MockEntity m;
         REQUIRE(m.getFullId().rfind("MOCK-", 0) == 0);
     }
-}
 
+    SECTION("Derived class getFullId() is consistent with prefix and UUID") {
+        MockEntity m;
+        REQUIRE(m.getFullId() == m.getPrefix() + "-" + m.getUuid());
+    }
+}
 
 
 

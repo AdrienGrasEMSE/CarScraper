@@ -1,7 +1,8 @@
 # Type:
 # feat          -> new feature
+# improvement   -> feature improvement
 # fix           -> bug fix
-# refactor      -> internal improvment
+# refactor      -> internal improvement
 # docs          -> documentation
 # test          -> tests
 # chore         -> maintenance

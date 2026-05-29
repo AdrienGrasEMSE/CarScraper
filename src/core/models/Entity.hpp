@@ -15,9 +15,13 @@ namespace CarScraper {
      * @class Entity:
      *
      * @attributes:
-     * - _uuid          : (string) The UUID of the entity.      | Ex : "123e45..."
+     * - _uuid          : (string) The UUID of the entity,
+                            generated during construction and
+                            immutable after construction.       | Ex : "123e45..."
      * - _prefix        : (string) The prefix of the entity,    
-                            immutable after construction        | Ex: "CAR"
+     *                      immutable after construction.       | Ex: "CAR"
+     * - _fullId        : (string) Cached full ID (prefix-uuid),
+                            immutable after construction.       | Ex: "CAR-123e45..."
      * 
      * @getters:
      * - getUuid()      : returns the UUID of the entity        | ex: "123e45..."
@@ -32,7 +36,7 @@ namespace CarScraper {
     // =========================================================================
     private:
 
-        // Prefix - UUID
+        // Prefix - UUID - Full ID
         std::string     _uuid;
         std::string     _prefix;
         std::string     _fullId;
@@ -99,7 +103,7 @@ namespace CarScraper {
          *
          * @return The UUID of the entity.
          */
-        const std::string& getUuid()       const { return _uuid; }
+        const std::string& getUuid()    const { return _uuid; }
 
 
 
@@ -108,16 +112,16 @@ namespace CarScraper {
          *
          * @return The prefix of the entity.
          */
-        const std::string& getPrefix()     const { return _prefix; }
+        const std::string& getPrefix()  const { return _prefix; }
 
 
 
         /**
          * Returns the full ID of the entity.
          *
-         * @return The full ID of the entity (prefix-uuid).
+         * @return The full ID of the entity.
          */
-        std::string        getFullId()     const { return _fullId; }
+        const std::string& getFullId()  const { return _fullId; }
 
     };
 
