@@ -9,36 +9,36 @@ Pour le Minimum Viable Product, il faut que l'application soit capable de :
 - Générer un fichier EXCEL de sortie avec les données filtrées
 
 ### Version 01.00 : détaillé
-- 1 : La classe Entity (v00.01)
+- 1 : La classe Entity
 	1. [x] Faire une classe Entity avec UUID
 	3. [x] Journalisation
 	4. [x] Tests unitaires
-- 1 : La classe Car (v00.02)
-	1. [x] Faire une classe Car pour le stockage des voitures
+- 2 : La classe Car
+	1. [ ] Faire une classe Car pour le stockage des voitures
 	2. [ ] Gestions des erreurs
 	3. [ ] Journalisation
 	4. [ ] Tests unitaires
-- 2 : Le client HTTP (v00.03)
+- 3 : Le client HTTP
 	1. [ ] Création d'un client HTTP capable de récupérer un HTML brut d'une page web
 	2. [ ] Gestions des erreurs
 	3. [ ] Journalisation
 	4. [ ] Tests unitaires
-- 3 : Le Scarpper de l'Argus (v00.04)
+- 4 : Le Scarpper de l'Argus
 	1. [ ] Création d'un scrapper dédié au site de l'Argus
 	2. [ ] Gestions des erreurs
 	3. [ ] Journalisation
 	4. [ ] Tests unitaires
-- 4 : Le système de lecture d'EXCEL (v00.05)
+- 5 : Le système de lecture d'EXCEL
 	1. [ ] Création d'un système capable de lire un EXCEL et sortir une liste de liens hypertexte
 	2. [ ] Gestions des erreurs
 	3. [ ] Journalisation
 	4. [ ] Tests unitaires
-- 5 : Le système de filtre (v00.06)
+- 6 : Le système de filtre
 	1. [ ] Création d'un système permettant de filtrer une liste de voiture selons des critères
 	2. [ ] Gestions des erreurs
 	3. [ ] Journalisation
 	4. [ ] Tests unitaires
-- 6 : Le système de génération d'EXCEL (v00.07)
+- 7 : Le système de génération d'EXCEL
 	1. [ ] Création d'un système générant un EXCEL à partir d'une liste de voiture filtrée
 	2. [ ] Gestions des erreurs
 	3. [ ] Journalisation

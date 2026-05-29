@@ -18,39 +18,111 @@
 namespace CarScraper {
 
     /**
-     * Class Car (exetension of Entity):
+     * @class Car (inheriting from @class Entity):
      *
-     * Represents a car with the following characteristics:
+     * @attributes:
      * - General:
-     *      -> brand            | string    | ex: "Renault"         | no unit
-     *      -> model            | string    | ex: "Clio"            | no unit
-     *      -> generation       | string    | ex: "4"               | no unit
-     *      -> engine           | string    | ex: "1.5 dCi 90hp"    | no unit
-     *      -> trim             | string    | ex: "Expression"      | no unit
-     *      -> price            | int       | ex: 15000             | in €
+     *  -> brand            : (string) Car brand                        | ex: "Renault"
+     *  -> model            : (string) Car model                        | ex: "Clio"
+     *  -> generation       : (string) Car generation                   | ex: "4"
+     *  -> engine           : (string) Car engine                       | ex: "1.5 dCi 90hp"
+     *  -> trim             : (string) Car trim                         | ex: "Expression"
+     *  -> price            : (int) Car price                           | ex: 15000             | in €
      * - Dimensions:
-     *      -> height           | double    | ex: 1.45              | in meters
-     *      -> length           | double    | ex: 4.05              | in meters
-     *      -> width            | double    | ex: 1.75              | in meters
-     *      -> trunkVolume      | int       | ex: 300               | in liters
-     *      -> weight           | int       | ex: 1200              | in kg
-     *      -> seatCount        | int       | ex: 5                 | no unit
+     *  -> height           : (double) Car height                       | ex: 1.45              | in meters
+     *  -> length           : (double) Car length                       | ex: 4.05              | in meters
+     *  -> width            : (double) Car width                        | ex: 1.75              | in meters
+     *  -> trunkVolume      : (int) Car trunk volume                    | ex: 300               | in liters
+     *  -> weight           : (int) Car weight                          | ex: 1200              | in kg
+     *  -> seatCount        : (int) Car seat count                      | ex: 5
      * - Transmission:
-     *      -> gearboxType      | string    | ex: "Manual"          | no unit
-     *      -> gearCount        | int       | ex: 5                 | no unit
+     *  -> gearboxType      : (string) Car gearbox type                 | ex: "Manual"
+     *  -> gearCount        : (int) Car gear count                      | ex: 5
      * - Power:
-     *      -> fuelType         | string    | ex: "Diesel"          | no unit
-     *      -> horsePower       | int       | ex: 90                | in DIN hp
-     *      -> taxHorsePower    | int       | ex: 5                 | in fiscal hp
+     *  -> fuelType         : (string) Car fuel type                    | ex: "Diesel"
+     *  -> horsePower       : (int) Car horse power                     | ex: 90                | in DIN hp
+     *  -> taxHorsePower    : (int) Car tax horse power                 | ex: 5
      * - Consumption:
-     *      -> tankCapacity     | int       | ex: 50                | in liters
-     *      -> fuelConsumption  | double    | ex: 4.5               | in L/100km
-     *      -> co2Emissions     | int       | ex: 120               | in g/km
-     *      -> co2Class         | string    | ex: "B"               | no unit
+     *  -> tankCapacity     : (int) Car tank capacity                   | ex: 50                | in liters
+     *  -> fuelConsumption  : (double) Car fuel consumption             | ex: 4.5               | in L/100km
+     *  -> co2Emissions     : (int) Car co2 emissions                   | ex: 120               | in g/km
+     *  -> co2Class         : (string) Car co2 class                    | ex: "B"
      * - Years:
-     *      -> yearStart        | string    | ex: "2012"            | no unit
-     *      -> yearEnd          | string    | ex: "2019"            | no unit
+     *  -> yearStart        : (string) Car commercialisation start year | ex: "2012"
+     *  -> yearEnd          : (string) Car commercialisation end year   | ex: "2019"
      *
+     * @getters:
+     * - General:
+     *  -> getBrand()           : (string) returns the brand of the car
+     *  -> getModel()           : (string) returns the model of the car
+     *  -> getGeneration()      : (string) returns the generation of the car
+     *  -> getEngine()          : (string) returns the engine of the car
+     *  -> getTrim()            : (string) returns the trim of the car
+     *  -> getPrice()           : (int) returns the price of the car
+     * - Dimensions:
+     *  -> getHeight()          : (double) returns the height of the car
+     *  -> getLength()          : (double) returns the length of the car
+     *  -> getWidth()           : (double) returns the width of the car
+     *  -> getTrunkVolume()     : (int) returns the trunk volume of the car
+     *  -> getWeight()          : (int) returns the weight of the car
+     *  -> getSeatCount()       : (int) returns the seat count of the car
+     * - Transmission:
+     *  -> getGearboxType()     : (string) returns the gearbox type of the car
+     *  -> getGearCount()       : (int) returns the gear count of the car
+     * - Power:
+     *  -> getFuelType()        : (string) returns the fuel type of the car
+     *  -> getHorsePower()      : (int) returns the horse power of the car
+     *  -> getTaxHorsePower()   : (int) returns the tax horse power of the car
+     * - Consumption:
+     *  -> getTankCapacity()    : (int) returns the tank capacity of the car
+     *  -> getFuelConsumption() : (double) returns the fuel consumption of the car
+     *  -> getCo2Emissions()    : (int) returns the CO2 emissions of the car
+     *  -> getCo2Class()        : (string) returns the CO2 class of the car
+     * - Years:
+     *  -> getYearStart()       : (string) returns the start year of the car
+     *  -> getYearEnd()         : (string) returns the end year of the car
+     *
+     * @setters:
+     * - General:
+     *  -> setBrand()           : sets the brand of the car             | max length: 100 characters
+     *  -> setModel()           : sets the model of the car             | max length: 200 characters
+     *  -> setGeneration()      : sets the generation of the car        | max length: 50 characters
+     *  -> setEngine()          : sets the engine of the car            | max length: 200 characters
+     *  -> setTrim()            : sets the trim of the car              | max length: 200 characters
+     *  -> setPrice()           : sets the price of the car             | min value: 0 €, max value: 10 000 000 €
+     * - Dimensions:
+     *  -> setHeight()          : sets the height of the car            | min value: 0.0 m, max value: 10.0 m
+     *  -> setLength()          : sets the length of the car            | min value: 0.0 m, max value: 10.0 m
+     *  -> setWidth()           : sets the width of the car             | min value: 0.0 m, max value: 10.0 m
+     *  -> setTrunkVolume()     : sets the trunk volume of the car      | min value: 0 L, max value: 1000 L
+     *  -> setWeight()          : sets the weight of the car            | min value: 0 kg, max value: 5000 kg
+     *  -> setSeatCount()       : sets the seat count of the car        | min value: 0, max value: 10
+     * - Transmission:
+     *  -> setGearboxType()     : sets the gearbox type of the car      | max length: 50 characters
+     *  -> setGearCount()       : sets the gear count of the car        | min value: 0, max value: 20
+     * - Power:
+     *  -> setFuelType()        : sets the fuel type of the car         | max length: 50 characters
+     *  -> setHorsePower()      : sets the horse power of the car       | min value: 0 hp, max value: 3000 hp
+     *  -> setTaxHorsePower()   : sets the tax horse power of the car   | min value: 0 hp, max value: 200
+     * - Consumption:
+     *  -> setTankCapacity()    : sets the tank capacity of the car     | min value: 0 L, max value: 500 L
+     *  -> setFuelConsumption() : sets the fuel consumption of the car  | min value: 0.0 L/100km, max value: 50.0 L/100km
+     *  -> setCo2Emissions()    : sets the CO2 emissions of the car     | min value: 0 g/km, max value: 200 g/km
+     *  -> setCo2Class()        : sets the CO2 class of the car         | max length: 10 characters
+     * - Years:
+     *  -> setYearStart()       : sets the start year of the car
+     *  -> setYearEnd()         : sets the end year of the car
+     *
+     * @utilities:
+     * - isComplete()           : returns true if the car data has been properly filled (no default values or error values)
+     * - isValid()              : returns true if the car data is valid (no error values)
+     * - stringValidation()     : validates and normalizes a string value (trimming, length check, UTF-8 normalization)
+     * - intValidation()        : validates an int value (range check)
+     * - doubleValidation()     : validates a double value (range check)
+     * - toString()             : returns a string representation of the car (for debugging purposes)
+     *
+     * @operators:
+     * - operator<<             : stream operator overload for easy display of the car information
      */
     class Car : public Entity {
 
@@ -205,6 +277,27 @@ namespace CarScraper {
             // Returns true if the car data has been properly filled (no default values or error values)
             bool isComplete() const;
             bool isValid() const;
+
+
+            // String validation and normalization
+            static std::string stringValidation(    const std::string&      strVal,
+                                                    const std::string&      attributeName,
+                                                    const long unsigned int maxLength = 255);
+
+            
+            // Int validation
+            static int intValidation(   const int           intVal,
+                                        const std::string&  attributeName,
+                                        const int           minValue = 0,
+                                        const int           maxValue = 9999);
+
+
+            // Double validation
+            static double doubleValidation( const double        doubleVal,
+                                            const std::string&  attributeName,
+                                            const double        minValue = 0.0,
+                                            const double        maxValue = 9999.0);
+
 
             // Debug display
             std::string toString() const;
