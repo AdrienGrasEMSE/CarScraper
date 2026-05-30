@@ -524,7 +524,50 @@ namespace CarScraper {
      * @return true if the car data is complete, false otherwise
      */
     bool Car::isComplete() const {
+
+        // General
+        if (_brand      == DEFAULT_STR)     return false;
+        if (_model      == DEFAULT_STR)     return false;
+        if (_generation == DEFAULT_STR)     return false;
+        if (_engine     == DEFAULT_STR)     return false;
+        if (_trim       == DEFAULT_STR)     return false;
+        if (_price      == DEFAULT_INT)     return false;
+
+
+        // Dimensions
+        if (_height     == DEFAULT_DOUBLE)  return false;
+        if (_length     == DEFAULT_DOUBLE)  return false;
+        if (_width      == DEFAULT_DOUBLE)  return false;
+        if (_trunkVolume== DEFAULT_INT)     return false;
+        if (_weight     == DEFAULT_INT)     return false;
+        if (_seatCount  == DEFAULT_INT)     return false;
+
+
+        // Transmission
+        if (_gearboxType == GearboxType::NA) return false;
+        if (_gearCount   == DEFAULT_INT)     return false;
+
+
+        // Power
+        if (_fuelType      == FuelType::NA) return false;
+        if (_horsePower    == DEFAULT_INT)  return false;
+        if (_taxHorsePower == DEFAULT_INT)  return false;
+
+
+        // Consumption
+        if (_tankCapacity    == DEFAULT_INT)    return false;
+        if (_fuelConsumption == DEFAULT_DOUBLE) return false;
+        if (_co2Emissions    == DEFAULT_INT)    return false;
+        if (_co2Class        == Co2Class::NA)   return false;
+
+
+        // Commercialisation
+        if (!_commercialisationStart.has_value()) return false;
+
+
+        // Car complete
         return true;
+
     }
 
 
@@ -534,7 +577,43 @@ namespace CarScraper {
      * @return true if the car data is valid, false otherwise
      */
     bool Car::isValid() const {
+
+        // General
+        if (_brand      == ERROR_STR)       return false;
+        if (_model      == ERROR_STR)       return false;
+        if (_generation == ERROR_STR)       return false;
+        if (_engine     == ERROR_STR)       return false;
+        if (_trim       == ERROR_STR)       return false;
+        if (_price      == ERROR_INT)       return false;
+
+
+        // Dimensions
+        if (_height     == ERROR_DOUBLE)    return false;
+        if (_length     == ERROR_DOUBLE)    return false;
+        if (_width      == ERROR_DOUBLE)    return false;
+        if (_trunkVolume== ERROR_INT)       return false;
+        if (_weight     == ERROR_INT)       return false;
+        if (_seatCount  == ERROR_INT)       return false;
+
+
+        // Transmission
+        if (_gearCount  == ERROR_INT)       return false;
+
+
+        // Power
+        if (_horsePower    == ERROR_INT)    return false;
+        if (_taxHorsePower == ERROR_INT)    return false;
+
+
+        // Consumption
+        if (_tankCapacity    == ERROR_INT)      return false;
+        if (_fuelConsumption == ERROR_DOUBLE)   return false;
+        if (_co2Emissions    == ERROR_INT)      return false;
+
+
+        // Car valid
         return true;
+
     }
 
 
@@ -542,8 +621,84 @@ namespace CarScraper {
      * Returns a string representation of the car (for debugging purposes)
      */
     std::string Car::toString() const {
+
         std::ostringstream oss;
-        oss << "[Car] ";
+        oss << std::fixed << std::setprecision(2);
+
+        // Header
+        oss << getFullId() << "\n";
+
+
+        // -------------------------------------------------------------------------
+        // General
+        // -------------------------------------------------------------------------
+        oss << "- General\n";
+        oss << "    -> " << std::left << std::setw(17) << "Brand"          << ": \"" << _brand       << "\"\n";
+        oss << "    -> " << std::left << std::setw(17) << "Model"          << ": \"" << _model       << "\"\n";
+        oss << "    -> " << std::left << std::setw(17) << "Generation"     << ": \"" << _generation  << "\"\n";
+        oss << "    -> " << std::left << std::setw(17) << "Engine"         << ": \"" << _engine      << "\"\n";
+        oss << "    -> " << std::left << std::setw(17) << "Trim"           << ": \"" << _trim        << "\"\n";
+        oss << "    -> " << std::left << std::setw(17) << "Price"          << ": "   << _price       << " €\n";
+
+
+        // -------------------------------------------------------------------------
+        // Dimensions
+        // -------------------------------------------------------------------------
+        oss << "- Dimensions\n";
+        oss << "    -> " << std::left << std::setw(17) << "Height"         << ": " << _height      << " m\n";
+        oss << "    -> " << std::left << std::setw(17) << "Length"         << ": " << _length      << " m\n";
+        oss << "    -> " << std::left << std::setw(17) << "Width"          << ": " << _width       << " m\n";
+        oss << "    -> " << std::left << std::setw(17) << "TrunkVolume"    << ": " << _trunkVolume << " L\n";
+        oss << "    -> " << std::left << std::setw(17) << "Weight"         << ": " << _weight      << " kg\n";
+        oss << "    -> " << std::left << std::setw(17) << "SeatCount"      << ": " << _seatCount   << "\n";
+
+
+        // -------------------------------------------------------------------------
+        // Transmission
+        // -------------------------------------------------------------------------
+        oss << "- Transmission\n";
+        oss << "    -> " << std::left << std::setw(17) << "GearboxType"    << ": \"" << gearBoxTypeToString(_gearboxType) << "\"\n";
+        oss << "    -> " << std::left << std::setw(17) << "GearCount"      << ": "   << _gearCount  << "\n";
+
+
+        // -------------------------------------------------------------------------
+        // Power
+        // -------------------------------------------------------------------------
+        oss << "- Power\n";
+        oss << "    -> " << std::left << std::setw(17) << "FuelType"       << ": \"" << fuelTypeToString(_fuelType)       << "\"\n";
+        oss << "    -> " << std::left << std::setw(17) << "HorsePower"     << ": "   << _horsePower    << " DIN hp\n";
+        oss << "    -> " << std::left << std::setw(17) << "TaxHorsePower"  << ": "   << _taxHorsePower << " fiscal hp\n";
+
+
+        // -------------------------------------------------------------------------
+        // Consumption
+        // -------------------------------------------------------------------------
+        oss << "- Consumption\n";
+        oss << "    -> " << std::left << std::setw(17) << "TankCapacity"    << ": " << _tankCapacity    << " L\n";
+        oss << "    -> " << std::left << std::setw(17) << "FuelConsumption" << ": " << _fuelConsumption << " L/100km\n";
+        oss << "    -> " << std::left << std::setw(17) << "Co2Emissions"    << ": " << _co2Emissions    << " g/km\n";
+        oss << "    -> " << std::left << std::setw(17) << "Co2Class"        << ": \"" << co2ClassToString(_co2Class)      << "\"\n";
+
+
+        // -------------------------------------------------------------------------
+        // Commercialisation
+        // -------------------------------------------------------------------------
+        oss << "- Commercialisation\n";
+        oss << "    -> " << std::left << std::setw(17) << "Start"
+            << ": \""
+            << (_commercialisationStart.has_value()
+                    ? Validation::formatDate(_commercialisationStart.value())
+                    : "N/A")
+            << "\"\n";
+        oss << "    -> " << std::left << std::setw(17) << "End"
+            << ": \""
+            << (_commercialisationEnd.has_value()
+                    ? Validation::formatDate(_commercialisationEnd.value())
+                    : "still in sale")
+            << "\"\n";
+        oss << "    -> " << std::left << std::setw(17) << "Still in Sale"  << ": " << _stillInSale << "\n";
+
+
         return oss.str();
     }
 
@@ -551,57 +706,10 @@ namespace CarScraper {
 
 
     // =========================================================================
-    // Stream operator overload
+    // Operator overload
     // =========================================================================
     std::ostream& operator<<(std::ostream& os, const Car& car) {
-
-        os << std::fixed << std::setprecision(2);
-
-        os << car.getFullId() << "\n";
-/**
-        // General
-        os << "- General\n";
-        os << "    -> " << std::left << std::setw(16) << "Brand"          << ": \""     << car.getBrand()           << "\"\n";
-        os << "    -> " << std::left << std::setw(16) << "Model"          << ": \""     << car.getModel()           << "\"\n";
-        os << "    -> " << std::left << std::setw(16) << "Generation"     << ": \""     << car.getGeneration()      << "\"\n";
-        os << "    -> " << std::left << std::setw(16) << "Engine"         << ": \""     << car.getEngine()          << "\"\n";
-        os << "    -> " << std::left << std::setw(16) << "Trim"           << ": \""     << car.getTrim()            << "\"\n";
-        os << "    -> " << std::left << std::setw(16) << "Price"          << ": "       << car.getPrice()           << " €\n";
-
-        // Dimensions
-        os << "- Dimensions\n";
-        os << "    -> " << std::left << std::setw(16) << "Height"         << ": "       << car.getHeight()          << " m\n";
-        os << "    -> " << std::left << std::setw(16) << "Length"         << ": "       << car.getLength()          << " m\n";
-        os << "    -> " << std::left << std::setw(16) << "Width"          << ": "       << car.getWidth()           << " m\n";
-        os << "    -> " << std::left << std::setw(16) << "TrunkVolume"    << ": "       << car.getTrunkVolume()     << " L\n";
-        os << "    -> " << std::left << std::setw(16) << "Weight"         << ": "       << car.getWeight()          << " kg\n";
-        os << "    -> " << std::left << std::setw(16) << "SeatCount"      << ": "       << car.getSeatCount()       << "\n";
-
-        // Transmission
-        os << "- Transmission\n";
-        os << "    -> " << std::left << std::setw(16) << "GearboxType"    << ": \""     << car.getGearboxType()     << "\"\n";
-        os << "    -> " << std::left << std::setw(16) << "GearCount"      << ": "       << car.getGearCount()       << "\n";
-
-        // Power
-        os << "- Power\n";
-        os << "    -> " << std::left << std::setw(16) << "FuelType"       << ": \""     << car.getFuelType()        << "\"\n";
-        os << "    -> " << std::left << std::setw(16) << "HorsePower"     << ": "       << car.getHorsePower()      << " DIN hp\n";
-        os << "    -> " << std::left << std::setw(16) << "TaxHorsePower"  << ": "       << car.getTaxHorsePower()   << " fiscal hp\n";
-
-        // Consumption
-        os << "- Consumption\n";
-        os << "    -> " << std::left << std::setw(16) << "TankCapacity"    << ": "      << car.getTankCapacity()    << " L\n";
-        os << "    -> " << std::left << std::setw(16) << "FuelConsumption" << ": "      << car.getFuelConsumption() << " L/100km\n";
-        os << "    -> " << std::left << std::setw(16) << "Co2Emissions"    << ": "      << car.getCo2Emissions()    << " g/km\n";
-        os << "    -> " << std::left << std::setw(16) << "Co2Class"        << ": \""    << car.getCo2Class()        << "\"\n";
-
-        // Commercialisation
-        os << "- Commercialisation\n";
-        //os << "    -> " << std::left << std::setw(16) << "Start"           << ": \""    << car.getCommercialisationStart()  << "\"\n";
-        //os << "    -> " << std::left << std::setw(16) << "End"             << ": \""    << car.getCommercialisationEnd()    << "\"\n";
-        os << "    -> " << std::left << std::setw(16) << "Still in Sale"   << ": "      << car.isStillInSale()      << "\n";
-*/
-
+        os << car.toString();
         return os;
     }
 

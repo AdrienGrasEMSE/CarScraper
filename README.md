@@ -14,9 +14,9 @@ Pour le Minimum Viable Product, il faut que l'application soit capable de :
 	3. [x] Journalisation
 	4. [x] Tests unitaires
 - 2 : La classe Car
-	1. [ ] Faire une classe Car pour le stockage des voitures
-	2. [ ] Gestions des erreurs
-	3. [ ] Journalisation
+	1. [x] Faire une classe Car pour le stockage des voitures
+	2. [x] Gestions des erreurs
+	3. [x] Journalisation
 	4. [ ] Tests unitaires
 - 3 : Le client HTTP
 	1. [ ] Création d'un client HTTP capable de récupérer un HTML brut d'une page web
