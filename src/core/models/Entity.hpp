@@ -1,3 +1,13 @@
+/**
+ * @file Entity.hpp
+ * 
+ * @brief This file define the Entity class, a basic class with a UUID system.
+ *
+ * @author Adrien GRAS
+ * @date 2026-05-26
+ */
+
+
 // For only one include
 #pragma once
 

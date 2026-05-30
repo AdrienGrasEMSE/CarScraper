@@ -6,7 +6,6 @@
  * @author Adrien GRAS
  * @date 2026-05-26
  *
- * @todo Use the date type for commercialisation start and end (instead of string) once the date parsing functions are implemented and tested
  * @todo Setup an Energy enum for fuel type and a corresponding setter that accepts both string and enum values (with string validation)
  * @todo Setup a CO2Class enum for CO2 class and a corresponding setter that accepts both string and enum values (with string validation)
  * @todo Setup a GearboxType enum for gearbox type and a corresponding setter that accepts both string and enum values (with string validation)
@@ -456,7 +455,7 @@ namespace CarScraper {
         os << std::fixed << std::setprecision(2);
 
         os << car.getFullId() << "\n";
-
+/**
         // General
         os << "- General\n";
         os << "    -> " << std::left << std::setw(16) << "Brand"          << ": \""     << car.getBrand()           << "\"\n";
@@ -498,6 +497,7 @@ namespace CarScraper {
         //os << "    -> " << std::left << std::setw(16) << "Start"           << ": \""    << car.getCommercialisationStart()  << "\"\n";
         //os << "    -> " << std::left << std::setw(16) << "End"             << ": \""    << car.getCommercialisationEnd()    << "\"\n";
         os << "    -> " << std::left << std::setw(16) << "Still in Sale"   << ": "      << car.isStillInSale()      << "\n";
+*/
 
         return os;
     }

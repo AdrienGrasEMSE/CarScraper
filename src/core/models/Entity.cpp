@@ -1,3 +1,13 @@
+/**
+ * @file Entity.cpp
+ * 
+ * @brief This file implement the Entity class, a basic class with a UUID system.
+ *
+ * @author Adrien GRAS
+ * @date 2026-05-26
+ */
+
+
 // Imports
 #include "Entity.hpp"
 #include "core/logger/Logger.hpp"
