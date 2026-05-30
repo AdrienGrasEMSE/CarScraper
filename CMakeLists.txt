@@ -92,7 +92,7 @@ set(CORE_SOURCES
 
     # Core — Models
     src/core/models/Entity.cpp
-    #src/core/models/Car.cpp
+    src/core/models/Car.cpp
 )
 
 

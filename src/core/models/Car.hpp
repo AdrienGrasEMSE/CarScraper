@@ -319,13 +319,13 @@ namespace CarScraper {
             /** @brief Gets the commercialisation start year of the car
              *  @return The commercialisation start year of the car
              */
-            const std::optional<std::chrono::year_month_day>  getCommercialisationStart()  const { return _commercialisationStart; }
+            const std::optional<std::chrono::year_month_day>& getCommercialisationStart()   const { return _commercialisationStart; }
 
 
             /** @brief Gets the commercialisation end year of the car
              *  @return The commercialisation end year of the car
              */
-            const std::optional<std::chrono::year_month_day>  getCommercialisationEnd()    const { return _commercialisationEnd; }
+            const std::optional<std::chrono::year_month_day>& getCommercialisationEnd()     const { return _commercialisationEnd; }
 
 
             /** @brief Gets whether the car is still in sale
@@ -363,9 +363,9 @@ namespace CarScraper {
             void setFuelConsumption (double                 fuelConsumption);
             void setCo2Emissions    (int                    co2Emissions);
             void setCo2Class        (const  std::string&    co2Class);
-            void setCommercialisationStart  (const  std::optional<std::chrono::year_month_day>& commercialisationStart);
-            void setCommercialisationEnd    (const  std::optional<std::chrono::year_month_day>& commercialisationEnd);
-            void setStillInSale     (bool                           stillInSale);
+            void setCommercialisationStart  (const std::string& commercialisationStart);
+            void setCommercialisationEnd    (const std::string& commercialisationEnd);
+            void setStillInSale     (bool                   stillInSale);
 
 
 

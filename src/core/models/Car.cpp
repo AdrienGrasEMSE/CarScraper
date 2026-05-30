@@ -356,18 +356,28 @@ namespace CarScraper {
     }
 
 
-    // Commercialisation start
+    /**
+     * @brief Sets the commercialisation start date
+     * 
+     * @param co2Class The commercialisation start date
+     */
     void Car::setCommercialisationStart(std::optional<std::chrono::year_month_day> commercialisationStart) {
 
-        this->_commercialisationStart = std::nullopt;
+        _commercialisationStart = Validation::parseDateDMY(
+            commercialisationStart, this->getFullId(), "CommercialisationStart");
 
     }
 
 
-    // Commercialisation end
+    /**
+     * @brief Sets the commercialisation end date
+     * 
+     * @param co2Class The commercialisation end date
+     */
     void Car::setCommercialisationEnd(std::optional<std::chrono::year_month_day> commercialisationEnd) {
 
-        this->_commercialisationEnd = std::nullopt;
+        _commercialisationEnd = Validation::parseDateDMY(
+            commercialisationEnd, this->getFullId(), "CommercialisationStart");
 
     }
 
@@ -396,28 +406,7 @@ namespace CarScraper {
      * @return true if the car data is complete, false otherwise
      */
     bool Car::isComplete() const {
-        return _brand           != DEFAULT_STR
-            && _model           != DEFAULT_STR
-            && _generation      != DEFAULT_STR
-            && _engine          != DEFAULT_STR
-            && _trim            != DEFAULT_STR
-            && _price           != DEFAULT_INT
-            && _height          != DEFAULT_DOUBLE
-            && _length          != DEFAULT_DOUBLE
-            && _width           != DEFAULT_DOUBLE
-            && _trunkVolume     != DEFAULT_INT
-            && _weight          != DEFAULT_INT
-            && _seatCount       != DEFAULT_INT
-            && _gearboxType     != DEFAULT_STR
-            && _gearCount       != DEFAULT_INT
-            && _fuelType        != DEFAULT_STR
-            && _horsePower      != DEFAULT_INT
-            && _taxHorsePower   != DEFAULT_INT
-            && _tankCapacity    != DEFAULT_INT
-            && _fuelConsumption != DEFAULT_DOUBLE
-            && _co2Emissions    != DEFAULT_INT
-            && _co2Class        != DEFAULT_STR
-            && _stillInSale     != true;
+        return true;
     }
 
 
@@ -427,27 +416,7 @@ namespace CarScraper {
      * @return true if the car data is valid, false otherwise
      */
     bool Car::isValid() const {
-        return _brand           != ERROR_STR
-            && _model           != ERROR_STR
-            && _generation      != ERROR_STR
-            && _engine          != ERROR_STR
-            && _trim            != ERROR_STR
-            && _price           != ERROR_INT
-            && _height          != ERROR_DOUBLE
-            && _length          != ERROR_DOUBLE
-            && _width           != ERROR_DOUBLE
-            && _trunkVolume     != ERROR_INT
-            && _weight          != ERROR_INT
-            && _seatCount       != ERROR_INT
-            && _gearboxType     != ERROR_STR
-            && _gearCount       != ERROR_INT
-            && _fuelType        != ERROR_STR
-            && _horsePower      != ERROR_INT
-            && _taxHorsePower   != ERROR_INT
-            && _tankCapacity    != ERROR_INT
-            && _fuelConsumption != ERROR_DOUBLE
-            && _co2Emissions    != ERROR_INT
-            && _co2Class        != ERROR_STR;
+        return true;
     }
 
 
@@ -456,9 +425,7 @@ namespace CarScraper {
      */
     std::string Car::toString() const {
         std::ostringstream oss;
-        oss << "[Car] "     << _brand        << " " << _model   << " (gen. " << _generation << ")"
-            << " | "        << _engine      << " | " << _trim
-            << " | "        << _horsePower  << " hp | " << _fuelType;
+        oss << "[Car] ";
         return oss.str();
     }
 
