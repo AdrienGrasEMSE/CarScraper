@@ -412,7 +412,7 @@ namespace CarScraper {
     void Car::setCo2Emissions(int co2Emissions) {
 
         // Verification
-        this->_co2Emissions = Validation::intValidation(co2Emissions, this->getFullId(), "Co2Emissions", 0, 200);
+        this->_co2Emissions = Validation::intValidation(co2Emissions, this->getFullId(), "Co2Emissions", 0, 1000);
 
     }
 
