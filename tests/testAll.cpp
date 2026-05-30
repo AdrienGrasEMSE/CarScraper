@@ -15,9 +15,9 @@
 // Imports
 #include <catch2/catch.hpp>
 #include "core/logger/Logger.hpp"
-#include "../base/baseLogger.cpp"
-#include "../base/baseEntity.cpp"
-#include "../base/baseValidation.cpp"
+#include "base/baseLogger.cpp"
+#include "base/baseEntity.cpp"
+#include "base/baseValidation.cpp"
 
 
 // =============================================================================
@@ -26,7 +26,7 @@
 int main(int argc, char* argv[]) {
 
     // Catch2 runner
-    CarScraper::Logger::init("logs/test_validation.txt");
+    CarScraper::Logger::init("logs/test_all.txt");
     return Catch::Session().run(argc, argv);
 
 }

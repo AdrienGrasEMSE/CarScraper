@@ -66,20 +66,6 @@ namespace CarScraper {
             ~Logger() = delete;
 
 
-            // -------------------------------------------------------------------------
-            // Testing utilities
-            // -------------------------------------------------------------------------
-            #ifdef TESTING
-
-                /**
-                * @brief Resets the logger instance (for testing purposes only).
-                */
-                spdlog::drop("CarScraper");
-                static void reset();
-
-            #endif
-
-
 
             
 
@@ -180,6 +166,19 @@ namespace CarScraper {
             static void critical(fmt::format_string<Args...> fmt, Args&&... args) {
                 if (auto* l = _safeGet()) l->critical(fmt, std::forward<Args>(args)...);
             }
+
+
+            // -------------------------------------------------------------------------
+            // Testing utilities
+            // -------------------------------------------------------------------------
+            #ifdef TESTING
+
+                /**
+                * @brief Resets the logger instance (for testing purposes only).
+                */
+                static void reset();
+
+            #endif
 
     };
 

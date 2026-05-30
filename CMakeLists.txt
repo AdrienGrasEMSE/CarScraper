@@ -80,24 +80,19 @@ endfunction()
 
 
 # ==============================================================================
-# Sources — main executable
+# Core sources (shared between lib and test lib)
 # ==============================================================================
 
-set(SOURCES
-    src/main.cpp
+set(CORE_SOURCES
+    # Core — Logger
+    src/core/Logger/Logger.cpp
 
     # Core — Utils
     src/core/utils/Validation.cpp
 
-    # Core — Logger
-    src/core/Logger/Logger.cpp
-
     # Core — Models
-    src/core/models/Car.cpp
     src/core/models/Entity.cpp
-
-    # IO — HttpClient
-    #src/io/HttpClient/HttpClient.cpp
+    #src/core/models/Car.cpp
 )
 
 
@@ -105,54 +100,66 @@ set(SOURCES
 # Main executable
 # ==============================================================================
 
-add_executable(${PROJECT_NAME} ${SOURCES})
+add_executable(${PROJECT_NAME}
+    src/main.cpp
+    ${CORE_SOURCES}
+    # src/io/HttpClient/HttpClient.cpp
+)
 target_link_libraries(${PROJECT_NAME} PRIVATE OpenXLSX::OpenXLSX)
 carscraper_configure_target(${PROJECT_NAME})
 
 
 # ==============================================================================
-# Tests
+# CarScraperLib — production lib (no TESTING flag)
 # ==============================================================================
 
-# Lib for tests — to avoid recompiling core files for each test
-add_library(CarScraperLib STATIC
-    src/core/Logger/Logger.cpp
-    src/core/utils/Validation.cpp
-    src/core/models/Entity.cpp
-)
+add_library(CarScraperLib STATIC ${CORE_SOURCES})
 carscraper_configure_target(CarScraperLib)
 
+
+# ==============================================================================
+# CarScraperLibTest — test lib (compiled with TESTING flag)
+# ==============================================================================
+
+add_library(CarScraperLibTest STATIC ${CORE_SOURCES})
+carscraper_configure_target(CarScraperLibTest)
+target_compile_definitions(CarScraperLibTest PRIVATE TESTING)
+
+
+# ==============================================================================
+# Tests — mono
+# ==============================================================================
+
 # test Logger
-set(TEST_LOGGER_SOURCES tests/mono/testLogger.cpp)
-add_executable(TestLogger ${TEST_LOGGER_SOURCES})
-target_link_libraries(TestLogger PRIVATE CarScraperLib)
+add_executable(TestLogger               tests/mono/testLogger.cpp)
+target_link_libraries(TestLogger        PRIVATE CarScraperLibTest)
 carscraper_configure_target(TestLogger)
-target_compile_definitions(TestLogger PRIVATE TESTING)
+target_compile_definitions(TestLogger   PRIVATE TESTING)
 
 # test Validation
-set(TEST_VALIDATION_SOURCES tests/mono/testValidation.cpp)
-add_executable(TestValidation ${TEST_VALIDATION_SOURCES})
-target_link_libraries(TestValidation PRIVATE CarScraperLib)
+add_executable(TestValidation           tests/mono/testValidation.cpp)
+target_link_libraries(TestValidation    PRIVATE CarScraperLibTest)
 carscraper_configure_target(TestValidation)
 target_compile_definitions(TestValidation PRIVATE TESTING)
 
 # test Entity
-set(TEST_ENTITY_SOURCES tests/mono/testEntity.cpp)
-add_executable(TestEntity ${TEST_ENTITY_SOURCES})
-target_link_libraries(TestEntity PRIVATE CarScraperLib)
+add_executable(TestEntity               tests/mono/testEntity.cpp)
+target_link_libraries(TestEntity        PRIVATE CarScraperLibTest)
 carscraper_configure_target(TestEntity)
-target_compile_definitions(TestEntity PRIVATE TESTING)
+target_compile_definitions(TestEntity   PRIVATE TESTING)
 
 # test Car
-set(TEST_CAR_SOURCES tests/mono/testCar.cpp)
-add_executable(TestCar ${TEST_CAR_SOURCES})
-target_link_libraries(TestCar PRIVATE CarScraperLib)
+add_executable(TestCar                  tests/mono/testCar.cpp)
+target_link_libraries(TestCar           PRIVATE CarScraperLibTest)
 carscraper_configure_target(TestCar)
-target_compile_definitions(TestCar PRIVATE TESTING)
+target_compile_definitions(TestCar      PRIVATE TESTING)
 
-# testAll (aggregator)
-set(TEST_ALL_SOURCES tests/testAll.cpp)
-add_executable(TestAll ${TEST_ALL_SOURCES})
-target_link_libraries(TestAll PRIVATE CarScraperLib)
+
+# ==============================================================================
+# Tests — all
+# ==============================================================================
+
+add_executable(TestAll                  tests/testAll.cpp)
+target_link_libraries(TestAll           PRIVATE CarScraperLibTest)
 carscraper_configure_target(TestAll)
-target_compile_definitions(TestAll PRIVATE TESTING)
+target_compile_definitions(TestAll      PRIVATE TESTING)
