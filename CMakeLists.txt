@@ -90,6 +90,9 @@ set(CORE_SOURCES
     # Core — Utils
     src/core/utils/Validation.cpp
 
+    # Core - Enum
+    src/core/enum/FuelType.cpp
+
     # Core — Models
     src/core/models/Entity.cpp
     src/core/models/Car.cpp
@@ -103,7 +106,6 @@ set(CORE_SOURCES
 add_executable(${PROJECT_NAME}
     src/main.cpp
     ${CORE_SOURCES}
-    # src/io/HttpClient/HttpClient.cpp
 )
 target_link_libraries(${PROJECT_NAME} PRIVATE OpenXLSX::OpenXLSX)
 carscraper_configure_target(${PROJECT_NAME})

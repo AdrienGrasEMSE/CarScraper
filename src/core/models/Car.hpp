@@ -14,6 +14,7 @@
 
 // Imports
 #include "Entity.hpp"
+#include "core/enum/FuelType.hpp"
 #include <string>
 #include <ostream>
 #include <iomanip>
@@ -51,7 +52,7 @@ namespace CarScraper {
      *  -> gearboxType      : (string) Car gearbox type                 | ex: "Manual"
      *  -> gearCount        : (int) Car gear count                      | ex: 5
      * - Power:
-     *  -> fuelType         : (string) Car fuel type                    | ex: "Diesel"
+     *  -> fuelType         : (enum) Car fuel type                      | ex: "Diesel"
      *  -> horsePower       : (int) Car horse power                     | ex: 90                | in DIN hp
      *  -> taxHorsePower    : (int) Car tax horse power                 | ex: 5
      * - Consumption:
@@ -60,8 +61,8 @@ namespace CarScraper {
      *  -> co2Emissions     : (int) Car co2 emissions                   | ex: 120               | in g/km
      *  -> co2Class         : (string) Car co2 class                    | ex: "B"
      * - Commercialisation :
-     *  -> commercialisationStart : (string) Car commercialisation start year | ex: "2012"
-     *  -> commercialisationEnd   : (string) Car commercialisation end year   | ex: "2019"
+     *  -> commercialisationStart : (chrono) Car commercialisation start year | ex: "01/01/2012"
+     *  -> commercialisationEnd   : (chrono) Car commercialisation end year   | ex: "08/09/2019"
      *  -> stillInSale            : (bool) Car still in sale                  | ex: false
      *
      * @getters:
@@ -83,7 +84,7 @@ namespace CarScraper {
      *  -> getGearboxType()     : (string) returns the gearbox type of the car
      *  -> getGearCount()       : (int) returns the gear count of the car
      * - Power:
-     *  -> getFuelType()        : (string) returns the fuel type of the car
+     *  -> getFuelType()        : (enum) returns the fuel type of the car
      *  -> getHorsePower()      : (int) returns the horse power of the car
      *  -> getTaxHorsePower()   : (int) returns the tax horse power of the car
      * - Consumption:
@@ -92,8 +93,8 @@ namespace CarScraper {
      *  -> getCo2Emissions()    : (int) returns the CO2 emissions of the car
      *  -> getCo2Class()        : (string) returns the CO2 class of the car
      * - Commercialisation :
-     *  -> getCommercialisationStart()  : (string) returns the start year of the car
-     *  -> getCommercialisationEnd()    : (string) returns the end year of the car
+     *  -> getCommercialisationStart()  : (chrono) returns the start year of the car
+     *  -> getCommercialisationEnd()    : (chrono) returns the end year of the car
      *  -> getStillInSale()             : (bool) returns whether the car is still in sale
      *
      * @setters:
@@ -115,7 +116,7 @@ namespace CarScraper {
      *  -> setGearboxType()     : sets the gearbox type of the car      | max length: 50 characters
      *  -> setGearCount()       : sets the gear count of the car        | min value: 0, max value: 20
      * - Power:
-     *  -> setFuelType()        : sets the fuel type of the car         | max length: 50 characters
+     *  -> setFuelType()        : sets the fuel type of the car         | enum / max length: 50 characters
      *  -> setHorsePower()      : sets the horse power of the car       | min value: 0 hp, max value: 3000 hp
      *  -> setTaxHorsePower()   : sets the tax horse power of the car   | min value: 0 hp, max value: 200
      * - Consumption:
@@ -164,7 +165,7 @@ namespace CarScraper {
             int             _gearCount;
 
             // Power
-            std::string     _fuelType;
+            CarScraper::FuelType    _fuelType;
             int             _horsePower;
             int             _taxHorsePower;
 
@@ -203,135 +204,145 @@ namespace CarScraper {
             /** @brief Gets the brand of the car
              *  @return The brand of the car
              */
-            const std::string&  getBrand()              const { return _brand; }
+            const std::string& getBrand() const { return _brand; }
 
 
             /** @brief Gets the model of the car
              *  @return The model of the car
              */
-            const std::string&  getModel()              const { return _model; }
+            const std::string& getModel() const { return _model; }
 
 
             /** @brief Gets the generation of the car
              *  @return The generation of the car
              */
-            const std::string&  getGeneration()         const { return _generation; }
+            const std::string& getGeneration() const { return _generation; }
 
 
             /** @brief Gets the engine of the car
              *  @return The engine of the car
              */
-            const std::string&  getEngine()             const { return _engine; }
+            const std::string& getEngine() const { return _engine; }
 
 
             /** @brief Gets the trim of the car
              *  @return The trim of the car
              */
-            const std::string&  getTrim()               const { return _trim; }
+            const std::string& getTrim() const { return _trim; }
 
             
             /** @brief Gets the price of the car
              *  @return The price of the car
              */
-            int                 getPrice()              const { return _price; }
+            int getPrice() const { return _price; }
 
             
             /** @brief Gets the height of the car
              *  @return The height of the car
              */
-            double              getHeight()             const { return _height; }
+            double getHeight() const { return _height; }
 
 
             /** @brief Gets the length of the car
              *  @return The length of the car
              */
-            double              getLength()             const { return _length; }
+            double getLength() const { return _length; }
 
 
             /** @brief Gets the width of the car
              *  @return The width of the car
              */
-            double              getWidth()              const { return _width; }
+            double getWidth() const { return _width; }
 
 
             /** @brief Gets the trunk volume of the car
              *  @return The trunk volume of the car
              */
-            int                 getTrunkVolume()        const { return _trunkVolume; }
+            int getTrunkVolume() const { return _trunkVolume; }
 
             
             /** @brief Gets the weight of the car
              *  @return The weight of the car
              */
-            int                 getWeight()             const { return _weight; }
+            int getWeight() const { return _weight; }
 
 
             /** @brief Gets the seat count of the car
              *  @return The seat count of the car
              */
-            int                 getSeatCount()          const { return _seatCount; }
+            int getSeatCount() const { return _seatCount; }
 
 
             /** @brief Gets the type of the gearbox
              *  @return The type of the gearbox
              */
-            const std::string&  getGearboxType()        const { return _gearboxType; }
+            const std::string& getGearboxType() const { return _gearboxType; }
 
 
             /** @brief Gets the number of gears
              *  @return The number of gears
              */
-            int                 getGearCount()          const { return _gearCount; }
+            int getGearCount() const { return _gearCount; }
 
 
             /** @brief Gets the type of fuel
              *  @return The type of fuel
              */
-            const std::string&  getFuelType()           const { return _fuelType; }
-            int                 getHorsePower()         const { return _horsePower; }
-            int                 getTaxHorsePower()      const { return _taxHorsePower; }
+            CarScraper::FuelType getFuelType() const { return _fuelType; }
+
+
+            /** @brief Gets the horse power of the car
+             *  @return The horse power of the car
+             */
+            int getHorsePower() const { return _horsePower; }
+
+
+            /** @brief Gets the tax horse power of the car
+             *  @return The tax horse power of the car
+             */
+            int getTaxHorsePower() const { return _taxHorsePower; }
 
             
             /** @brief Gets the tank capacity of the car
              *  @return The tank capacity of the car
              */
-            int                 getTankCapacity()       const { return _tankCapacity; }
+            int getTankCapacity() const { return _tankCapacity; }
 
 
             /** @brief Gets the fuel consumption of the car
              *  @return The fuel consumption of the car
              */
-            double              getFuelConsumption()    const { return _fuelConsumption; }
+            double getFuelConsumption() const { return _fuelConsumption; }
 
 
             /** @brief Gets the CO2 emissions of the car
              *  @return The CO2 emissions of the car
              */
-            int                 getCo2Emissions()       const { return _co2Emissions; }
+            int getCo2Emissions() const { return _co2Emissions; }
 
 
             /** @brief Gets the CO2 class of the car
              *  @return The CO2 class of the car
              */
-            const std::string&  getCo2Class()           const { return _co2Class; }
+            const std::string& getCo2Class() const { return _co2Class; }
 
 
             /** @brief Gets the commercialisation start year of the car
              *  @return The commercialisation start year of the car
              */
-            const std::optional<std::chrono::year_month_day>& getCommercialisationStart()   const { return _commercialisationStart; }
+            const std::optional<std::chrono::year_month_day>& getCommercialisationStart() const { return _commercialisationStart; }
 
 
             /** @brief Gets the commercialisation end year of the car
              *  @return The commercialisation end year of the car
              */
-            const std::optional<std::chrono::year_month_day>& getCommercialisationEnd()     const { return _commercialisationEnd; }
+            const std::optional<std::chrono::year_month_day>& getCommercialisationEnd() const { return _commercialisationEnd; }
 
 
             /** @brief Gets whether the car is still in sale
              *  @return Whether the car is still in sale
              */
-            bool                isStillInSale()        const { return _stillInSale; }
+            bool isStillInSale() const { return _stillInSale; }
 
 
 
@@ -356,6 +367,7 @@ namespace CarScraper {
             void setSeatCount       (int                    seatCount);
             void setGearboxType     (const  std::string&    gearboxType);
             void setGearCount       (int                    gearCount);
+            void setFuelType        (const  CarScraper::FuelType    fuelType);
             void setFuelType        (const  std::string&    fuelType);
             void setHorsePower      (int                    horsePower);
             void setTaxHorsePower   (int                    taxHorsePower);

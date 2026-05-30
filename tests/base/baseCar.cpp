@@ -12,6 +12,7 @@
 #include <catch2/catch.hpp>
 #include "core/models/Car.hpp"
 #include "core/utils/Constant.hpp"
+#include "core/enum/FuelType.hpp"
 #include "core/logger/Logger.hpp"
 
 
@@ -44,7 +45,7 @@ TEST_CASE("Car Getters", "[car][getters]") {
         REQUIRE(e.getSeatCount()                == DEFAULT_INT);
         REQUIRE_THAT(e.getGearboxType(),        Catch::Matchers::Equals(DEFAULT_STR, Catch::CaseSensitive::No));
         REQUIRE(e.getGearCount()                == DEFAULT_INT);
-        REQUIRE_THAT(e.getFuelType(),           Catch::Matchers::Equals(DEFAULT_STR, Catch::CaseSensitive::No));
+        REQUIRE(e.getFuelType()                 == CarScraper::FuelType::NA);
         REQUIRE(e.getHorsePower()               == DEFAULT_INT);
         REQUIRE(e.getTaxHorsePower()            == DEFAULT_INT);
         REQUIRE(e.getTankCapacity()             == DEFAULT_INT);
@@ -74,7 +75,7 @@ TEST_CASE("Car Setters", "[car][setters]") {
         e.setSeatCount              (5);
         e.setGearboxType            ("Automatic");
         e.setGearCount              (0);
-        e.setFuelType               ("Hybrid");
+        e.setFuelType               ("hybride : essence/electrique");
         e.setHorsePower             (122);
         e.setTaxHorsePower          (6);
         e.setTankCapacity           (43);
@@ -99,7 +100,7 @@ TEST_CASE("Car Setters", "[car][setters]") {
         REQUIRE(e.getSeatCount()                == 5);
         REQUIRE_THAT(e.getGearboxType(),        Catch::Matchers::Equals("Automatic", Catch::CaseSensitive::No));
         REQUIRE(e.getGearCount()                == 0);
-        REQUIRE_THAT(e.getFuelType(),           Catch::Matchers::Equals("Hybrid", Catch::CaseSensitive::No));
+        REQUIRE(e.getFuelType()                 == CarScraper::FuelType::EE);
         REQUIRE(e.getHorsePower()               == 122);
         REQUIRE(e.getTaxHorsePower()            == 6);
         REQUIRE(e.getTankCapacity()             == 43);
@@ -117,7 +118,6 @@ TEST_CASE("Car Setters", "[car][setters]") {
         e.setEngine                 ("1.8L hyBrid");
         e.setTrim                   ("dynaMic");
         e.setGearboxType            ("auTomAtIC");
-        e.setFuelType               ("hyBrid");
         e.setCo2Class               ("a");
 
         REQUIRE(e.getBrand()        == "TOYOTA");
@@ -126,7 +126,6 @@ TEST_CASE("Car Setters", "[car][setters]") {
         REQUIRE(e.getEngine()       == "1.8L hyBrid");
         REQUIRE(e.getTrim()         == "Dynamic");
         REQUIRE(e.getGearboxType()  == "Automatic");
-        REQUIRE(e.getFuelType()     == "Hybrid");
         REQUIRE(e.getCo2Class()     == "A");
     }
 
@@ -171,7 +170,7 @@ TEST_CASE("Car Setters", "[car][setters]") {
         REQUIRE(e.getSeatCount()                == ERROR_INT);
         REQUIRE_THAT(e.getGearboxType(),        Catch::Matchers::Equals(ERROR_STR, Catch::CaseSensitive::No));
         REQUIRE(e.getGearCount()                == ERROR_INT);
-        REQUIRE_THAT(e.getFuelType(),           Catch::Matchers::Equals(ERROR_STR, Catch::CaseSensitive::No));
+        REQUIRE(e.getFuelType()                 == CarScraper::FuelType::NA);
         REQUIRE(e.getHorsePower()               == ERROR_INT);
         REQUIRE(e.getTaxHorsePower()            == ERROR_INT);
         REQUIRE(e.getTankCapacity()             == ERROR_INT);

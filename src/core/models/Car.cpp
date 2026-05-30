@@ -59,7 +59,7 @@ namespace CarScraper {
         _gearCount          = DEFAULT_INT;
 
         // Power
-        _fuelType           = DEFAULT_STR;
+        _fuelType           = CarScraper::FuelType::NA;
         _horsePower         = DEFAULT_INT;
         _taxHorsePower      = DEFAULT_INT;
 
@@ -75,6 +75,14 @@ namespace CarScraper {
         _stillInSale             = false;
 
     }
+
+
+
+
+
+    // =========================================================================
+    // Getters
+    // =========================================================================
 
 
 
@@ -266,12 +274,46 @@ namespace CarScraper {
     }
 
 
-    // Fuel type
+    /**
+     * @brief Sets the fuel type
+     * 
+     * @param fuelType (enum) The fuel type
+     */
+    void Car::setFuelType(const CarScraper::FuelType fuelType) {
+
+        // Set value
+        _fuelType = fuelType;
+
+
+        // Log message
+        if (_fuelType == CarScraper::FuelType::NA) {
+            Logger::error("{}::set{} got an invalid value", this->getFullId(), "FuelType");
+        } else {
+            Logger::trace("{}::set{} value: {}", this->getFullId(),
+                "FuelType", CarScraper::fuelTypeToString(_fuelType));
+        }
+
+    }
+
+
+    /**
+     * @brief Sets the fuel type
+     * 
+     * @param fuelType (string) The fuel type
+     */
     void Car::setFuelType(const std::string& fuelType) {
 
-        // Verification + Normalize UTF-8 (NFC) then apply title case (handles accented chars)
-        this->_fuelType = una::cases::to_titlecase_utf8(
-            una::norm::to_nfc_utf8(Validation::stringValidation(fuelType, this->getFullId(), "FuelType", 50)));
+        // Set value
+        _fuelType = CarScraper::fuelTypeFromString(fuelType);
+
+
+        // Log message
+        if (_fuelType == CarScraper::FuelType::NA) {
+            Logger::error("{}::set{} got an invalid value", this->getFullId(), "FuelType");
+        } else {
+            Logger::trace("{}::set{} value: {}", this->getFullId(),
+                "FuelType", CarScraper::fuelTypeToString(_fuelType));
+        }
 
     }
 
