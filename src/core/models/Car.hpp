@@ -15,6 +15,7 @@
 // Imports
 #include "Entity.hpp"
 #include "core/enum/FuelType.hpp"
+#include "core/enum/GearboxType.hpp"
 #include <string>
 #include <ostream>
 #include <iomanip>
@@ -49,10 +50,10 @@ namespace CarScraper {
      *  -> weight           : (int) Car weight                          | ex: 1200              | in kg
      *  -> seatCount        : (int) Car seat count                      | ex: 5
      * - Transmission:
-     *  -> gearboxType      : (string) Car gearbox type                 | ex: "Manual"
+     *  -> gearboxType      : (enum) Car gearbox type                   | AUTOMATIC / MANUAL
      *  -> gearCount        : (int) Car gear count                      | ex: 5
      * - Power:
-     *  -> fuelType         : (enum) Car fuel type                      | ex: "Diesel"
+     *  -> fuelType         : (enum) Car fuel type                      | ex: EE / EL / ES / GL / GO / GP / H2
      *  -> horsePower       : (int) Car horse power                     | ex: 90                | in DIN hp
      *  -> taxHorsePower    : (int) Car tax horse power                 | ex: 5
      * - Consumption:
@@ -81,7 +82,7 @@ namespace CarScraper {
      *  -> getWeight()          : (int) returns the weight of the car
      *  -> getSeatCount()       : (int) returns the seat count of the car
      * - Transmission:
-     *  -> getGearboxType()     : (string) returns the gearbox type of the car
+     *  -> getGearboxType()     : (enum) returns the gearbox type of the car
      *  -> getGearCount()       : (int) returns the gear count of the car
      * - Power:
      *  -> getFuelType()        : (enum) returns the fuel type of the car
@@ -113,7 +114,7 @@ namespace CarScraper {
      *  -> setWeight()          : sets the weight of the car            | min value: 0 kg, max value: 5000 kg
      *  -> setSeatCount()       : sets the seat count of the car        | min value: 0, max value: 10
      * - Transmission:
-     *  -> setGearboxType()     : sets the gearbox type of the car      | max length: 50 characters
+     *  -> setGearboxType()     : sets the gearbox type of the car      | enum /max length: 50 characters
      *  -> setGearCount()       : sets the gear count of the car        | min value: 0, max value: 20
      * - Power:
      *  -> setFuelType()        : sets the fuel type of the car         | enum / max length: 50 characters
@@ -161,13 +162,13 @@ namespace CarScraper {
             int             _seatCount;
 
             // Transmission
-            std::string     _gearboxType;
-            int             _gearCount;
+            CarScraper::GearboxType _gearboxType;
+            int                     _gearCount;
 
             // Power
             CarScraper::FuelType    _fuelType;
-            int             _horsePower;
-            int             _taxHorsePower;
+            int                     _horsePower;
+            int                     _taxHorsePower;
 
             // Consumption
             int             _tankCapacity;
@@ -276,7 +277,7 @@ namespace CarScraper {
             /** @brief Gets the type of the gearbox
              *  @return The type of the gearbox
              */
-            const std::string& getGearboxType() const { return _gearboxType; }
+            CarScraper::GearboxType getGearboxType() const { return _gearboxType; }
 
 
             /** @brief Gets the number of gears
@@ -365,6 +366,7 @@ namespace CarScraper {
             void setTrunkVolume     (int                    trunkVolume);
             void setWeight          (int                    weight);
             void setSeatCount       (int                    seatCount);
+            void setGearboxType     (const  CarScraper::GearboxType gearboxType);
             void setGearboxType     (const  std::string&    gearboxType);
             void setGearCount       (int                    gearCount);
             void setFuelType        (const  CarScraper::FuelType    fuelType);

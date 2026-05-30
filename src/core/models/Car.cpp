@@ -55,7 +55,7 @@ namespace CarScraper {
         _seatCount          = DEFAULT_INT;
 
         // Transmission
-        _gearboxType        = DEFAULT_STR;
+        _gearboxType        = CarScraper::GearboxType::NA;;
         _gearCount          = DEFAULT_INT;
 
         // Power
@@ -251,12 +251,46 @@ namespace CarScraper {
     }
 
 
-    // Gearbox type
+    /**
+     * @brief Sets the gear box type
+     * 
+     * @param gearboxType (enum) The gear box type
+     */
+    void Car::setGearboxType(const CarScraper::GearboxType gearboxType) {
+
+       // Set value
+        _gearboxType = gearboxType;
+
+
+        // Log message
+        if (_gearboxType == CarScraper::GearboxType::NA) {
+            Logger::error("{}::set{} got an invalid value", this->getFullId(), "GearboxType");
+        } else {
+            Logger::trace("{}::set{} value: {}", this->getFullId(),
+                "GearboxType", CarScraper::gearBoxTypeToString(_gearboxType));
+        }
+
+    }
+
+
+    /**
+     * @brief Sets the gear box type
+     * 
+     * @param gearboxType (string) The gear box type
+     */
     void Car::setGearboxType(const std::string& gearboxType) {
 
-        // Verification + Normalize UTF-8 (NFC) then apply title case (handles accented chars)
-        this->_gearboxType = una::cases::to_titlecase_utf8(
-            una::norm::to_nfc_utf8(Validation::stringValidation(gearboxType, this->getFullId(), "GearboxType", 50)));
+       // Set value
+        _gearboxType = CarScraper::gearBoxTypeFromString(gearboxType);
+
+
+        // Log message
+        if (_gearboxType == CarScraper::GearboxType::NA) {
+            Logger::error("{}::set{} got an invalid value", this->getFullId(), "GearboxType");
+        } else {
+            Logger::trace("{}::set{} value: {}", this->getFullId(),
+                "GearboxType", CarScraper::gearBoxTypeToString(_gearboxType));
+        }
 
     }
 

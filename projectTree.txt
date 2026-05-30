@@ -19,7 +19,9 @@
 │   ├── core
 │   │   ├── enum
 │   │   │   ├── FuelType.cpp
-│   │   │   └── FuelType.hpp
+│   │   │   ├── FuelType.hpp
+│   │   │   ├── GearboxType.cpp
+│   │   │   └── GearboxType.hpp
 │   │   ├── logger
 │   │   │   ├── Logger.cpp
 │   │   │   └── Logger.hpp
@@ -54,4 +56,4 @@
     │   └── testValidation.cpp
     └── testAll.cpp
 
-20 directories, 35 files
+20 directories, 37 files
