@@ -107,7 +107,7 @@ namespace CarScraper {
             case FuelType::PE:  return "PE";
             case FuelType::PH:  return "PH";
             case FuelType::PL:  return "PL";
-            default:            return "Inconnu";
+            default:            return "Unknown";
         }
     }
 
