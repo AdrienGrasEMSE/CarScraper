@@ -168,7 +168,7 @@ namespace CarScraper {
         }
 
 
-        // Inconnu
+        // Unknown
         return FuelType::NA;
 
     }
