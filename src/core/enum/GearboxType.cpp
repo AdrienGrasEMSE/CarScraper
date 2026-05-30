@@ -58,7 +58,7 @@ namespace CarScraper {
         }
 
 
-        // Inconnu
+        // Unknown
         return GearboxType::NA;
 
     }
