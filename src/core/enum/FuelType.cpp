@@ -162,7 +162,7 @@ namespace CarScraper {
 
 
         // H2 : Hydrogène
-        if (lower == "Hydrogène" ||
+        if (lower == "hydrogène" ||
             lower == "hydrogene") {
             return FuelType::H2;
         }
