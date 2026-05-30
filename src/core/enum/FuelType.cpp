@@ -67,6 +67,7 @@ namespace CarScraper {
 
     /**
      * @brief Converts a FuelType enum value to its signification.
+     *        Only covers the fuel type strings encountered on L'Argus.
      *
      * @param value The FuelType value to convert.
      * @return The string signification of the FuelType value.
@@ -114,7 +115,8 @@ namespace CarScraper {
 
     /**
      * @brief Converts a string to its FuelType enum value.
-     *        Returns FuelType::NA if the string does not match any known value.
+     *        Only covers the fuel type strings encountered on L'Argus.
+     *        Returns FuelType::NA for any unrecognized value.
      *
      * @param value The string to convert.
      * @return The FuelType value corresponding to the string.
