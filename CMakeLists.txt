@@ -93,6 +93,7 @@ set(CORE_SOURCES
     # Core - Enum
     src/core/enum/FuelType.cpp
     src/core/enum/GearboxType.cpp
+    src/core/enum/Co2Class.cpp
 
     # Core — Models
     src/core/models/Entity.cpp
