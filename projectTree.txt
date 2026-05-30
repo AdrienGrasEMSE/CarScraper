@@ -8,13 +8,18 @@
 │   └── stduuid
 │       └── uuid.h
 ├── logs
-│   ├── log_test_entity.txt
-│   └── log.txt
+│   ├── log.txt
+│   ├── test_car.txt
+│   ├── test_entity.txt
+│   └── test_validation.txt
 ├── projectTree.txt
 ├── README.md
 ├── src
 │   ├── cli
 │   ├── core
+│   │   ├── enum
+│   │   │   ├── FuelType.cpp
+│   │   │   └── FuelType.hpp
 │   │   ├── logger
 │   │   │   ├── Logger.cpp
 │   │   │   └── Logger.hpp
@@ -47,7 +52,6 @@
     │   ├── testEntity.cpp
     │   ├── testLogger.cpp
     │   └── testValidation.cpp
-    ├── testAll.cpp
-    └── test_HttpClient.cpp
+    └── testAll.cpp
 
-19 directories, 32 files
+20 directories, 35 files
