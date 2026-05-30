@@ -10,11 +10,12 @@
 
 // Imports
 #include <catch2/catch.hpp>
-#include "core/models/Car.hpp"
-#include "core/utils/Constant.hpp"
+#include "core/logger/Logger.hpp"
 #include "core/enum/FuelType.hpp"
 #include "core/enum/GearboxType.hpp"
-#include "core/logger/Logger.hpp"
+#include "core/enum/Co2Class.hpp"
+#include "core/utils/Constant.hpp"
+#include "core/models/Car.hpp"
 
 
 /**
@@ -51,8 +52,7 @@ TEST_CASE("Car Getters", "[car][getters]") {
         REQUIRE(e.getTaxHorsePower()            == DEFAULT_INT);
         REQUIRE(e.getTankCapacity()             == DEFAULT_INT);
         REQUIRE(e.getFuelConsumption()          == DEFAULT_DOUBLE);
-        REQUIRE(e.getCo2Emissions()             == DEFAULT_INT);
-        REQUIRE_THAT(e.getCo2Class(),           Catch::Matchers::Equals(DEFAULT_STR, Catch::CaseSensitive::No));
+        REQUIRE(e.getCo2Class()                 == CarScraper::Co2Class::NA);
     }
 
 }
@@ -107,7 +107,7 @@ TEST_CASE("Car Setters", "[car][setters]") {
         REQUIRE(e.getTankCapacity()             == 43);
         REQUIRE(e.getFuelConsumption()          == 4.3);
         REQUIRE(e.getCo2Emissions()             == 98);
-        REQUIRE_THAT(e.getCo2Class(),           Catch::Matchers::Equals("A", Catch::CaseSensitive::No));
+        REQUIRE(e.getCo2Class()                 == CarScraper::Co2Class::A);
     }
 
 
@@ -118,14 +118,12 @@ TEST_CASE("Car Setters", "[car][setters]") {
         e.setGeneration             ("e210");
         e.setEngine                 ("1.8L hyBrid");
         e.setTrim                   ("dynaMic");
-        e.setCo2Class               ("a");
 
         REQUIRE(e.getBrand()        == "TOYOTA");
         REQUIRE(e.getModel()        == "Corolla");
         REQUIRE(e.getGeneration()   == "e210");
         REQUIRE(e.getEngine()       == "1.8L hyBrid");
         REQUIRE(e.getTrim()         == "Dynamic");
-        REQUIRE(e.getCo2Class()     == "A");
     }
 
 
@@ -175,7 +173,7 @@ TEST_CASE("Car Setters", "[car][setters]") {
         REQUIRE(e.getTankCapacity()             == ERROR_INT);
         REQUIRE(e.getFuelConsumption()          == ERROR_DOUBLE);
         REQUIRE(e.getCo2Emissions()             == ERROR_INT);
-        REQUIRE_THAT(e.getCo2Class(),           Catch::Matchers::Equals(ERROR_STR, Catch::CaseSensitive::No));
+        REQUIRE(e.getCo2Class()                 == CarScraper::Co2Class::NA);
     }
 
 }

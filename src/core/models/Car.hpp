@@ -16,6 +16,7 @@
 #include "Entity.hpp"
 #include "core/enum/FuelType.hpp"
 #include "core/enum/GearboxType.hpp"
+#include "core/enum/Co2Class.hpp"
 #include <string>
 #include <ostream>
 #include <iomanip>
@@ -60,7 +61,7 @@ namespace CarScraper {
      *  -> tankCapacity     : (int) Car tank capacity                   | ex: 50                | in liters
      *  -> fuelConsumption  : (double) Car fuel consumption             | ex: 4.5               | in L/100km
      *  -> co2Emissions     : (int) Car co2 emissions                   | ex: 120               | in g/km
-     *  -> co2Class         : (string) Car co2 class                    | ex: "B"
+     *  -> co2Class         : (enum) Car co2 class                      | A / B / C / D / E / F / G
      * - Commercialisation :
      *  -> commercialisationStart : (chrono) Car commercialisation start year | ex: "01/01/2012"
      *  -> commercialisationEnd   : (chrono) Car commercialisation end year   | ex: "08/09/2019"
@@ -92,7 +93,7 @@ namespace CarScraper {
      *  -> getTankCapacity()    : (int) returns the tank capacity of the car
      *  -> getFuelConsumption() : (double) returns the fuel consumption of the car
      *  -> getCo2Emissions()    : (int) returns the CO2 emissions of the car
-     *  -> getCo2Class()        : (string) returns the CO2 class of the car
+     *  -> getCo2Class()        : (enum) returns the CO2 class of the car
      * - Commercialisation :
      *  -> getCommercialisationStart()  : (chrono) returns the start year of the car
      *  -> getCommercialisationEnd()    : (chrono) returns the end year of the car
@@ -124,7 +125,7 @@ namespace CarScraper {
      *  -> setTankCapacity()    : sets the tank capacity of the car     | min value: 0 L, max value: 500 L
      *  -> setFuelConsumption() : sets the fuel consumption of the car  | min value: 0.0 L/100km, max value: 50.0 L/100km
      *  -> setCo2Emissions()    : sets the CO2 emissions of the car     | min value: 0 g/km, max value: 200 g/km
-     *  -> setCo2Class()        : sets the CO2 class of the car         | max length: 10 characters
+     *  -> setCo2Class()        : sets the CO2 class of the car         | enum / max length: 10 characters
      * - Commercialisation:
      *  -> setCommercialisationStart()  : sets the start year of the car
      *  -> setCommercialisationEnd()    : sets the end year of the car
@@ -171,10 +172,10 @@ namespace CarScraper {
             int                     _taxHorsePower;
 
             // Consumption
-            int             _tankCapacity;
-            double          _fuelConsumption;
-            int             _co2Emissions;
-            std::string     _co2Class;
+            int                     _tankCapacity;
+            double                  _fuelConsumption;
+            int                     _co2Emissions;
+            CarScraper::Co2Class    _co2Class;
 
             // Commercialisation
             std::optional<std::chrono::year_month_day>  _commercialisationStart;
@@ -325,7 +326,7 @@ namespace CarScraper {
             /** @brief Gets the CO2 class of the car
              *  @return The CO2 class of the car
              */
-            const std::string& getCo2Class() const { return _co2Class; }
+            CarScraper::Co2Class getCo2Class() const { return _co2Class; }
 
 
             /** @brief Gets the commercialisation start year of the car
@@ -354,32 +355,33 @@ namespace CarScraper {
             // -------------------------------------------------------------------------
 
             // General
-            void setBrand           (const  std::string&    brand);
-            void setModel           (const  std::string&    model);
-            void setGeneration      (const  std::string&    generation);
-            void setEngine          (const  std::string&    engine);
-            void setTrim            (const  std::string&    trim);
-            void setPrice           (int                    price);
-            void setHeight          (double                 height);
-            void setLength          (double                 length);
-            void setWidth           (double                 width);
-            void setTrunkVolume     (int                    trunkVolume);
-            void setWeight          (int                    weight);
-            void setSeatCount       (int                    seatCount);
+            void setBrand           (const  std::string&            brand);
+            void setModel           (const  std::string&            model);
+            void setGeneration      (const  std::string&            generation);
+            void setEngine          (const  std::string&            engine);
+            void setTrim            (const  std::string&            trim);
+            void setPrice           (int                            price);
+            void setHeight          (double                         height);
+            void setLength          (double                         length);
+            void setWidth           (double                         width);
+            void setTrunkVolume     (int                            trunkVolume);
+            void setWeight          (int                            weight);
+            void setSeatCount       (int                            seatCount);
             void setGearboxType     (const  CarScraper::GearboxType gearboxType);
-            void setGearboxType     (const  std::string&    gearboxType);
-            void setGearCount       (int                    gearCount);
+            void setGearboxType     (const  std::string&            gearboxType);
+            void setGearCount       (int                            gearCount);
             void setFuelType        (const  CarScraper::FuelType    fuelType);
-            void setFuelType        (const  std::string&    fuelType);
-            void setHorsePower      (int                    horsePower);
-            void setTaxHorsePower   (int                    taxHorsePower);
-            void setTankCapacity    (int                    tankCapacity);
-            void setFuelConsumption (double                 fuelConsumption);
-            void setCo2Emissions    (int                    co2Emissions);
-            void setCo2Class        (const  std::string&    co2Class);
-            void setCommercialisationStart  (const std::string& commercialisationStart);
-            void setCommercialisationEnd    (const std::string& commercialisationEnd);
-            void setStillInSale     (bool                   stillInSale);
+            void setFuelType        (const  std::string&            fuelType);
+            void setHorsePower      (int                            horsePower);
+            void setTaxHorsePower   (int                            taxHorsePower);
+            void setTankCapacity    (int                            tankCapacity);
+            void setFuelConsumption (double                         fuelConsumption);
+            void setCo2Emissions    (int                            co2Emissions);
+            void setCo2Class        (const  CarScraper::Co2Class    co2Class);
+            void setCo2Class        (const  std::string&            co2Class);
+            void setCommercialisationStart  (const std::string&     commercialisationStart);
+            void setCommercialisationEnd    (const std::string&     commercialisationEnd);
+            void setStillInSale     (bool                           stillInSale);
 
 
 

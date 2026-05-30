@@ -18,6 +18,8 @@
 │   ├── cli
 │   ├── core
 │   │   ├── enum
+│   │   │   ├── Co2Class.cpp
+│   │   │   ├── Co2Class.hpp
 │   │   │   ├── FuelType.cpp
 │   │   │   ├── FuelType.hpp
 │   │   │   ├── GearboxType.cpp
@@ -56,4 +58,4 @@
     │   └── testValidation.cpp
     └── testAll.cpp
 
-20 directories, 37 files
+20 directories, 39 files

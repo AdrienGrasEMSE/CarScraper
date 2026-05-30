@@ -6,9 +6,6 @@
  * @author Adrien GRAS
  * @date 2026-05-26
  *
- * @todo Setup an Energy enum for fuel type and a corresponding setter that accepts both string and enum values (with string validation)
- * @todo Setup a CO2Class enum for CO2 class and a corresponding setter that accepts both string and enum values (with string validation)
- * @todo Setup a GearboxType enum for gearbox type and a corresponding setter that accepts both string and enum values (with string validation)
  */
 
 
@@ -67,7 +64,7 @@ namespace CarScraper {
         _tankCapacity       = DEFAULT_INT;
         _fuelConsumption    = DEFAULT_DOUBLE;
         _co2Emissions       = DEFAULT_INT;
-        _co2Class           = DEFAULT_STR;
+        _co2Class           = CarScraper::Co2Class::NA;
 
         // Commercialisation
         _commercialisationStart  = std::nullopt;
@@ -420,13 +417,43 @@ namespace CarScraper {
     /**
      * @brief Sets the CO2 class value
      * 
-     * @param co2Class The CO2 class value
+     * @param co2Class (enum) The CO2 class value
+     */
+    void Car::setCo2Class(const CarScraper::Co2Class co2Class) {
+
+        // Set value
+        _co2Class = co2Class;
+
+
+        // Log message
+        if (_co2Class == CarScraper::Co2Class::NA) {
+            Logger::error("{}::set{} got an invalid value", this->getFullId(), "Co2Class");
+        } else {
+            Logger::trace("{}::set{} value: {}", this->getFullId(),
+                "Co2Class", CarScraper::co2ClassToString(_co2Class));
+        }
+    
+    }
+
+
+    /**
+     * @brief Sets the CO2 class value
+     * 
+     * @param co2Class (string) The CO2 class value
      */
     void Car::setCo2Class(const std::string& co2Class) {
 
-        // Verification + Normalize UTF-8 (NFC) then apply upper case (short code like "A", "B+")
-        this->_co2Class = una::cases::to_uppercase_utf8(
-            una::norm::to_nfc_utf8(Validation::stringValidation(co2Class, this->getFullId(), "Co2Class", 10)));
+        // Set value
+        _co2Class = CarScraper::co2ClassFromString(co2Class);
+
+
+        // Log message
+        if (_co2Class == CarScraper::Co2Class::NA) {
+            Logger::error("{}::set{} got an invalid value", this->getFullId(), "Co2Class");
+        } else {
+            Logger::trace("{}::set{} value: {}", this->getFullId(),
+                "Co2Class", CarScraper::co2ClassToString(_co2Class));
+        }
     
     }
 
