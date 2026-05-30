@@ -10,7 +10,7 @@
 
 // Imports
 #include "FuelType.hpp"
-#include <uni_algo/case.h>    // pour la normalisation en lowercase
+#include <uni_algo/case.h>
 
 
 /**
