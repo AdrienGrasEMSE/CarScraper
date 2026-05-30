@@ -66,6 +66,20 @@ namespace CarScraper {
             ~Logger() = delete;
 
 
+            // -------------------------------------------------------------------------
+            // Testing utilities
+            // -------------------------------------------------------------------------
+            #ifdef TESTING
+
+                /**
+                * @brief Resets the logger instance (for testing purposes only).
+                */
+                spdlog::drop("CarScraper");
+                static void reset();
+
+            #endif
+
+
 
             
 

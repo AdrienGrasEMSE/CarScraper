@@ -123,4 +123,22 @@ namespace CarScraper {
         return _instance.get();
     }
 
+
+
+
+
+    // =========================================================================
+    // Testing utilities
+    // =========================================================================
+
+    /**
+     * @brief Resets the logger instance (for testing purposes only).
+     */
+    #ifdef TESTING
+        void Logger::reset() {
+            spdlog::drop("CarScraper");
+            _instance = nullptr;
+        }
+    #endif
+
 } // namespace CarScraper
