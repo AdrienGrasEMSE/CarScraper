@@ -361,10 +361,18 @@ namespace CarScraper {
      * 
      * @param co2Class The commercialisation start date
      */
-    void Car::setCommercialisationStart(std::optional<std::chrono::year_month_day> commercialisationStart) {
+    void Car::setCommercialisationStart(const std::string& commercialisationStart) {
 
-        _commercialisationStart = Validation::parseDateDMY(
-            commercialisationStart, this->getFullId(), "CommercialisationStart");
+        // Set value
+        _commercialisationStart = Validation::parseDateDMY(commercialisationStart);
+
+
+        // Log message
+        if (_commercialisationStart.has_value()) {
+            Logger::trace("{}::set{} value: \"{}\"", this->getFullId(),
+                "CommercialisationStart", Validation::formatDate(_commercialisationStart.value()));
+        }
+        Logger::error("{}::set{} got an empty value", this->getFullId(), "CommercialisationStart");
 
     }
 
@@ -374,10 +382,18 @@ namespace CarScraper {
      * 
      * @param co2Class The commercialisation end date
      */
-    void Car::setCommercialisationEnd(std::optional<std::chrono::year_month_day> commercialisationEnd) {
+    void Car::setCommercialisationEnd(const std::string& commercialisationEnd) {
 
-        _commercialisationEnd = Validation::parseDateDMY(
-            commercialisationEnd, this->getFullId(), "CommercialisationStart");
+        // Set value
+        _commercialisationEnd = Validation::parseDateDMY(commercialisationEnd);
+
+
+        // Log message
+        if (_commercialisationEnd.has_value()) {
+            Logger::trace("{}::set{} value: \"{}\"", this->getFullId(),
+                "CommercialisationEnd", Validation::formatDate(_commercialisationEnd.value()));
+        }
+        Logger::error("{}::set{} got an empty value", this->getFullId(), "CommercialisationEnd");
 
     }
 
