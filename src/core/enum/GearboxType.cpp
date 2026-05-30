@@ -28,7 +28,7 @@ namespace CarScraper {
         switch (value) {
             case GearboxType::AUTOMATIC:    return "Automatique";
             case GearboxType::MANUAL:       return "Manuelle";
-            default:                        return "NA";
+            default:                        return "Unkown";
         }
     }
 
