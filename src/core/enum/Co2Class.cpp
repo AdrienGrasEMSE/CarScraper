@@ -44,7 +44,7 @@ namespace CarScraper {
      * @param value The Co2Class value to convert.
      * @return The string signification of the Co2Class value.
      */
-    std::string fuelTypeExplained(Co2Class value) {
+    std::string co2ClassExplained(Co2Class value) {
         switch (value) {
             case Co2Class::A:   return "-100g/km";
             case Co2Class::B:   return "101-120g/km";
