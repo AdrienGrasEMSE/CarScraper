@@ -474,7 +474,7 @@ namespace CarScraper {
             Logger::trace("[{}].set{} value: \"{}\"", this->getFullId(),
                 "CommercialisationStart", Validation::formatDate(_commercialisationStart.value()));
         } else {
-            Logger::error("[{}].set{} got an empty value", this->getFullId(), "CommercialisationStart");
+            Logger::error("[{}].set{} got an invalid value", this->getFullId(), "CommercialisationStart");
         }
 
     }
@@ -496,7 +496,7 @@ namespace CarScraper {
             Logger::trace("[{}].set{} value: \"{}\"", this->getFullId(),
                 "CommercialisationEnd", Validation::formatDate(_commercialisationEnd.value()));
         } else {
-            Logger::error("[{}].set{} got an empty value", this->getFullId(), "CommercialisationEnd");
+            Logger::error("[{}].set{} got an invalid value", this->getFullId(), "CommercialisationEnd");
         }
 
     }
