@@ -2,9 +2,11 @@
  * @file baseCar.cpp
  *
  * @brief Unit tests for CarScraper::Car class.
+ *        Covers: construction, getters, setters (valid/invalid/boundary),
+ *                string formatting, enum conversions, dates, isComplete, isValid.
  *
  * @author Adrien GRAS
- * @date 2026-05-29
+ * @date 2026-05-30
  */
 
 
@@ -18,11 +20,43 @@
 #include "core/utils/Validation.hpp"
 #include "core/models/Car.hpp"
 
+using namespace CarScraper;
+
+
+// =============================================================================
+// Helpers
+// =============================================================================
 
 /**
- * Using namespace CarScraper for constants values and logging
+ * Builds a fully populated, valid Car for reuse across test sections.
  */
-using namespace CarScraper;
+static Car buildValidCar() {
+    Car c;
+    c.setBrand                  ("Toyota");
+    c.setModel                  ("Corolla");
+    c.setGeneration             ("E210");
+    c.setEngine                 ("1.8L Hybrid");
+    c.setTrim                   ("Dynamic");
+    c.setPrice                  (25000);
+    c.setHeight                 (1.43);
+    c.setLength                 (4.37);
+    c.setWidth                  (1.79);
+    c.setTrunkVolume            (361);
+    c.setWeight                 (1375);
+    c.setSeatCount              (5);
+    c.setGearboxType            (GearboxType::AUTOMATIC);
+    c.setGearCount              (6);
+    c.setFuelType               (FuelType::EE);
+    c.setHorsePower             (122);
+    c.setTaxHorsePower          (6);
+    c.setTankCapacity           (43);
+    c.setFuelConsumption        (4.3);
+    c.setCo2Emissions           (98);
+    c.setCo2Class               (Co2Class::A);
+    c.setCommercialisationStart ("01/01/2019");
+    c.setStillInSale            (true);
+    return c;
+}
 
 
 // =============================================================================
@@ -41,9 +75,13 @@ TEST_CASE("Car Default Construction", "[car][construction]") {
         REQUIRE(c.getPrefix() == "CAR");
     }
 
+    SECTION("FullId starts with CAR-") {
+        Car c;
+        REQUIRE(c.getFullId().rfind("CAR-", 0) == 0);
+    }
+
     SECTION("Two cars have different UUIDs") {
-        Car c1;
-        Car c2;
+        Car c1, c2;
         REQUIRE(c1.getUuid() != c2.getUuid());
     }
 
@@ -58,15 +96,15 @@ TEST_CASE("Car Default Construction", "[car][construction]") {
 
     SECTION("All int attributes are DEFAULT_INT") {
         Car c;
-        REQUIRE(c.getPrice()        == DEFAULT_INT);
-        REQUIRE(c.getTrunkVolume()  == DEFAULT_INT);
-        REQUIRE(c.getWeight()       == DEFAULT_INT);
-        REQUIRE(c.getSeatCount()    == DEFAULT_INT);
-        REQUIRE(c.getGearCount()    == DEFAULT_INT);
-        REQUIRE(c.getHorsePower()   == DEFAULT_INT);
-        REQUIRE(c.getTaxHorsePower()== DEFAULT_INT);
-        REQUIRE(c.getTankCapacity() == DEFAULT_INT);
-        REQUIRE(c.getCo2Emissions() == DEFAULT_INT);
+        REQUIRE(c.getPrice()         == DEFAULT_INT);
+        REQUIRE(c.getTrunkVolume()   == DEFAULT_INT);
+        REQUIRE(c.getWeight()        == DEFAULT_INT);
+        REQUIRE(c.getSeatCount()     == DEFAULT_INT);
+        REQUIRE(c.getGearCount()     == DEFAULT_INT);
+        REQUIRE(c.getHorsePower()    == DEFAULT_INT);
+        REQUIRE(c.getTaxHorsePower() == DEFAULT_INT);
+        REQUIRE(c.getTankCapacity()  == DEFAULT_INT);
+        REQUIRE(c.getCo2Emissions()  == DEFAULT_INT);
     }
 
     SECTION("All double attributes are DEFAULT_DOUBLE") {
@@ -328,6 +366,8 @@ TEST_CASE("Car Setters — String Formatting", "[car][setters][formatting]") {
 
 TEST_CASE("Car Setters — Invalid Values", "[car][setters][invalid]") {
 
+    // --- Strings vides ---
+
     SECTION("setBrand with empty string stores ERROR_STR") {
         Car c;
         c.setBrand("");
@@ -356,8 +396,9 @@ TEST_CASE("Car Setters — Invalid Values", "[car][setters][invalid]") {
         Car c;
         c.setTrim("");
         REQUIRE_THAT(c.getTrim(), Catch::Matchers::Equals(ERROR_STR, Catch::CaseSensitive::No));
-
     }
+
+    // --- Numériques hors borne inférieure ---
 
     SECTION("setPrice with negative value stores ERROR_INT") {
         Car c;
@@ -722,48 +763,116 @@ TEST_CASE("Car Co2Class Conversions", "[car][enum][co2class]") {
 
 TEST_CASE("Car isComplete and isValid", "[car][utilities]") {
 
+    // --- isComplete ---
+
     SECTION("Default car is not complete") {
         Car c;
         REQUIRE_FALSE(c.isComplete());
     }
+
+    SECTION("Fully populated car is complete") {
+        Car c = buildValidCar();
+        REQUIRE(c.isComplete());
+    }
+
+    SECTION("Car missing brand is not complete") {
+        Car c = buildValidCar();
+        c.setBrand(DEFAULT_STR);
+        REQUIRE_FALSE(c.isComplete());
+    }
+
+    SECTION("Car missing model is not complete") {
+        Car c = buildValidCar();
+        c.setModel(DEFAULT_STR);
+        REQUIRE_FALSE(c.isComplete());
+    }
+
+    SECTION("Car missing price is not complete") {
+        Car c = buildValidCar();
+        c.setPrice(DEFAULT_INT);
+        REQUIRE_FALSE(c.isComplete());
+    }
+
+    SECTION("Car with FuelType::NA is not complete") {
+        Car c = buildValidCar();
+        c.setFuelType(FuelType::NA);
+        REQUIRE_FALSE(c.isComplete());
+    }
+
+    SECTION("Car with GearboxType::NA is not complete") {
+        Car c = buildValidCar();
+        c.setGearboxType(GearboxType::NA);
+        REQUIRE_FALSE(c.isComplete());
+    }
+
+    SECTION("Car with Co2Class::NA is not complete") {
+        Car c = buildValidCar();
+        c.setCo2Class(Co2Class::NA);
+        REQUIRE_FALSE(c.isComplete());
+    }
+
+    SECTION("Car with invalid start date is not complete") {
+        Car c = buildValidCar();
+        c.setCommercialisationStart("31/02/2019");   // date invalide → nullopt
+        REQUIRE_FALSE(c.isComplete());
+    }
+
+    SECTION("Car with no end date is complete (still in sale)") {
+        Car c = buildValidCar();
+        // _commercialisationEnd non renseignée = encore commercialisée = valide
+        REQUIRE(c.isComplete());
+    }
+
+
+    // --- isValid ---
 
     SECTION("Default car is valid (no error values)") {
         Car c;
         REQUIRE(c.isValid());
     }
 
-    SECTION("Car with error values is not valid") {
+    SECTION("Fully populated car is valid") {
+        Car c = buildValidCar();
+        REQUIRE(c.isValid());
+    }
+
+    SECTION("Car with ERROR_STR brand is not valid") {
         Car c;
-        c.setBrand("");                 // → ERROR_STR
+        c.setBrand("");
         REQUIRE_FALSE(c.isValid());
     }
 
-    SECTION("Fully populated car is complete and valid") {
+    SECTION("Car with ERROR_INT price is not valid") {
         Car c;
-        c.setBrand("Toyota");
-        c.setModel("Corolla");
-        c.setGeneration("E210");
-        c.setEngine("1.8L Hybrid");
-        c.setTrim("Dynamic");
-        c.setPrice(25000);
-        c.setHeight(1.43);
-        c.setLength(4.37);
-        c.setWidth(1.79);
-        c.setTrunkVolume(361);
-        c.setWeight(1375);
-        c.setSeatCount(5);
-        c.setGearboxType(GearboxType::AUTOMATIC);
-        c.setGearCount(1);
-        c.setFuelType(FuelType::EE);
-        c.setHorsePower(122);
-        c.setTaxHorsePower(6);
-        c.setTankCapacity(43);
-        c.setFuelConsumption(4.3);
-        c.setCo2Emissions(98);
-        c.setCo2Class(Co2Class::A);
-        c.setCommercialisationStart("01/01/2019");
-        c.setStillInSale(true);
-        REQUIRE(c.isComplete());
+        c.setPrice(-1);
+        REQUIRE_FALSE(c.isValid());
+    }
+
+    SECTION("Car with ERROR_DOUBLE height is not valid") {
+        Car c;
+        c.setHeight(-1.0);
+        REQUIRE_FALSE(c.isValid());
+    }
+
+    SECTION("Car with ERROR_INT horsePower is not valid") {
+        Car c;
+        c.setHorsePower(-1);
+        REQUIRE_FALSE(c.isValid());
+    }
+
+    SECTION("Car with ERROR_DOUBLE fuelConsumption is not valid") {
+        Car c;
+        c.setFuelConsumption(-1.0);
+        REQUIRE_FALSE(c.isValid());
+    }
+
+    SECTION("GearboxType::NA alone does not make car invalid") {
+        Car c;
+        REQUIRE(c.isValid());
+    }
+
+    SECTION("FuelType::NA alone does not make car invalid") {
+        Car c;
         REQUIRE(c.isValid());
     }
 

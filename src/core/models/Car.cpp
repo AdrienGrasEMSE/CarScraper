@@ -96,9 +96,13 @@ namespace CarScraper {
      */
     void Car::setBrand(const std::string& brand) {
 
-        // Verification + Normalize UTF-8 (NFC) then apply upper case
-        this->_brand = una::cases::to_uppercase_utf8(
-            una::norm::to_nfc_utf8(Validation::stringValidation(brand, this->getFullId(), "Brand", 100)));
+        // Validation
+        _brand = Validation::stringValidation(brand, this->getFullId(), "Brand", 100);
+
+        // Normalize UTF-8 (NFC) then apply upper case if no error
+        if (_brand != CarScraper::ERROR_STR) {
+            this->_brand = una::cases::to_uppercase_utf8(una::norm::to_nfc_utf8(_brand));
+        }
 
     }
 
@@ -109,10 +113,14 @@ namespace CarScraper {
      * @param model The model value
      */
     void Car::setModel(const std::string& model) {
+        
+        // Validation
+        _model = Validation::stringValidation(model, this->getFullId(), "Model", 200);
 
-        // Verification + Normalize UTF-8 (NFC) then apply title case (handles accented chars)
-        this->_model = una::cases::to_titlecase_utf8(
-            una::norm::to_nfc_utf8(Validation::stringValidation(model, this->getFullId(), "Model", 200)));
+        // Normalize UTF-8 (NFC) then apply title case if no error
+        if (_model != CarScraper::ERROR_STR) {
+            this->_model = una::cases::to_titlecase_utf8(una::norm::to_nfc_utf8(_model));
+        }
 
     }
 
@@ -123,9 +131,14 @@ namespace CarScraper {
      * @param generation The generation value
      */
     void Car::setGeneration(const std::string& generation) {
+        
+        // Validation
+        _generation = Validation::stringValidation(generation, this->getFullId(), "Generation", 50);
 
-        // Verification + Normalize UTF-8 (NFC) only — generation is a technical identifier (ex: "4", "IV")
-        this->_generation = una::norm::to_nfc_utf8(Validation::stringValidation(generation, this->getFullId(), "Generation", 50));
+        // Normalize UTF-8 (NFC) only — generation is a technical identifier
+        if (_generation != CarScraper::ERROR_STR) {
+            this->_generation = una::norm::to_nfc_utf8(_generation);
+        }
 
     }
 
@@ -137,8 +150,13 @@ namespace CarScraper {
      */
     void Car::setEngine(const std::string& engine) {
 
-        // Verification + Normalize UTF-8 (NFC) only — engine is a technical identifier (ex: "1.5 dCi 90hp")
-        this->_engine = una::norm::to_nfc_utf8(Validation::stringValidation(engine, this->getFullId(), "Engine", 200));
+        // Validation
+        _engine = Validation::stringValidation(engine, this->getFullId(), "Engine", 200);
+
+        // Normalize UTF-8 (NFC) only — generation is a technical identifier
+        if (_engine != CarScraper::ERROR_STR) {
+            this->_engine = una::norm::to_nfc_utf8(_engine);
+        }
 
     }
 
@@ -150,9 +168,13 @@ namespace CarScraper {
      */
     void Car::setTrim(const std::string& trim) {
 
-        // Verification + Normalize UTF-8 (NFC) then apply title case (handles accented chars)
-        this->_trim = una::cases::to_titlecase_utf8(
-            una::norm::to_nfc_utf8(Validation::stringValidation(trim, this->getFullId(), "Trim", 200)));
+        // Validation
+        _trim = Validation::stringValidation(trim, this->getFullId(), "Trim", 200);
+
+        // Normalize UTF-8 (NFC) then apply title case if no error
+        if (_trim != CarScraper::ERROR_STR) {
+            this->_trim = una::cases::to_titlecase_utf8(una::norm::to_nfc_utf8(_trim));
+        }
     
     }
 
