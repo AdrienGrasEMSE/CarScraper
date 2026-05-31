@@ -153,7 +153,7 @@ namespace CarScraper {
         // Validation
         _engine = Validation::stringValidation(engine, this->getFullId(), "Engine", 200);
 
-        // Normalize UTF-8 (NFC) only — generation is a technical identifier
+        // Normalize UTF-8 (NFC) only — engine is a technical identifier
         if (_engine != CarScraper::ERROR_STR) {
             this->_engine = una::norm::to_nfc_utf8(_engine);
         }
