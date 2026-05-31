@@ -74,40 +74,40 @@ namespace CarScraper {
      */
     std::string fuelTypeExplained(FuelType value) {
         switch (value) {
-            case FuelType::AC:  return "AC";
+            case FuelType::AC:  return "Unused - AC";
             case FuelType::EE:  return "Essence électricité (hybride rechargeable)";
             case FuelType::EG:  return "Bicarburation essence-GPL";
             case FuelType::EH:  return "Essence électricité (hybride non rechargeable)";
             case FuelType::EL:  return "Electricité";
-            case FuelType::EM:  return "EM";
-            case FuelType::EN:  return "EN";
-            case FuelType::EP:  return "EP";
-            case FuelType::EQ:  return "EQ";
-            case FuelType::ER:  return "ER";
+            case FuelType::EM:  return "Unused - EM";
+            case FuelType::EN:  return "Unused - EN";
+            case FuelType::EP:  return "Unused - EP";
+            case FuelType::EQ:  return "Unused - EQ";
+            case FuelType::ER:  return "Unused - ER";
             case FuelType::ES:  return "Essence";
             case FuelType::ET:  return "Ethanol";
             case FuelType::FE:  return "Superéthanol";
-            case FuelType::FG:  return "FG";
-            case FuelType::FL:  return "FL";
-            case FuelType::FN:  return "FN";
-            case FuelType::GA:  return "GA";
-            case FuelType::GE:  return "GE";
-            case FuelType::GF:  return "GF";
-            case FuelType::GG:  return "GG";
+            case FuelType::FG:  return "Unused - FG";
+            case FuelType::FL:  return "Unused - FL";
+            case FuelType::FN:  return "Unused - FN";
+            case FuelType::GA:  return "Unused - GA";
+            case FuelType::GE:  return "Unused - GE";
+            case FuelType::GF:  return "Unused - GF";
+            case FuelType::GG:  return "Unused - GG";
             case FuelType::GH:  return "Gazole-électricité (hybride non rechargeable)";
             case FuelType::GL:  return "Gazole-électricité (hybride rechargeable)";
-            case FuelType::GM:  return "GM";
-            case FuelType::GN:  return "GN";
+            case FuelType::GM:  return "Unused - GM";
+            case FuelType::GN:  return "Unused - GN";
             case FuelType::GO:  return "Diesel";
             case FuelType::GP:  return "GPL";
-            case FuelType::GQ:  return "GQ";
-            case FuelType::GZ:  return "GZ";
+            case FuelType::GQ:  return "Unused - GQ";
+            case FuelType::GZ:  return "Unused - GZ";
             case FuelType::H2:  return "Hydrogène";
-            case FuelType::NE:  return "NE";
-            case FuelType::NH:  return "NH";
-            case FuelType::PE:  return "PE";
-            case FuelType::PH:  return "PH";
-            case FuelType::PL:  return "PL";
+            case FuelType::NE:  return "Unused - NE";
+            case FuelType::NH:  return "Unused - NH";
+            case FuelType::PE:  return "Unused - PE";
+            case FuelType::PH:  return "Unused - PH";
+            case FuelType::PL:  return "Unused - PL";
             default:            return "Unknown";
         }
     }
