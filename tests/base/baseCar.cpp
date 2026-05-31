@@ -371,13 +371,13 @@ TEST_CASE("Car Setters — Invalid Values", "[car][setters][invalid]") {
     SECTION("setBrand with empty string stores ERROR_STR") {
         Car c;
         c.setBrand("");
-        REQUIRE_THAT(c.getBrand(), Catch::Matchers::Equals(ERROR_STR, Catch::CaseSensitive::No));
+        REQUIRE(c.getBrand() == ERROR_STR);
     }
 
     SECTION("setModel with empty string stores ERROR_STR") {
         Car c;
         c.setModel("");
-        REQUIRE_THAT(c.getModel(), Catch::Matchers::Equals(ERROR_STR, Catch::CaseSensitive::No));
+        REQUIRE(c.getModel() == ERROR_STR);
     }
 
     SECTION("setGeneration with empty string stores ERROR_STR") {
@@ -395,7 +395,7 @@ TEST_CASE("Car Setters — Invalid Values", "[car][setters][invalid]") {
     SECTION("setTrim with empty string stores ERROR_STR") {
         Car c;
         c.setTrim("");
-        REQUIRE_THAT(c.getTrim(), Catch::Matchers::Equals(ERROR_STR, Catch::CaseSensitive::No));
+        REQUIRE(c.getTrim() == ERROR_STR);
     }
 
     // --- Numériques hors borne inférieure ---
