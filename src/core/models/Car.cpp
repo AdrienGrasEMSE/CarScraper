@@ -473,8 +473,9 @@ namespace CarScraper {
         if (_commercialisationStart.has_value()) {
             Logger::trace("[{}].set{} value: \"{}\"", this->getFullId(),
                 "CommercialisationStart", Validation::formatDate(_commercialisationStart.value()));
+        } else {
+            Logger::error("[{}].set{} got an empty value", this->getFullId(), "CommercialisationStart");
         }
-        Logger::error("[{}].set{} got an empty value", this->getFullId(), "CommercialisationStart");
 
     }
 
