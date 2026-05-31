@@ -16,8 +16,9 @@
 #include <catch2/catch.hpp>
 #include "core/logger/Logger.hpp"
 #include "base/baseLogger.cpp"
-#include "base/baseEntity.cpp"
 #include "base/baseValidation.cpp"
+#include "base/baseEntity.cpp"
+#include "base/baseCar.cpp"
 
 
 // =============================================================================
