@@ -50,21 +50,21 @@ namespace CarScraper::Validation {
 
         // Check if the string is empty
         if (strVal.empty()) {
-            Logger::error("{}::set{} got an empty value", objectID, attributeName);
+            Logger::error("[{}].set{} got an empty value", objectID, attributeName);
             return ERROR_STR;
         }
 
 
         // Check if the string exceeds the maximum length
         if (strVal.length() > maxLength) {
-            Logger::error(  "{}::set{} got a value that exceeds the maximum length of {} characters",
+            Logger::error(  "[{}].set{} got a value that exceeds the maximum length of {} characters",
                             objectID, attributeName, maxLength);
             return ERROR_STR;
         }
 
 
         // String valid
-        Logger::trace("{}::set{} value: \"{}\"", objectID, attributeName, strVal);
+        Logger::trace("[{}].set{} value: \"{}\"", objectID, attributeName, strVal);
         return strVal;
 
     }
@@ -91,7 +91,7 @@ namespace CarScraper::Validation {
 
         // Check if the integer is below the minimum value
         if (intVal < minValue) {
-            Logger::error(  "{}::set{} got a value out of bounds: {} < {}",
+            Logger::error(  "[{}].set{} got a value out of bounds: {} < {}",
                             objectID, attributeName, intVal, minValue);
             return ERROR_INT;
         }
@@ -99,14 +99,14 @@ namespace CarScraper::Validation {
 
         // Check if the integer is above the maximum value
         if (intVal > maxValue) {
-            Logger::error(  "{}::set{} got a value out of bounds: {} > {}",
+            Logger::error(  "[{}].set{} got a value out of bounds: {} > {}",
                             objectID, attributeName, intVal, maxValue);
             return ERROR_INT;
         }
 
 
         // Integer valid
-        Logger::trace("{}::set{} value: {}", objectID, attributeName, intVal);
+        Logger::trace("[{}].set{} value: {}", objectID, attributeName, intVal);
         return intVal;
 
     }
@@ -133,7 +133,7 @@ namespace CarScraper::Validation {
 
         // Check if the double is below the minimum value
         if (doubleVal < minValue) {
-            Logger::error(  "{}::set{} got a value out of bounds: {} < {}",
+            Logger::error(  "[{}].set{} got a value out of bounds: {} < {}",
                             objectID, attributeName, doubleVal, minValue);
             return ERROR_DOUBLE;
         }
@@ -141,14 +141,14 @@ namespace CarScraper::Validation {
 
         // Check if the double is above the maximum value
         if (doubleVal > maxValue) {
-            Logger::error(  "{}::set{} got a value out of bounds: {} > {}",
+            Logger::error(  "[{}].set{} got a value out of bounds: {} > {}",
                             objectID, attributeName, doubleVal, maxValue);
             return ERROR_DOUBLE;
         }
 
 
         // Double valid
-        Logger::trace("{}::set{} value: {}", objectID, attributeName, doubleVal);
+        Logger::trace("[{}].set{} value: {}", objectID, attributeName, doubleVal);
         return doubleVal;
 
     }
@@ -185,13 +185,13 @@ namespace CarScraper::Validation {
 
         // Validation
         if (!date.ok()) {
-            Logger::error("Validation::buildDate got an invalid date: {}/{}/{}", day, month, year);
+            Logger::error("<Validation>::buildDate got an invalid date: {}/{}/{}", day, month, year);
             return std::nullopt;
         }
 
 
         // Date valid
-        Logger::trace("Validation::buildDate value: {}/{}/{}", day, month, year);
+        Logger::trace("<Validation>::buildDate value: {}/{}/{}", day, month, year);
         return date;
     }
 
@@ -265,7 +265,7 @@ namespace CarScraper::Validation {
 
         // String splitting and conversion to integers
         if (!splitThreeParts(strVal, '/', day, month, year)) {
-            Logger::error("Validation::parseDateDMY got a malformed date (expected DD/MM/YYYY): {}", strVal);
+            Logger::error("<Validation>::parseDateDMY got a malformed date (expected DD/MM/YYYY): {}", strVal);
             return std::nullopt;
         }
 
@@ -289,7 +289,7 @@ namespace CarScraper::Validation {
 
         // String splitting and conversion to integers
         if (!splitThreeParts(strVal, '/', year, month, day)) {
-            Logger::error("Validation::parseDateYMD got a malformed date (expected YYYY/MM/DD): {}", strVal);
+            Logger::error("<Validation>::parseDateYMD got a malformed date (expected YYYY/MM/DD): {}", strVal);
             return std::nullopt;
         }
 
@@ -313,7 +313,7 @@ namespace CarScraper::Validation {
 
         // String splitting and conversion to integers
         if (!splitThreeParts(strVal, '/', month, day, year)) {
-            Logger::error("Validation::parseDateMDY got a malformed date (expected MM/DD/YYYY): {}", strVal);
+            Logger::error("<Validation>::parseDateMDY got a malformed date (expected MM/DD/YYYY): {}", strVal);
             return std::nullopt;
         }
 

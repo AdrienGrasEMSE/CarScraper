@@ -261,9 +261,9 @@ namespace CarScraper {
 
         // Log message
         if (_gearboxType == CarScraper::GearboxType::NA) {
-            Logger::error("{}::set{} got an invalid value", this->getFullId(), "GearboxType");
+            Logger::error("[{}].set{} got an invalid value", this->getFullId(), "GearboxType");
         } else {
-            Logger::trace("{}::set{} value: {}", this->getFullId(),
+            Logger::trace("[{}].set{} value: {}", this->getFullId(),
                 "GearboxType", CarScraper::gearBoxTypeToString(_gearboxType));
         }
 
@@ -283,9 +283,9 @@ namespace CarScraper {
 
         // Log message
         if (_gearboxType == CarScraper::GearboxType::NA) {
-            Logger::error("{}::set{} got an invalid value", this->getFullId(), "GearboxType");
+            Logger::error("[{}].set{} got an invalid value", this->getFullId(), "GearboxType");
         } else {
-            Logger::trace("{}::set{} value: {}", this->getFullId(),
+            Logger::trace("[{}].set{} value: {}", this->getFullId(),
                 "GearboxType", CarScraper::gearBoxTypeToString(_gearboxType));
         }
 
@@ -318,9 +318,9 @@ namespace CarScraper {
 
         // Log message
         if (_fuelType == CarScraper::FuelType::NA) {
-            Logger::error("{}::set{} got an invalid value", this->getFullId(), "FuelType");
+            Logger::error("[{}].set{} got an invalid value", this->getFullId(), "FuelType");
         } else {
-            Logger::trace("{}::set{} value: {}", this->getFullId(),
+            Logger::trace("[{}].set{} value: {}", this->getFullId(),
                 "FuelType", CarScraper::fuelTypeToString(_fuelType));
         }
 
@@ -340,9 +340,9 @@ namespace CarScraper {
 
         // Log message
         if (_fuelType == CarScraper::FuelType::NA) {
-            Logger::error("{}::set{} got an invalid value", this->getFullId(), "FuelType");
+            Logger::error("[{}].set{} got an invalid value", this->getFullId(), "FuelType");
         } else {
-            Logger::trace("{}::set{} value: {}", this->getFullId(),
+            Logger::trace("[{}].set{} value: {}", this->getFullId(),
                 "FuelType", CarScraper::fuelTypeToString(_fuelType));
         }
 
@@ -427,9 +427,9 @@ namespace CarScraper {
 
         // Log message
         if (_co2Class == CarScraper::Co2Class::NA) {
-            Logger::error("{}::set{} got an invalid value", this->getFullId(), "Co2Class");
+            Logger::error("[{}].set{} got an invalid value", this->getFullId(), "Co2Class");
         } else {
-            Logger::trace("{}::set{} value: {}", this->getFullId(),
+            Logger::trace("[{}].set{} value: {}", this->getFullId(),
                 "Co2Class", CarScraper::co2ClassToString(_co2Class));
         }
     
@@ -449,9 +449,9 @@ namespace CarScraper {
 
         // Log message
         if (_co2Class == CarScraper::Co2Class::NA) {
-            Logger::error("{}::set{} got an invalid value", this->getFullId(), "Co2Class");
+            Logger::error("[{}].set{} got an invalid value", this->getFullId(), "Co2Class");
         } else {
-            Logger::trace("{}::set{} value: {}", this->getFullId(),
+            Logger::trace("[{}].set{} value: {}", this->getFullId(),
                 "Co2Class", CarScraper::co2ClassToString(_co2Class));
         }
     
@@ -461,7 +461,7 @@ namespace CarScraper {
     /**
      * @brief Sets the commercialisation start date
      * 
-     * @param co2Class The commercialisation start date
+     * @param commercialisationStart The commercialisation start date
      */
     void Car::setCommercialisationStart(const std::string& commercialisationStart) {
 
@@ -471,10 +471,10 @@ namespace CarScraper {
 
         // Log message
         if (_commercialisationStart.has_value()) {
-            Logger::trace("{}::set{} value: \"{}\"", this->getFullId(),
+            Logger::trace("[{}].set{} value: \"{}\"", this->getFullId(),
                 "CommercialisationStart", Validation::formatDate(_commercialisationStart.value()));
         }
-        Logger::error("{}::set{} got an empty value", this->getFullId(), "CommercialisationStart");
+        Logger::error("[{}].set{} got an empty value", this->getFullId(), "CommercialisationStart");
 
     }
 
@@ -482,7 +482,7 @@ namespace CarScraper {
     /**
      * @brief Sets the commercialisation end date
      * 
-     * @param co2Class The commercialisation end date
+     * @param commercialisationEnd The commercialisation end date
      */
     void Car::setCommercialisationEnd(const std::string& commercialisationEnd) {
 
@@ -492,10 +492,10 @@ namespace CarScraper {
 
         // Log message
         if (_commercialisationEnd.has_value()) {
-            Logger::trace("{}::set{} value: \"{}\"", this->getFullId(),
+            Logger::trace("[{}].set{} value: \"{}\"", this->getFullId(),
                 "CommercialisationEnd", Validation::formatDate(_commercialisationEnd.value()));
         } else {
-            Logger::error("{}::set{} got an empty value", this->getFullId(), "CommercialisationEnd");
+            Logger::error("[{}].set{} got an empty value", this->getFullId(), "CommercialisationEnd");
         }
 
     }
