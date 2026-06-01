@@ -28,7 +28,7 @@ namespace CarScraper::Validation {
     // =========================================================================
 
     /**
-     * Validates a string value against a maximum length.
+     * @brief Validates a string value against a maximum length.
      *
      * @param strVal The string value to validate.
      * @param objectID The ID of the object being validated.
@@ -43,7 +43,7 @@ namespace CarScraper::Validation {
 
     
     /**
-     * Validates an integer value against minimum and maximum values.
+     * @brief Validates an integer value against minimum and maximum values.
      *
      * @param intVal The integer value to validate.
      * @param objectID The ID of the object being validated.
@@ -60,7 +60,7 @@ namespace CarScraper::Validation {
 
 
     /**
-     * Validates a double value against minimum and maximum values.
+     * @brief Validates a double value against minimum and maximum values.
      *
      * @param doubleVal The double value to validate.
      * @param objectID The ID of the object being validated.
@@ -84,7 +84,7 @@ namespace CarScraper::Validation {
     // =========================================================================
 
     /**
-     * Parses a date string in the format DD/MM/YYYY.
+     * @brief Parses a date string in the format DD/MM/YYYY.
      *
      * @param strVal The date string to parse.
      * @return The parsed date or std::nullopt if the format is invalid.
@@ -93,7 +93,7 @@ namespace CarScraper::Validation {
 
                                                             
     /**
-     * Parses a date string in the format YYYY/MM/DD.
+     * @brief Parses a date string in the format YYYY/MM/DD.
      *
      * @param strVal The date string to parse.
      * @return The parsed date or std::nullopt if the format is invalid.
@@ -102,7 +102,7 @@ namespace CarScraper::Validation {
 
 
     /**
-     * Parses a date string in the format MM/DD/YYYY.
+     * @brief Parses a date string in the format MM/DD/YYYY.
      *
      * @param strVal The date string to parse.
      * @return The parsed date or std::nullopt if the format is invalid.
@@ -111,7 +111,7 @@ namespace CarScraper::Validation {
 
                                                             
     /**
-     * Formats a date into a string in the format DD/MM/YYYY.
+     * @brief Formats a date into a string in the format DD/MM/YYYY.
      *
      * @param date The date to format.
      * @return The formatted date string.

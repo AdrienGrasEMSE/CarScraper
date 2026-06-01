@@ -33,111 +33,9 @@
 namespace CarScraper {
 
     /**
-     * @class Car (inheriting from @class Entity)
-     *
-     * @attributes:
-     * - General:
-     *  -> brand            : (string) Car brand                        | ex: "Renault"
-     *  -> model            : (string) Car model                        | ex: "Clio"
-     *  -> generation       : (string) Car generation                   | ex: "4"
-     *  -> engine           : (string) Car engine                       | ex: "1.5 dCi 90hp"
-     *  -> trim             : (string) Car trim                         | ex: "Expression"
-     *  -> price            : (int) Car price                           | ex: 15000             | in €
-     * - Dimensions:
-     *  -> height           : (double) Car height                       | ex: 1.45              | in meters
-     *  -> length           : (double) Car length                       | ex: 4.05              | in meters
-     *  -> width            : (double) Car width                        | ex: 1.75              | in meters
-     *  -> trunkVolume      : (int) Car trunk volume                    | ex: 300               | in liters
-     *  -> weight           : (int) Car weight                          | ex: 1200              | in kg
-     *  -> seatCount        : (int) Car seat count                      | ex: 5
-     * - Transmission:
-     *  -> gearboxType      : (enum) Car gearbox type                   | AUTOMATIC / MANUAL
-     *  -> gearCount        : (int) Car gear count                      | ex: 5
-     * - Power:
-     *  -> fuelType         : (enum) Car fuel type                      | ex: EE / EL / ES / GL / GO / GP / H2
-     *  -> horsePower       : (int) Car horse power                     | ex: 90                | in DIN hp
-     *  -> taxHorsePower    : (int) Car tax horse power                 | ex: 5
-     * - Consumption:
-     *  -> tankCapacity     : (int) Car tank capacity                   | ex: 50                | in liters
-     *  -> fuelConsumption  : (double) Car fuel consumption             | ex: 4.5               | in L/100km
-     *  -> co2Emissions     : (int) Car co2 emissions                   | ex: 120               | in g/km
-     *  -> co2Class         : (enum) Car co2 class                      | A / B / C / D / E / F / G
-     * - Commercialisation :
-     *  -> commercialisationStart : (chrono) Car commercialisation start year | ex: "01/01/2012"
-     *  -> commercialisationEnd   : (chrono) Car commercialisation end year   | ex: "08/09/2019"
-     *  -> stillInSale            : (bool) Car still in sale                  | ex: false
-     *
-     * @getters:
-     * - General:
-     *  -> getBrand()           : (string) returns the brand of the car
-     *  -> getModel()           : (string) returns the model of the car
-     *  -> getGeneration()      : (string) returns the generation of the car
-     *  -> getEngine()          : (string) returns the engine of the car
-     *  -> getTrim()            : (string) returns the trim of the car
-     *  -> getPrice()           : (int) returns the price of the car
-     * - Dimensions:
-     *  -> getHeight()          : (double) returns the height of the car
-     *  -> getLength()          : (double) returns the length of the car
-     *  -> getWidth()           : (double) returns the width of the car
-     *  -> getTrunkVolume()     : (int) returns the trunk volume of the car
-     *  -> getWeight()          : (int) returns the weight of the car
-     *  -> getSeatCount()       : (int) returns the seat count of the car
-     * - Transmission:
-     *  -> getGearboxType()     : (enum) returns the gearbox type of the car
-     *  -> getGearCount()       : (int) returns the gear count of the car
-     * - Power:
-     *  -> getFuelType()        : (enum) returns the fuel type of the car
-     *  -> getHorsePower()      : (int) returns the horse power of the car
-     *  -> getTaxHorsePower()   : (int) returns the tax horse power of the car
-     * - Consumption:
-     *  -> getTankCapacity()    : (int) returns the tank capacity of the car
-     *  -> getFuelConsumption() : (double) returns the fuel consumption of the car
-     *  -> getCo2Emissions()    : (int) returns the CO2 emissions of the car
-     *  -> getCo2Class()        : (enum) returns the CO2 class of the car
-     * - Commercialisation :
-     *  -> getCommercialisationStart()  : (chrono) returns the start year of the car
-     *  -> getCommercialisationEnd()    : (chrono) returns the end year of the car
-     *  -> getStillInSale()             : (bool) returns whether the car is still in sale
-     *
-     * @setters:
-     * - General:
-     *  -> setBrand()           : sets the brand of the car             | max length: 100 characters
-     *  -> setModel()           : sets the model of the car             | max length: 200 characters
-     *  -> setGeneration()      : sets the generation of the car        | max length: 50 characters
-     *  -> setEngine()          : sets the engine of the car            | max length: 200 characters
-     *  -> setTrim()            : sets the trim of the car              | max length: 200 characters
-     *  -> setPrice()           : sets the price of the car             | min value: 0 €, max value: 10 000 000 €
-     * - Dimensions:
-     *  -> setHeight()          : sets the height of the car            | min value: 0.0 m, max value: 10.0 m
-     *  -> setLength()          : sets the length of the car            | min value: 0.0 m, max value: 10.0 m
-     *  -> setWidth()           : sets the width of the car             | min value: 0.0 m, max value: 10.0 m
-     *  -> setTrunkVolume()     : sets the trunk volume of the car      | min value: 0 L, max value: 1000 L
-     *  -> setWeight()          : sets the weight of the car            | min value: 0 kg, max value: 5000 kg
-     *  -> setSeatCount()       : sets the seat count of the car        | min value: 0, max value: 10
-     * - Transmission:
-     *  -> setGearboxType()     : sets the gearbox type of the car      | enum /max length: 50 characters
-     *  -> setGearCount()       : sets the gear count of the car        | min value: 0, max value: 20
-     * - Power:
-     *  -> setFuelType()        : sets the fuel type of the car         | enum / max length: 50 characters
-     *  -> setHorsePower()      : sets the horse power of the car       | min value: 0 hp, max value: 3000 hp
-     *  -> setTaxHorsePower()   : sets the tax horse power of the car   | min value: 0 hp, max value: 200
-     * - Consumption:
-     *  -> setTankCapacity()    : sets the tank capacity of the car     | min value: 0 L, max value: 500 L
-     *  -> setFuelConsumption() : sets the fuel consumption of the car  | min value: 0.0 L/100km, max value: 50.0 L/100km
-     *  -> setCo2Emissions()    : sets the CO2 emissions of the car     | min value: 0 g/km, max value: 200 g/km
-     *  -> setCo2Class()        : sets the CO2 class of the car         | enum / max length: 10 characters
-     * - Commercialisation:
-     *  -> setCommercialisationStart()  : sets the start year of the car
-     *  -> setCommercialisationEnd()    : sets the end year of the car
-     *  -> setStillInSale()             : sets whether the car is still in sale
-     *
-     * @utilities:
-     * - isComplete()           : returns true if the car data has been properly filled (no default values or error values)
-     * - isValid()              : returns true if the car data is valid (no error values)
-     * - toString()             : returns a string representation of the car (for debugging purposes)
-     *
-     * @operators:
-     * - operator<<             : stream operator overload for easy display of the car information
+     * @class Car
+     * 
+     * @brief Represent a car entity with various attributes and methods
      */
     class Car : public Entity {
 
@@ -147,40 +45,40 @@ namespace CarScraper {
         private:
 
             // General
-            std::string     _brand;
-            std::string     _model;
-            std::string     _generation;
-            std::string     _engine;
-            std::string     _trim;
-            int             _price;
+            std::string     _brand;                     ///< Car brand                        | ex: "Renault"
+            std::string     _model;                     ///< Car model                        | ex: "Clio"
+            std::string     _generation;                ///< Car generation                   | ex: "4"
+            std::string     _engine;                    ///< Car engine                       | ex: "1.5 dCi 90hp"
+            std::string     _trim;                      ///< Car trim                         | ex: "Expression"
+            int             _price;                     ///< Car price                        | ex: 15000
 
             // Dimensions
-            double          _height;
-            double          _length;
-            double          _width;
-            int             _trunkVolume;
-            int             _weight;
-            int             _seatCount;
+            double          _height;                    ///< Car height                       | ex: 1.45
+            double          _length;                    ///< Car length                       | ex: 4.05
+            double          _width;                     ///< Car width                        | ex: 1.75
+            int             _trunkVolume;               ///< Car trunk volume                 | ex: 300
+            int             _weight;                    ///< Car weight                       | ex: 1200
+            int             _seatCount;                 ///< Car seat count                   | ex: 5
 
             // Transmission
-            CarScraper::GearboxType _gearboxType;
-            int                     _gearCount;
+            CarScraper::GearboxType _gearboxType;       ///< Car gearbox type                 | AUTOMATIC / MANUAL
+            int                     _gearCount;         ///< Car gear count                   | ex: 5
 
             // Power
-            CarScraper::FuelType    _fuelType;
-            int                     _horsePower;
-            int                     _taxHorsePower;
+            CarScraper::FuelType    _fuelType;          ///< Car fuel type                    | ex: EE / EL / ES / GL / GO / GP / H2
+            int                     _horsePower;        ///< Car horse power                  | ex: 90
+            int                     _taxHorsePower;     ///< Car tax horse power              | ex: 5
 
             // Consumption
-            int                     _tankCapacity;
-            double                  _fuelConsumption;
-            int                     _co2Emissions;
-            CarScraper::Co2Class    _co2Class;
+            int                     _tankCapacity;      ///< Car tank capacity                | ex: 50
+            double                  _fuelConsumption;   ///< Car fuel consumption             | ex: 4.5
+            int                     _co2Emissions;      ///< Car co2 emissions                | ex: 120
+            CarScraper::Co2Class    _co2Class;          ///< Car co2 class                    | A / B / C / D / E / F / G
 
             // Commercialisation
-            std::optional<std::chrono::year_month_day>  _commercialisationStart;
-            std::optional<std::chrono::year_month_day>  _commercialisationEnd;
-            bool            _stillInSale;
+            std::optional<std::chrono::year_month_day>  _commercialisationStart;    ///< Car commercialisation start year | ex: "01/01/2012"
+            std::optional<std::chrono::year_month_day>  _commercialisationEnd;      ///< Car commercialisation end year   | ex: "08/09/2019"
+            bool                                        _stillInSale;               ///< Car still in sale                | ex: false
 
 
 
@@ -193,6 +91,10 @@ namespace CarScraper {
             // -------------------------------------------------------------------------
             // Constructor / Destructor
             // -------------------------------------------------------------------------
+
+            /**
+             * @brief Default constructor : initializes all the car data with default values
+             */
             Car();
 
 
@@ -354,34 +256,193 @@ namespace CarScraper {
             // Setters
             // -------------------------------------------------------------------------
 
-            // General
-            void setBrand           (const  std::string&            brand);
-            void setModel           (const  std::string&            model);
-            void setGeneration      (const  std::string&            generation);
-            void setEngine          (const  std::string&            engine);
-            void setTrim            (const  std::string&            trim);
-            void setPrice           (int                            price);
-            void setHeight          (double                         height);
-            void setLength          (double                         length);
-            void setWidth           (double                         width);
-            void setTrunkVolume     (int                            trunkVolume);
-            void setWeight          (int                            weight);
-            void setSeatCount       (int                            seatCount);
-            void setGearboxType     (const  CarScraper::GearboxType gearboxType);
-            void setGearboxType     (const  std::string&            gearboxType);
-            void setGearCount       (int                            gearCount);
-            void setFuelType        (const  CarScraper::FuelType    fuelType);
-            void setFuelType        (const  std::string&            fuelType);
-            void setHorsePower      (int                            horsePower);
-            void setTaxHorsePower   (int                            taxHorsePower);
-            void setTankCapacity    (int                            tankCapacity);
-            void setFuelConsumption (double                         fuelConsumption);
-            void setCo2Emissions    (int                            co2Emissions);
-            void setCo2Class        (const  CarScraper::Co2Class    co2Class);
-            void setCo2Class        (const  std::string&            co2Class);
-            void setCommercialisationStart  (const std::string&     commercialisationStart);
-            void setCommercialisationEnd    (const std::string&     commercialisationEnd);
-            void setStillInSale     (bool                           stillInSale);
+            /**
+             * @brief Sets the brand value
+             * @param brand The brand value
+             */
+            void setBrand(const std::string& brand);
+
+
+            /**
+             * @brief Sets the model value
+             * @param model The model value
+             */
+            void setModel(const std::string& model);
+
+
+            /**
+             * @brief Sets the generation value
+             * @param generation The generation value
+             */
+            void setGeneration(const std::string& generation);
+
+
+            /**
+             * @brief Sets the engine value
+             * @param engine The engine value
+             */
+            void setEngine(const std::string& engine);
+
+
+            /**
+             * @brief Sets the trim value
+             * @param trim The trim value
+             */
+            void setTrim(const std::string& trim);
+
+
+            /**
+             * @brief Sets the price value
+             * @param price The price value
+             */
+            void setPrice(int price);
+
+
+            /**
+             * @brief Sets the height value
+             * @param height The height value
+             */
+            void setHeight(double height);
+
+
+            /**
+             * @brief Sets the length value
+             * @param length The length value
+             */
+            void setLength(double length);
+
+
+            /**
+             * @brief Sets the width value
+             * @param width The width value
+             */
+            void setWidth(double width);
+
+
+            /**
+             * @brief Sets the trunk volume value
+             * @param trunkVolume The trunk volume value
+             */
+            void setTrunkVolume(int trunkVolume);
+
+
+            /**
+             * @brief Sets the weight value
+             * @param weight The weight value
+             */
+            void setWeight(int weight);
+
+
+            /**
+             * @brief Sets the seat count value
+             * @param seatCount The seat count value
+             */
+            void setSeatCount(int seatCount);
+
+
+            /**
+             * @brief Sets the gear box type
+             * @param gearboxType The gear box type
+             */
+            void setGearboxType(const CarScraper::GearboxType gearboxType);
+
+
+            /**
+             * @brief Sets the gear box type
+             * @param gearboxType The gear box type
+             */
+            void setGearboxType(const std::string& gearboxType);
+
+
+            /**
+             * @brief Sets the gear count value
+             * @param gearCount The gear count value
+             */
+            void setGearCount(int gearCount);
+
+
+            /**
+             * @brief Sets the fuel type
+             * @param fuelType The fuel type
+             */
+            void setFuelType(const CarScraper::FuelType fuelType);
+
+
+            /**
+             * @brief Sets the fuel type
+             * @param fuelType The fuel type
+             */
+            void setFuelType(const std::string& fuelType);
+
+
+            /**
+             * @brief Sets the horse power value
+             * @param horsePower The horse power value
+             */
+            void setHorsePower(int horsePower);
+
+
+            /**
+             * @brief Sets the tax horse power value
+             * @param taxHorsePower The tax horse power value
+             */
+            void setTaxHorsePower(int taxHorsePower);
+
+
+            /**
+             * @brief Sets the tank capacity value
+             * @param tankCapacity The tank capacity value
+             */
+            void setTankCapacity(int tankCapacity);
+
+
+            /**
+             * @brief Sets the fuel consumption value
+             * @param fuelConsumption The fuel consumption value
+             */
+            void setFuelConsumption(double fuelConsumption);
+
+
+            /**
+             * @brief Sets the CO2 emissions value
+             * @param co2Emissions The CO2 emissions value
+             */
+            void setCo2Emissions(int co2Emissions);
+
+
+            /**
+             * @brief Sets the CO2 class value
+             * @param co2Class The CO2 class value
+             */
+            void setCo2Class(const CarScraper::Co2Class co2Class);
+
+
+            /**
+             * @brief Sets the CO2 class value
+             * @param co2Class The CO2 class value
+             */
+            void setCo2Class(const std::string& co2Class);
+
+
+            /**
+             * @brief Sets the commercialisation start date
+             * @param commercialisationStart The commercialisation start date
+             */
+            void setCommercialisationStart(const std::string& commercialisationStart);
+
+
+            /**
+             * @brief Sets the commercialisation end date
+             * @param commercialisationEnd The commercialisation end date
+             */
+            void setCommercialisationEnd(const std::string& commercialisationEnd);
+
+
+            /**
+             * Sets the still in sale value
+             * @param stillInSale The still in sale value
+             */
+            void setStillInSale(bool stillInSale);
 
 
 
@@ -391,12 +452,27 @@ namespace CarScraper {
             // Utilities
             // -------------------------------------------------------------------------
 
-            // Returns true if the car data has been properly filled (no default values or error values)
+            /**
+             * @brief Checks if the car data has been filled (no default sentinel values)
+             *
+             * @return true if the car data is complete and valid, false otherwise
+             */
             bool isComplete() const;
+
+
+            /**
+             * @brief Checks if the car data has been properly filled (no error sentinel values)
+             *
+             * @return true if the car data is valid, false otherwise
+             */
             bool isValid() const;
 
 
-            // Debug display
+            /**
+             * @brief Returns a string representation of the car (for debugging purposes)
+             * 
+             * @return the string representation of the car
+             */
             std::string toString() const;
 
     };
@@ -408,6 +484,13 @@ namespace CarScraper {
     // =========================================================================
     // Operators
     // =========================================================================
+
+    /**
+     * @brief Operator << overload for the stream compatibility (uses the Car.toString() method)
+     * 
+     * @param os the targeted stream
+     * @param car the targeted car
+     */
     std::ostream& operator<<(std::ostream& os, const Car& car);
 
 } // namespace CarScraper

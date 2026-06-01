@@ -25,6 +25,9 @@ namespace CarScraper {
     // Enum
     // =========================================================================
 
+    /**
+     * @brief Class of CO2 emmission, stored according to the European standard
+     */
     enum class Co2Class {
         A,  // -100g/km
         B,  // 101-120g/km

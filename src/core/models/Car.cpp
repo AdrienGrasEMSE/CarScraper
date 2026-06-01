@@ -31,7 +31,7 @@ namespace CarScraper {
     // =========================================================================
 
     /**
-     * Default constructor: initializes all the car data with default values
+     * @brief Default constructor : initializes all the car data with default values
      */
     Car::Car() : Entity("CAR") {
 
@@ -72,14 +72,6 @@ namespace CarScraper {
         _stillInSale             = false;
 
     }
-
-
-
-
-
-    // =========================================================================
-    // Getters
-    // =========================================================================
 
 
 
@@ -273,7 +265,7 @@ namespace CarScraper {
     /**
      * @brief Sets the gear box type
      * 
-     * @param gearboxType (enum) The gear box type
+     * @param gearboxType The gear box type
      */
     void Car::setGearboxType(const CarScraper::GearboxType gearboxType) {
 
@@ -295,7 +287,7 @@ namespace CarScraper {
     /**
      * @brief Sets the gear box type
      * 
-     * @param gearboxType (string) The gear box type
+     * @param gearboxType The gear box type
      */
     void Car::setGearboxType(const std::string& gearboxType) {
 
@@ -330,7 +322,7 @@ namespace CarScraper {
     /**
      * @brief Sets the fuel type
      * 
-     * @param fuelType (enum) The fuel type
+     * @param fuelType The fuel type
      */
     void Car::setFuelType(const CarScraper::FuelType fuelType) {
 
@@ -352,7 +344,7 @@ namespace CarScraper {
     /**
      * @brief Sets the fuel type
      * 
-     * @param fuelType (string) The fuel type
+     * @param fuelType The fuel type
      */
     void Car::setFuelType(const std::string& fuelType) {
 
@@ -439,7 +431,7 @@ namespace CarScraper {
     /**
      * @brief Sets the CO2 class value
      * 
-     * @param co2Class (enum) The CO2 class value
+     * @param co2Class The CO2 class value
      */
     void Car::setCo2Class(const CarScraper::Co2Class co2Class) {
 
@@ -461,7 +453,7 @@ namespace CarScraper {
     /**
      * @brief Sets the CO2 class value
      * 
-     * @param co2Class (string) The CO2 class value
+     * @param co2Class The CO2 class value
      */
     void Car::setCo2Class(const std::string& co2Class) {
 
@@ -543,9 +535,9 @@ namespace CarScraper {
 
 
     /**
-     * Checks if the car data has been filled (no default sentinel values)
+     * @brief Checks if the car data has been filled (no default sentinel values)
      *
-     * @return true if the car data is complete, false otherwise
+     * @return true if the car data is complete and valid, false otherwise
      */
     bool Car::isComplete() const {
 
@@ -590,13 +582,13 @@ namespace CarScraper {
 
 
         // Car complete
-        return true;
+        return this->isValid();
 
     }
 
 
     /**
-     * Checks if the car data has been properly filled (no error sentinel values)
+     * @brief Checks if the car data has been properly filled (no error sentinel values)
      *
      * @return true if the car data is valid, false otherwise
      */
@@ -642,7 +634,9 @@ namespace CarScraper {
 
 
     /**
-     * Returns a string representation of the car (for debugging purposes)
+     * @brief Returns a string representation of the car (for debugging purposes)
+     * 
+     * @return the string representation of the car
      */
     std::string Car::toString() const {
 
@@ -732,6 +726,13 @@ namespace CarScraper {
     // =========================================================================
     // Operator overload
     // =========================================================================
+
+    /**
+     * @brief Operator << overload for the stream compatibility (uses the Car.toString() method)
+     * 
+     * @param os the targeted stream
+     * @param car the targeted car
+     */
     std::ostream& operator<<(std::ostream& os, const Car& car) {
         os << car.toString();
         return os;

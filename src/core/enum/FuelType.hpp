@@ -25,6 +25,9 @@ namespace CarScraper {
     // Enum
     // =========================================================================
 
+    /**
+     * @brief Type of Fuel, stored according to the french SIV fuel code
+     */
     enum class FuelType {
         AC, // Air comprimé
         EE, // Essence électricité (hybride rechargeable)

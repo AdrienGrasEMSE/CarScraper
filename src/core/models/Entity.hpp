@@ -24,20 +24,7 @@ namespace CarScraper {
     /**
      * @class Entity:
      *
-     * @attributes:
-     * - _uuid          : (string) The UUID of the entity,
-                            generated during construction and
-                            immutable after construction.       | Ex : "123e45..."
-     * - _prefix        : (string) The prefix of the entity,    
-     *                      immutable after construction.       | Ex: "CAR"
-     * - _fullId        : (string) Cached full ID (prefix-uuid),
-                            immutable after construction.       | Ex: "CAR-123e45..."
-     * 
-     * @getters:
-     * - getUuid()      : returns the UUID of the entity        | ex: "123e45..."
-     * - getPrefix()    : returns the prefix of the entity      | ex: "CAR"
-     * - getFullId()    : returns the full ID of the entity     | ex: "CAR-123e45..."
-     *
+     * @brief represent an entity, with an UUID
      */
     class Entity {
 
@@ -47,9 +34,9 @@ namespace CarScraper {
     private:
 
         // Prefix - UUID - Full ID
-        std::string     _uuid;
-        std::string     _prefix;
-        std::string     _fullId;
+        std::string     _uuid;      //< The UUID of the entity generated during construction and immutable after construction.  | Ex : "123e45..."
+        std::string     _prefix;    //< The prefix of the entity, immutable after construction.                                 | Ex: "CAR"
+        std::string     _fullId;    //< Cached full ID (prefix-uuid), immutable after construction.                             | ex: "CAR-123e45..."
 
 
 
@@ -64,17 +51,17 @@ namespace CarScraper {
         // -------------------------------------------------------------------------
 
         /**
-         * Constructor for the Entity class.
-         * - Delegating constructor to set the undefined prefix
+         * @brief Default constructor for the Entity class : Delegating constructor to set the "UNDEFINED" prefix
          */
         Entity();
 
 
 
         /**
-         * Constructor for the Entity class.
-         * - Generates a random UUID for the entity and sets the prefix.
-         * - Logs the creation of the instance with its full ID.
+         * @brief Constructor for the Entity class.
+         *
+         * @details 1 - Generates a random UUID for the entity and sets the prefix.
+         * @details 2 - Logs the creation of the instance with its full ID.
          *
          * @param prefix The prefix for the entity.
          */
@@ -94,9 +81,7 @@ namespace CarScraper {
         // -------------------------------------------------------------------------
 
         /**
-         * Destructor for the Entity class.
-         *
-         * Logs the destruction of the instance with its full ID.
+         * @brief Destructor for the Entity class : Logs the destruction of the instance with its full ID.
          */
         virtual ~Entity();
 
@@ -109,7 +94,7 @@ namespace CarScraper {
         // -------------------------------------------------------------------------
 
         /**
-         * Returns the UUID of the entity.
+         * @brief Gets the UUID of the entity.
          *
          * @return The UUID of the entity.
          */
@@ -118,7 +103,7 @@ namespace CarScraper {
 
 
         /**
-         * Returns the prefix of the entity.
+         * @brief Gets the prefix of the entity.
          *
          * @return The prefix of the entity.
          */
@@ -127,7 +112,7 @@ namespace CarScraper {
 
 
         /**
-         * Returns the full ID of the entity.
+         * @brief Gets the full ID of the entity.
          *
          * @return The full ID of the entity.
          */

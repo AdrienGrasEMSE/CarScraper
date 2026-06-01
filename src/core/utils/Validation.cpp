@@ -32,10 +32,10 @@ namespace CarScraper::Validation {
     // =========================================================================
 
     /**
-     * Validates and normalizes a string value
+     * @brief Validates and normalizes a string value
      * 
-     * Log ERROR if the string is empty or exceeds the maximum length
-     * Log TRACE with the validated value if the string is valid
+     * @details Log ERROR if the string is empty or exceeds the maximum length
+     * @details Log TRACE with the validated value if the string is valid
      * 
      * @param strVal The string value to validate and normalize
      * @param objectID The ID of the object being validated (for logging purposes)
@@ -71,10 +71,10 @@ namespace CarScraper::Validation {
 
 
     /**
-     * Validates and normalizes an integer value
+     * @brief Validates and normalizes an integer value
      *
-     * Log ERROR if the integer is out of bounds
-     * Log TRACE with the validated value if the integer is valid
+     * @details Log ERROR if the integer is out of bounds
+     * @details Log TRACE with the validated value if the integer is valid
      *
      * @param intVal The integer value to validate and normalize
      * @param objectID The ID of the object being validated (for logging purposes)
@@ -113,10 +113,10 @@ namespace CarScraper::Validation {
 
 
     /**
-     * Validates and normalizes a double value
+     * @brief Validates and normalizes a double value
      *
-     * Log ERROR if the double is out of bounds
-     * Log TRACE with the validated value if the double is valid
+     * @details Log ERROR if the double is out of bounds
+     * @details Log TRACE with the validated value if the double is valid
      *
      * @param doubleVal The double value to validate and normalize
      * @param objectID The ID of the object being validated (for logging purposes)
@@ -166,7 +166,7 @@ namespace CarScraper::Validation {
     // -------------------------------------------------------------------------
 
     /**
-     * Builds a date from day, month, and year.
+     * @brief Builds a date from day, month, and year.
      *
      * @param day The day of the date.
      * @param month The month of the date.
@@ -197,7 +197,7 @@ namespace CarScraper::Validation {
 
 
     /**
-     * Splits a string into three parts based on a separator.
+     * @brief Splits a string into three parts based on a separator.
      *
      * @param v The string to split.
      * @param sep The separator character.
@@ -252,7 +252,7 @@ namespace CarScraper::Validation {
     // -------------------------------------------------------------------------
 
     /**
-     * Parses a date string in the format DD/MM/YYYY.
+     * @brief Parses a date string in the format DD/MM/YYYY.
      *
      * @param strVal The date string to parse.
      * @return The parsed date or std::nullopt if the format is invalid.
@@ -276,7 +276,7 @@ namespace CarScraper::Validation {
 
 
     /**
-     * Parses a date string in the format YYYY/MM/DD.
+     * @brief Parses a date string in the format YYYY/MM/DD.
      *
      * @param strVal The date string to parse.
      * @return The parsed date or std::nullopt if the format is invalid.
@@ -300,7 +300,7 @@ namespace CarScraper::Validation {
 
 
     /**
-     * Parses a date string in the format MM/DD/YYYY.
+     * @brief Parses a date string in the format MM/DD/YYYY.
      *
      * @param strVal The date string to parse.
      * @return The parsed date or std::nullopt if the format is invalid.
@@ -324,7 +324,7 @@ namespace CarScraper::Validation {
 
 
     /**
-     * Formats a date into a string in the format DD/MM/YYYY.
+     * @brief Formats a date into a string in the format DD/MM/YYYY.
      *
      * @param date The date to format.
      * @return The formatted date string.
