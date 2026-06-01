@@ -22,7 +22,7 @@
 namespace CarScraper {
 
     /**
-     * @class Entity:
+     * @class Entity
      *
      * @brief represent an entity, with an UUID
      */
@@ -34,9 +34,9 @@ namespace CarScraper {
     private:
 
         // Prefix - UUID - Full ID
-        std::string     _uuid;      //< The UUID of the entity generated during construction and immutable after construction.  | Ex : "123e45..."
-        std::string     _prefix;    //< The prefix of the entity, immutable after construction.                                 | Ex: "CAR"
-        std::string     _fullId;    //< Cached full ID (prefix-uuid), immutable after construction.                             | ex: "CAR-123e45..."
+        std::string     _uuid;      ///< The UUID of the entity generated during construction and immutable after construction.  | Ex : "123e45..."
+        std::string     _prefix;    ///< The prefix of the entity, immutable after construction.                                 | Ex: "CAR"
+        std::string     _fullId;    ///< Cached full ID (prefix-uuid), immutable after construction.                             | ex: "CAR-123e45..."
 
 
 

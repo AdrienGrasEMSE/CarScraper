@@ -29,41 +29,41 @@ namespace CarScraper {
      * @brief Type of Fuel, stored according to the french SIV fuel code
      */
     enum class FuelType {
-        AC, // Air comprimé
-        EE, // Essence électricité (hybride rechargeable)
-        EG, // Bicarburation essence-GPL
-        EH, // Essence-électricité (hybride non rechargeable)
-        EL, // Electricité
-        EM, // Bicarburation essence-gaz naturel et électricité (hybride rechargeable)
-        EN, // Bicarburation essence-gaz naturel
-        EP, // Bicarburation essence-gaz naturel et électricité (hybride non rechargeable)
-        EQ, // Bicarburation essence-GPL et électricité (hybride non rechargeable)
-        ER, // Bicarburation essence-GPL et électricité (hybride rechargeable)
-        ES, // Essence
-        ET, // Ethanol
-        FE, // Superéthanol
-        FG, // Bicarburation superéthanol-GPL
-        FL, // Superéthanol-électricité (hybride rechargeable)
-        FN, // Bicarburation superéthanol-gaz naturel
-        GA, // Gazogène (*)
-        GE, // Mélange gazogène-essence (*)
-        GF, // Mélange de gazole et gaz naturel (dual fuel)
-        GG, // Mélange gazogène-gazole (*)
-        GH, // Gazole-électricité (hybride non rechargeable)
-        GL, // Gazole-électricité (hybride rechargeable)
-        GM, // Mélange de gazole et gaz naturel (dual fuel) et électricité (hybride rechargeable)
-        GN, // Gaz naturel
-        GO, // Gazole (ou diesel)
-        GP, // Gaz de pétrole liquéfié GPL (mélange spécial de butane et de propane, à l’exception des butane et propane commerciaux) utilisé en tant que carburant exclusif
-        GQ, // Mélange de gazole et gaz naturel (dual fuel) et électricité (hybride non rechargeable)
-        GZ, // Autres hydrocarbures gazeux comprimés
-        H2, // Hydrogène
-        NE, // Gaz naturel-électricité (hybride rechargeable)
-        NH, // Gaz naturel-électricité (hybride non rechargeable)
-        PE, // Monocarburation GPL-électricité (hybride rechargeable)
-        PH, // Monocarburation GPL-électricité (hybride non rechargeable)
-        PL, // Pétrole lampant
-        NA  // Inconnu
+        AC, ///< Air comprimé
+        EE, ///< Essence électricité (hybride rechargeable)
+        EG, ///< Bicarburation essence-GPL
+        EH, ///< Essence-électricité (hybride non rechargeable)
+        EL, ///< Electricité
+        EM, ///< Bicarburation essence-gaz naturel et électricité (hybride rechargeable)
+        EN, ///< Bicarburation essence-gaz naturel
+        EP, ///< Bicarburation essence-gaz naturel et électricité (hybride non rechargeable)
+        EQ, ///< Bicarburation essence-GPL et électricité (hybride non rechargeable)
+        ER, ///< Bicarburation essence-GPL et électricité (hybride rechargeable)
+        ES, ///< Essence
+        ET, ///< Ethanol
+        FE, ///< Superéthanol
+        FG, ///< Bicarburation superéthanol-GPL
+        FL, ///< Superéthanol-électricité (hybride rechargeable)
+        FN, ///< Bicarburation superéthanol-gaz naturel
+        GA, ///< Gazogène (*)
+        GE, ///< Mélange gazogène-essence (*)
+        GF, ///< Mélange de gazole et gaz naturel (dual fuel)
+        GG, ///< Mélange gazogène-gazole (*)
+        GH, ///< Gazole-électricité (hybride non rechargeable)
+        GL, ///< Gazole-électricité (hybride rechargeable)
+        GM, ///< Mélange de gazole et gaz naturel (dual fuel) et électricité (hybride rechargeable)
+        GN, ///< Gaz naturel
+        GO, ///< Gazole (ou diesel)
+        GP, ///< Gaz de pétrole liquéfié GPL (mélange spécial de butane et de propane, à l’exception des butane et propane commerciaux) utilisé en tant que carburant exclusif
+        GQ, ///< Mélange de gazole et gaz naturel (dual fuel) et électricité (hybride non rechargeable)
+        GZ, ///< Autres hydrocarbures gazeux comprimés
+        H2, ///< Hydrogène
+        NE, ///< Gaz naturel-électricité (hybride rechargeable)
+        NH, ///< Gaz naturel-électricité (hybride non rechargeable)
+        PE, ///< Monocarburation GPL-électricité (hybride rechargeable)
+        PH, ///< Monocarburation GPL-électricité (hybride non rechargeable)
+        PL, ///< Pétrole lampant
+        NA  ///< Inconnu
     };
 
 

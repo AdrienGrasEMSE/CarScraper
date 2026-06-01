@@ -29,14 +29,14 @@ namespace CarScraper {
      * @brief Class of CO2 emmission, stored according to the European standard
      */
     enum class Co2Class {
-        A,  // -100g/km
-        B,  // 101-120g/km
-        C,  // 121-140g/km
-        D,  // 141-160g/km
-        E,  // 161-200g/km
-        F,  // 201-250g/km
-        G,  // +250g/km
-        NA  // Unknown
+        A,  ///< -100g/km
+        B,  ///< 101-120g/km
+        C,  ///< 121-140g/km
+        D,  ///< 141-160g/km
+        E,  ///< 161-200g/km
+        F,  ///< 201-250g/km
+        G,  ///< +250g/km
+        NA  ///< Unknown
     };
 
 

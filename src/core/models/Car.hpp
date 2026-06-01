@@ -36,6 +36,7 @@ namespace CarScraper {
      * @class Car
      * 
      * @brief Represent a car entity with various attributes and methods
+     * @details Car is inherited from Entity. Every car has a UUID
      */
     class Car : public Entity {
 

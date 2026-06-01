@@ -517,7 +517,7 @@ namespace CarScraper {
 
 
     /**
-     * Sets the still in sale value
+     * @brief Sets the still in sale value
      * 
      * @param stillInSale The still in sale value
      */

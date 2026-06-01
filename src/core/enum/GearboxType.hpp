@@ -29,9 +29,9 @@ namespace CarScraper {
      * @brief Type of Gearbox, automatic or manual
      */
     enum class GearboxType {
-        AUTOMATIC,
-        MANUAL,
-        NA  // Unknown
+        AUTOMATIC,  ///< Automatic Gearbox
+        MANUAL,     ///< Manual Gearbox
+        NA          ///< Unknown
     };
 
 
