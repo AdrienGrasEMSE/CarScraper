@@ -3,3 +3,6 @@ build/
 
 # VSCode folder
 .vscode/
+
+# Documentation folder
+docs/

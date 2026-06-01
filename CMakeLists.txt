@@ -167,3 +167,24 @@ add_executable(TestAll                  tests/testAll.cpp)
 target_link_libraries(TestAll           PRIVATE CarScraperLibTest)
 carscraper_configure_target(TestAll)
 target_compile_definitions(TestAll      PRIVATE TESTING)
+
+
+# ==============================================================================
+# Documentation — Doxygen (optionnel)
+# ==============================================================================
+
+find_package(Doxygen OPTIONAL_COMPONENTS dot)
+
+if(DOXYGEN_FOUND)
+    set(DOXYGEN_IN  ${CMAKE_SOURCE_DIR}/Doxyfile)
+    set(DOXYGEN_OUT ${CMAKE_SOURCE_DIR}/docs)
+
+    add_custom_target(doc
+        COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_IN}
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+        COMMENT "DOxygen documentation generation..."
+        VERBATIM
+    )
+else()
+    message(STATUS "Doxygen not found — target 'doc' unavailable")
+endif()
