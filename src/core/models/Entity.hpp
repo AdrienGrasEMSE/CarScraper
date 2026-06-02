@@ -51,7 +51,8 @@ namespace CarScraper {
         // -------------------------------------------------------------------------
 
         /**
-         * @brief Default constructor for the Entity class : Delegating constructor to set the "UNDEFINED" prefix
+         * @brief Default constructor for the Entity class
+         * @details Delegating constructor to set the "UNDEFINED" prefix
          */
         Entity();
 
@@ -60,8 +61,9 @@ namespace CarScraper {
         /**
          * @brief Constructor for the Entity class.
          *
-         * @details 1 - Generates a random UUID for the entity and sets the prefix.
-         * @details 2 - Logs the creation of the instance with its full ID.
+         * @details
+         * 1. Generates a random UUID for the entity and sets the prefix.
+         * 2. Logs the creation of the instance with its full ID.
          *
          * @param prefix The prefix for the entity.
          */
@@ -81,7 +83,8 @@ namespace CarScraper {
         // -------------------------------------------------------------------------
 
         /**
-         * @brief Destructor for the Entity class : Logs the destruction of the instance with its full ID.
+         * @brief Destructor for the Entity class
+         * @details Logs the destruction of the instance with its full ID.
          */
         virtual ~Entity();
 
@@ -95,7 +98,6 @@ namespace CarScraper {
 
         /**
          * @brief Gets the UUID of the entity.
-         *
          * @return The UUID of the entity.
          */
         const std::string& getUuid()    const { return _uuid; }
@@ -104,7 +106,6 @@ namespace CarScraper {
 
         /**
          * @brief Gets the prefix of the entity.
-         *
          * @return The prefix of the entity.
          */
         const std::string& getPrefix()  const { return _prefix; }
@@ -113,7 +114,6 @@ namespace CarScraper {
 
         /**
          * @brief Gets the full ID of the entity.
-         *
          * @return The full ID of the entity.
          */
         const std::string& getFullId()  const { return _fullId; }
