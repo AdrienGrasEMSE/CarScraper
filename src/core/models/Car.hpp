@@ -94,7 +94,8 @@ namespace CarScraper {
             // -------------------------------------------------------------------------
 
             /**
-             * @brief Default constructor : initializes all the car data with default values
+             * @brief Default constructor
+             * @details Initializes all the car data with default values
              */
             Car();
 
@@ -440,7 +441,7 @@ namespace CarScraper {
 
 
             /**
-             * Sets the still in sale value
+             * @brief Sets the still in sale value
              * @param stillInSale The still in sale value
              */
             void setStillInSale(bool stillInSale);
@@ -455,7 +456,6 @@ namespace CarScraper {
 
             /**
              * @brief Checks if the car data has been filled (no default sentinel values)
-             *
              * @return true if the car data is complete and valid, false otherwise
              */
             bool isComplete() const;
@@ -463,7 +463,6 @@ namespace CarScraper {
 
             /**
              * @brief Checks if the car data has been properly filled (no error sentinel values)
-             *
              * @return true if the car data is valid, false otherwise
              */
             bool isValid() const;
@@ -471,7 +470,6 @@ namespace CarScraper {
 
             /**
              * @brief Returns a string representation of the car (for debugging purposes)
-             * 
              * @return the string representation of the car
              */
             std::string toString() const;

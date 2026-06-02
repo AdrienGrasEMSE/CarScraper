@@ -31,7 +31,8 @@ namespace CarScraper {
     // =========================================================================
 
     /**
-     * @brief Default constructor : initializes all the car data with default values
+     * @brief Default constructor
+     * @details Initializes all the car data with default values
      */
     Car::Car() : Entity("CAR") {
 
@@ -83,7 +84,6 @@ namespace CarScraper {
 
     /**
      * @brief Sets the brand value
-     * 
      * @param brand The brand value
      */
     void Car::setBrand(const std::string& brand) {
@@ -101,7 +101,6 @@ namespace CarScraper {
 
     /**
      * @brief Sets the model value
-     * 
      * @param model The model value
      */
     void Car::setModel(const std::string& model) {
@@ -119,7 +118,6 @@ namespace CarScraper {
 
     /**
      * @brief Sets the generation value
-     *
      * @param generation The generation value
      */
     void Car::setGeneration(const std::string& generation) {
@@ -137,7 +135,6 @@ namespace CarScraper {
 
     /**
      * @brief Sets the engine value
-     *
      * @param engine The engine value
      */
     void Car::setEngine(const std::string& engine) {
@@ -155,7 +152,6 @@ namespace CarScraper {
 
     /**
      * @brief Sets the trim value
-     * 
      * @param trim The trim value
      */
     void Car::setTrim(const std::string& trim) {
@@ -173,7 +169,6 @@ namespace CarScraper {
 
     /**
      * @brief Sets the price value
-     * 
      * @param price The price value
      */
     void Car::setPrice(int price) {
@@ -186,7 +181,6 @@ namespace CarScraper {
 
     /**
      * @brief Sets the height value
-     * 
      * @param height The height value
      */
     void Car::setHeight(double height) {
@@ -199,7 +193,6 @@ namespace CarScraper {
 
     /**
      * @brief Sets the length value
-     * 
      * @param length The length value
      */
     void Car::setLength(double length) {
@@ -212,7 +205,6 @@ namespace CarScraper {
 
     /**
      * @brief Sets the width value
-     * 
      * @param width The width value
      */
     void Car::setWidth(double width) {
@@ -225,7 +217,6 @@ namespace CarScraper {
 
     /**
      * @brief Sets the trunk volume value
-     * 
      * @param trunkVolume The trunk volume value
      */
     void Car::setTrunkVolume(int trunkVolume) {
@@ -238,7 +229,6 @@ namespace CarScraper {
 
     /**
      * @brief Sets the weight value
-     * 
      * @param weight The weight value
      */
     void Car::setWeight(int weight) {
@@ -251,7 +241,6 @@ namespace CarScraper {
 
     /**
      * @brief Sets the seat count value
-     * 
      * @param seatCount The seat count value
      */
     void Car::setSeatCount(int seatCount) {
@@ -264,7 +253,6 @@ namespace CarScraper {
 
     /**
      * @brief Sets the gear box type
-     * 
      * @param gearboxType The gear box type
      */
     void Car::setGearboxType(const CarScraper::GearboxType gearboxType) {
@@ -286,7 +274,6 @@ namespace CarScraper {
 
     /**
      * @brief Sets the gear box type
-     * 
      * @param gearboxType The gear box type
      */
     void Car::setGearboxType(const std::string& gearboxType) {
@@ -308,7 +295,6 @@ namespace CarScraper {
 
     /**
      * @brief Sets the gear count value
-     * 
      * @param gearCount The gear count value
      */
     void Car::setGearCount(int gearCount) {
@@ -321,7 +307,6 @@ namespace CarScraper {
 
     /**
      * @brief Sets the fuel type
-     * 
      * @param fuelType The fuel type
      */
     void Car::setFuelType(const CarScraper::FuelType fuelType) {
@@ -343,7 +328,6 @@ namespace CarScraper {
 
     /**
      * @brief Sets the fuel type
-     * 
      * @param fuelType The fuel type
      */
     void Car::setFuelType(const std::string& fuelType) {
@@ -365,7 +349,6 @@ namespace CarScraper {
 
     /**
      * @brief Sets the horse power value
-     * 
      * @param horsePower The horse power value
      */
     void Car::setHorsePower(int horsePower) {
@@ -378,7 +361,6 @@ namespace CarScraper {
 
     /**
      * @brief Sets the tax horse power value
-     * 
      * @param taxHorsePower The tax horse power value
      */
     void Car::setTaxHorsePower(int taxHorsePower) {
@@ -391,7 +373,6 @@ namespace CarScraper {
 
     /**
      * @brief Sets the tank capacity value
-     * 
      * @param tankCapacity The tank capacity value
      */
     void Car::setTankCapacity(int tankCapacity) {
@@ -404,7 +385,6 @@ namespace CarScraper {
 
     /**
      * @brief Sets the fuel consumption value
-     * 
      * @param fuelConsumption The fuel consumption value
      */
     void Car::setFuelConsumption(double fuelConsumption) {
@@ -417,7 +397,6 @@ namespace CarScraper {
 
     /**
      * @brief Sets the CO2 emissions value
-     * 
      * @param co2Emissions The CO2 emissions value
      */
     void Car::setCo2Emissions(int co2Emissions) {
@@ -430,7 +409,6 @@ namespace CarScraper {
 
     /**
      * @brief Sets the CO2 class value
-     * 
      * @param co2Class The CO2 class value
      */
     void Car::setCo2Class(const CarScraper::Co2Class co2Class) {
@@ -452,7 +430,6 @@ namespace CarScraper {
 
     /**
      * @brief Sets the CO2 class value
-     * 
      * @param co2Class The CO2 class value
      */
     void Car::setCo2Class(const std::string& co2Class) {
@@ -474,7 +451,6 @@ namespace CarScraper {
 
     /**
      * @brief Sets the commercialisation start date
-     * 
      * @param commercialisationStart The commercialisation start date
      */
     void Car::setCommercialisationStart(const std::string& commercialisationStart) {
@@ -496,7 +472,6 @@ namespace CarScraper {
 
     /**
      * @brief Sets the commercialisation end date
-     * 
      * @param commercialisationEnd The commercialisation end date
      */
     void Car::setCommercialisationEnd(const std::string& commercialisationEnd) {
@@ -518,7 +493,6 @@ namespace CarScraper {
 
     /**
      * @brief Sets the still in sale value
-     * 
      * @param stillInSale The still in sale value
      */
     void Car::setStillInSale(bool stillInSale) {
@@ -536,7 +510,6 @@ namespace CarScraper {
 
     /**
      * @brief Checks if the car data has been filled (no default sentinel values)
-     *
      * @return true if the car data is complete and valid, false otherwise
      */
     bool Car::isComplete() const {
@@ -589,7 +562,6 @@ namespace CarScraper {
 
     /**
      * @brief Checks if the car data has been properly filled (no error sentinel values)
-     *
      * @return true if the car data is valid, false otherwise
      */
     bool Car::isValid() const {
@@ -635,7 +607,6 @@ namespace CarScraper {
 
     /**
      * @brief Returns a string representation of the car (for debugging purposes)
-     * 
      * @return the string representation of the car
      */
     std::string Car::toString() const {
@@ -729,7 +700,6 @@ namespace CarScraper {
 
     /**
      * @brief Operator << overload for the stream compatibility (uses the Car.toString() method)
-     * 
      * @param os the targeted stream
      * @param car the targeted car
      */
