@@ -60,14 +60,14 @@ namespace CarScraper {
             std::string     _generation;                ///< Car generation                   | ex: "4"
             std::string     _engine;                    ///< Car engine                       | ex: "1.5 dCi 90hp"
             std::string     _trim;                      ///< Car trim                         | ex: "Expression"
-            int             _price;                     ///< Car price                        | ex: 15000
+            int             _price;                     ///< Car price (in €)                 | ex: 15000
 
             // Dimensions
-            double          _height;                    ///< Car height                       | ex: 1.45
-            double          _length;                    ///< Car length                       | ex: 4.05
-            double          _width;                     ///< Car width                        | ex: 1.75
-            int             _trunkVolume;               ///< Car trunk volume                 | ex: 300
-            int             _weight;                    ///< Car weight                       | ex: 1200
+            double          _height;                    ///< Car height (in m)                | ex: 1.45
+            double          _length;                    ///< Car length (in m)                | ex: 4.05
+            double          _width;                     ///< Car width (in m)                 | ex: 1.75
+            int             _trunkVolume;               ///< Car trunk volume (in L)          | ex: 300
+            int             _weight;                    ///< Car weight (in kg)               | ex: 1200
             int             _seatCount;                 ///< Car seat count                   | ex: 5
 
             // Transmission
@@ -76,13 +76,13 @@ namespace CarScraper {
 
             // Power
             CarScraper::FuelType    _fuelType;          ///< Car fuel type                    | ex: EE / EL / ES / GL / GO / GP / H2
-            int                     _horsePower;        ///< Car horse power                  | ex: 90
+            int                     _horsePower;        ///< Car horse power (in DIN hp)      | ex: 90
             int                     _taxHorsePower;     ///< Car tax horse power              | ex: 5
 
             // Consumption
-            int                     _tankCapacity;      ///< Car tank capacity                | ex: 50
-            double                  _fuelConsumption;   ///< Car fuel consumption             | ex: 4.5
-            int                     _co2Emissions;      ///< Car co2 emissions                | ex: 120
+            int                     _tankCapacity;      ///< Car tank capacity (in L)         | ex: 50
+            double                  _fuelConsumption;   ///< Car fuel consumption (in L/100km)| ex: 4.5
+            int                     _co2Emissions;      ///< Car co2 emissions (in g/km)      | ex: 120
             CarScraper::Co2Class    _co2Class;          ///< Car co2 class                    | A / B / C / D / E / F / G
 
             // Commercialisation
@@ -372,7 +372,6 @@ namespace CarScraper {
             /**
              * @brief Sets the gear box type using an enum value
              * @param gearboxType The gear box type
-             * @note The gear box type must be a valid value from the CarScraper::GearboxType enum
              */
             void setGearboxType(const CarScraper::GearboxType gearboxType);
 
@@ -398,7 +397,6 @@ namespace CarScraper {
             /**
              * @brief Sets the fuel type using an enum value
              * @param fuelType The fuel type
-             * @note The fuel type must be a valid value from the CarScraper::FuelType enum
              */
             void setFuelType(const CarScraper::FuelType fuelType);
 
@@ -456,7 +454,6 @@ namespace CarScraper {
             /**
              * @brief Sets the CO2 class value using an enum value
              * @param co2Class The CO2 class value
-             * @note The CO2 class value must be a valid value from the CarScraper::Co2Class enum
              */
             void setCo2Class(const CarScraper::Co2Class co2Class);
 
@@ -536,6 +533,7 @@ namespace CarScraper {
      * @details Uses the Car.toString() method
      * @param os the targeted stream
      * @param car the targeted car
+     * @return the stream with the car string representation inserted
      */
     std::ostream& operator<<(std::ostream& os, const Car& car);
 

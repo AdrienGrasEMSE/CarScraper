@@ -272,7 +272,6 @@ namespace CarScraper {
     /**
      * @brief Sets the gear box type using an enum value
      * @param gearboxType The gear box type
-     * @note The gear box type must be a valid value from the CarScraper::GearboxType enum
      */
     void Car::setGearboxType(const CarScraper::GearboxType gearboxType) {
 
@@ -331,7 +330,6 @@ namespace CarScraper {
     /**
      * @brief Sets the fuel type using an enum value
      * @param fuelType The fuel type
-     * @note The fuel type must be a valid value from the CarScraper::FuelType enum
      */
     void Car::setFuelType(const CarScraper::FuelType fuelType) {
 
@@ -442,7 +440,6 @@ namespace CarScraper {
     /**
      * @brief Sets the CO2 class value using an enum value
      * @param co2Class The CO2 class value
-     * @note The CO2 class value must be a valid value from the CarScraper::Co2Class enum
      */
     void Car::setCo2Class(const CarScraper::Co2Class co2Class) {
 
@@ -740,6 +737,7 @@ namespace CarScraper {
      * @brief Operator << overload for the stream compatibility (uses the Car.toString() method)
      * @param os the targeted stream
      * @param car the targeted car
+     * @return the stream with the car string representation inserted
      */
     std::ostream& operator<<(std::ostream& os, const Car& car) {
         os << car.toString();
