@@ -36,7 +36,16 @@ namespace CarScraper {
      * @class Car
      * 
      * @brief Represent a car entity with various attributes and methods
-     * @details Car is inherited from Entity. Every car has a UUID
+     * @details Car is inherited from Entity and uses the prefix "CAR".
+     *
+     * Every car has a UUID, some general information, dimensions, transmission
+     * information, power information, consumption information and commercialisation
+     * information.
+     *
+     * The class provides getters and setters for each attribute, as well as utility methods.
+     * Every values are set with their corresponding default sentinel value. Every setter method
+     * validates the input value. In a case of invalid value, it sets the error sentinel value
+     * and logs an error message.
      */
     class Car : public Entity {
 
@@ -95,7 +104,8 @@ namespace CarScraper {
 
             /**
              * @brief Default constructor
-             * @details Initializes all the car data with default values
+             * @details Initializes all the car data with sentinel default values
+             * @note The car entity uses the CAR prefix for its full ID (ex: "CAR-123e45...")
              */
             Car();
 
@@ -260,35 +270,45 @@ namespace CarScraper {
 
             /**
              * @brief Sets the brand value
+             * @details The brand value is normalized (converted to uppercase)
              * @param brand The brand value
+             * @note The maximum length accepted is 100 characters
              */
             void setBrand(const std::string& brand);
 
 
             /**
              * @brief Sets the model value
+             * @details The model value is normalized (converted to title case)
              * @param model The model value
+             * @note The maximum length accepted is 200 characters
              */
             void setModel(const std::string& model);
 
 
             /**
              * @brief Sets the generation value
+             * @details The generation value is normalized
              * @param generation The generation value
+             * @note The maximum length accepted is 50 characters
              */
             void setGeneration(const std::string& generation);
 
 
             /**
              * @brief Sets the engine value
+             * @details The engine value is normalized
              * @param engine The engine value
+             * @note The maximum length accepted is 200 characters
              */
             void setEngine(const std::string& engine);
 
 
             /**
              * @brief Sets the trim value
+             * @details The trim value is normalized (converted to title case)
              * @param trim The trim value
+             * @note The maximum length accepted is 200 characters
              */
             void setTrim(const std::string& trim);
 
@@ -296,6 +316,7 @@ namespace CarScraper {
             /**
              * @brief Sets the price value
              * @param price The price value
+             * @note The price value must be between 0 and 10 million (inclusive)
              */
             void setPrice(int price);
 
@@ -303,6 +324,7 @@ namespace CarScraper {
             /**
              * @brief Sets the height value
              * @param height The height value
+             * @note The height value must be between 0 and 10 meters (inclusive)
              */
             void setHeight(double height);
 
@@ -310,6 +332,7 @@ namespace CarScraper {
             /**
              * @brief Sets the length value
              * @param length The length value
+             * @note The length value must be between 0 and 10 meters (inclusive)
              */
             void setLength(double length);
 
@@ -317,6 +340,7 @@ namespace CarScraper {
             /**
              * @brief Sets the width value
              * @param width The width value
+             * @note The width value must be between 0 and 10 meters (inclusive)
              */
             void setWidth(double width);
 
@@ -324,6 +348,7 @@ namespace CarScraper {
             /**
              * @brief Sets the trunk volume value
              * @param trunkVolume The trunk volume value
+             * @note The trunk volume value must be between 0 and 1000 liters (inclusive)
              */
             void setTrunkVolume(int trunkVolume);
 
@@ -331,6 +356,7 @@ namespace CarScraper {
             /**
              * @brief Sets the weight value
              * @param weight The weight value
+             * @note The weight value must be between 0 and 5000 kg (inclusive)
              */
             void setWeight(int weight);
 
@@ -338,19 +364,24 @@ namespace CarScraper {
             /**
              * @brief Sets the seat count value
              * @param seatCount The seat count value
+             * @note The seat count value must be between 0 and 10 (inclusive)
              */
             void setSeatCount(int seatCount);
 
 
             /**
-             * @brief Sets the gear box type
+             * @brief Sets the gear box type using an enum value
              * @param gearboxType The gear box type
+             * @note The gear box type must be a valid value from the CarScraper::GearboxType enum
              */
             void setGearboxType(const CarScraper::GearboxType gearboxType);
 
 
             /**
-             * @brief Sets the gear box type
+             * @brief Sets the gear box type using a string value
+             * @details The string value will be converted to the corresponding enum value
+             * using the CarScraper::gearBoxTypeFromString() method. If the string value is invalid,
+             * the gear boxtype will be set to NA and an error message will be logged.
              * @param gearboxType The gear box type
              */
             void setGearboxType(const std::string& gearboxType);
@@ -359,19 +390,24 @@ namespace CarScraper {
             /**
              * @brief Sets the gear count value
              * @param gearCount The gear count value
+             * @note The gear count value must be between 0 and 20 (inclusive)
              */
             void setGearCount(int gearCount);
 
 
             /**
-             * @brief Sets the fuel type
+             * @brief Sets the fuel type using an enum value
              * @param fuelType The fuel type
+             * @note The fuel type must be a valid value from the CarScraper::FuelType enum
              */
             void setFuelType(const CarScraper::FuelType fuelType);
 
 
             /**
-             * @brief Sets the fuel type
+             * @brief Sets the fuel type using a string value
+             * @details The string value will be converted to the corresponding enum value
+             * using the CarScraper::fuelTypeFromString() method. If the string value is invalid,
+             * the fuel type will be set to NA and an error message will be logged.
              * @param fuelType The fuel type
              */
             void setFuelType(const std::string& fuelType);
@@ -380,6 +416,7 @@ namespace CarScraper {
             /**
              * @brief Sets the horse power value
              * @param horsePower The horse power value
+             * @note The horse power value must be between 0 and 3000 (inclusive)
              */
             void setHorsePower(int horsePower);
 
@@ -387,6 +424,7 @@ namespace CarScraper {
             /**
              * @brief Sets the tax horse power value
              * @param taxHorsePower The tax horse power value
+             * @note The tax horse power value must be between 0 and 200 (inclusive)
              */
             void setTaxHorsePower(int taxHorsePower);
 
@@ -394,6 +432,7 @@ namespace CarScraper {
             /**
              * @brief Sets the tank capacity value
              * @param tankCapacity The tank capacity value
+             * @note The tank capacity value must be between 0 and 500 liters (inclusive)
              */
             void setTankCapacity(int tankCapacity);
 
@@ -401,6 +440,7 @@ namespace CarScraper {
             /**
              * @brief Sets the fuel consumption value
              * @param fuelConsumption The fuel consumption value
+             * @note The fuel consumption value must be between 0 and 50 L/100 km (inclusive)
              */
             void setFuelConsumption(double fuelConsumption);
 
@@ -408,19 +448,24 @@ namespace CarScraper {
             /**
              * @brief Sets the CO2 emissions value
              * @param co2Emissions The CO2 emissions value
+             * @note The CO2 emissions value must be between 0 and 1000 g/km (inclusive)
              */
             void setCo2Emissions(int co2Emissions);
 
 
             /**
-             * @brief Sets the CO2 class value
+             * @brief Sets the CO2 class value using an enum value
              * @param co2Class The CO2 class value
+             * @note The CO2 class value must be a valid value from the CarScraper::Co2Class enum
              */
             void setCo2Class(const CarScraper::Co2Class co2Class);
 
 
             /**
-             * @brief Sets the CO2 class value
+             * @brief Sets the CO2 class value using a string value
+             * @details The string value will be converted to the corresponding enum value
+             * using the CarScraper::co2ClassFromString() method. If the string value is invalid,
+             * the CO2 class will be set to NA and an error message will be logged.
              * @param co2Class The CO2 class value
              */
             void setCo2Class(const std::string& co2Class);
@@ -429,6 +474,7 @@ namespace CarScraper {
             /**
              * @brief Sets the commercialisation start date
              * @param commercialisationStart The commercialisation start date
+             * @note The commercialisation start date must be in the format "DD/MM/YYYY" and must be a valid date
              */
             void setCommercialisationStart(const std::string& commercialisationStart);
 
@@ -436,6 +482,7 @@ namespace CarScraper {
             /**
              * @brief Sets the commercialisation end date
              * @param commercialisationEnd The commercialisation end date
+             * @note The commercialisation end date must be in the format "DD/MM/YYYY" and must be a valid date
              */
             void setCommercialisationEnd(const std::string& commercialisationEnd);
 
@@ -485,8 +532,8 @@ namespace CarScraper {
     // =========================================================================
 
     /**
-     * @brief Operator << overload for the stream compatibility (uses the Car.toString() method)
-     * 
+     * @brief Operator << overload for the stream compatibility
+     * @details Uses the Car.toString() method
      * @param os the targeted stream
      * @param car the targeted car
      */
