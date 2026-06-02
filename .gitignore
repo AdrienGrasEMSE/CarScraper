@@ -1,6 +1,9 @@
 # Build folder
 build/
 
+# Data folder
+data/
+
 # VSCode folder
 .vscode/
 
