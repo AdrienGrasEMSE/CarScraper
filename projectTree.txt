@@ -1,6 +1,290 @@
 .
 ├── CMakeLists.txt
 ├── data
+├── docs
+│   └── html
+│       ├── annotated.html
+│       ├── bc_sd.png
+│       ├── bc_s.png
+│       ├── Car_8cpp.html
+│       ├── Car_8cpp__incl.map
+│       ├── Car_8cpp__incl.md5
+│       ├── Car_8cpp__incl.png
+│       ├── Car_8hpp__dep__incl.map
+│       ├── Car_8hpp__dep__incl.md5
+│       ├── Car_8hpp__dep__incl.png
+│       ├── Car_8hpp.html
+│       ├── Car_8hpp__incl.map
+│       ├── Car_8hpp__incl.md5
+│       ├── Car_8hpp__incl.png
+│       ├── Car_8hpp_source.html
+│       ├── classCarScraper_1_1Car__coll__graph.map
+│       ├── classCarScraper_1_1Car__coll__graph.md5
+│       ├── classCarScraper_1_1Car__coll__graph.png
+│       ├── classCarScraper_1_1Car.html
+│       ├── classCarScraper_1_1Car__inherit__graph.map
+│       ├── classCarScraper_1_1Car__inherit__graph.md5
+│       ├── classCarScraper_1_1Car__inherit__graph.png
+│       ├── classCarScraper_1_1Car-members.html
+│       ├── classCarScraper_1_1Entity.html
+│       ├── classCarScraper_1_1Entity__inherit__graph.map
+│       ├── classCarScraper_1_1Entity__inherit__graph.md5
+│       ├── classCarScraper_1_1Entity__inherit__graph.png
+│       ├── classCarScraper_1_1Entity-members.html
+│       ├── classCarScraper_1_1HttpClient.html
+│       ├── classCarScraper_1_1HttpClient-members.html
+│       ├── classCarScraper_1_1Logger.html
+│       ├── classCarScraper_1_1Logger-members.html
+│       ├── classes.html
+│       ├── classExcelReader.html
+│       ├── classExcelReader-members.html
+│       ├── closed.png
+│       ├── Co2Class_8cpp.html
+│       ├── Co2Class_8cpp__incl.map
+│       ├── Co2Class_8cpp__incl.md5
+│       ├── Co2Class_8cpp__incl.png
+│       ├── Co2Class_8hpp__dep__incl.map
+│       ├── Co2Class_8hpp__dep__incl.md5
+│       ├── Co2Class_8hpp__dep__incl.png
+│       ├── Co2Class_8hpp.html
+│       ├── Co2Class_8hpp__incl.map
+│       ├── Co2Class_8hpp__incl.md5
+│       ├── Co2Class_8hpp__incl.png
+│       ├── Co2Class_8hpp_source.html
+│       ├── Constant_8hpp__dep__incl.map
+│       ├── Constant_8hpp__dep__incl.md5
+│       ├── Constant_8hpp__dep__incl.png
+│       ├── Constant_8hpp.html
+│       ├── Constant_8hpp__incl.map
+│       ├── Constant_8hpp__incl.md5
+│       ├── Constant_8hpp__incl.png
+│       ├── Constant_8hpp_source.html
+│       ├── dir_000006_000001.html
+│       ├── dir_000006_000005.html
+│       ├── dir_000006_000008.html
+│       ├── dir_000007_000000.html
+│       ├── dir_000008_000005.html
+│       ├── dir_0e7a58851e096bd60301b89de049e7fd_dep.map
+│       ├── dir_0e7a58851e096bd60301b89de049e7fd_dep.md5
+│       ├── dir_0e7a58851e096bd60301b89de049e7fd_dep.png
+│       ├── dir_0e7a58851e096bd60301b89de049e7fd.html
+│       ├── dir_68267d1309a1af8e8297ef4c3efbcdba_dep.map
+│       ├── dir_68267d1309a1af8e8297ef4c3efbcdba_dep.md5
+│       ├── dir_68267d1309a1af8e8297ef4c3efbcdba_dep.png
+│       ├── dir_68267d1309a1af8e8297ef4c3efbcdba.html
+│       ├── dir_a3d38565974f6cd48f4cb834e5cf3293_dep.map
+│       ├── dir_a3d38565974f6cd48f4cb834e5cf3293_dep.md5
+│       ├── dir_a3d38565974f6cd48f4cb834e5cf3293_dep.png
+│       ├── dir_a3d38565974f6cd48f4cb834e5cf3293.html
+│       ├── dir_a8053b3d69cfefb2b2e6ec7bf9dd5c1a_dep.map
+│       ├── dir_a8053b3d69cfefb2b2e6ec7bf9dd5c1a_dep.md5
+│       ├── dir_a8053b3d69cfefb2b2e6ec7bf9dd5c1a_dep.png
+│       ├── dir_a8053b3d69cfefb2b2e6ec7bf9dd5c1a.html
+│       ├── dir_aebb8dcc11953d78e620bbef0b9e2183_dep.map
+│       ├── dir_aebb8dcc11953d78e620bbef0b9e2183_dep.md5
+│       ├── dir_aebb8dcc11953d78e620bbef0b9e2183_dep.png
+│       ├── dir_aebb8dcc11953d78e620bbef0b9e2183.html
+│       ├── dir_c184e51c84f2c3f0345bbc8a0d75d3e1_dep.map
+│       ├── dir_c184e51c84f2c3f0345bbc8a0d75d3e1_dep.md5
+│       ├── dir_c184e51c84f2c3f0345bbc8a0d75d3e1_dep.png
+│       ├── dir_c184e51c84f2c3f0345bbc8a0d75d3e1.html
+│       ├── dir_c67a4d9e7e7a2bc8c86505c6f88ae398_dep.map
+│       ├── dir_c67a4d9e7e7a2bc8c86505c6f88ae398_dep.md5
+│       ├── dir_c67a4d9e7e7a2bc8c86505c6f88ae398_dep.png
+│       ├── dir_c67a4d9e7e7a2bc8c86505c6f88ae398.html
+│       ├── dir_f0649de74b179a978e3be69a06151214_dep.map
+│       ├── dir_f0649de74b179a978e3be69a06151214_dep.md5
+│       ├── dir_f0649de74b179a978e3be69a06151214_dep.png
+│       ├── dir_f0649de74b179a978e3be69a06151214.html
+│       ├── dir_ffd15e349ea497166a76d5042b2f5c37_dep.map
+│       ├── dir_ffd15e349ea497166a76d5042b2f5c37_dep.md5
+│       ├── dir_ffd15e349ea497166a76d5042b2f5c37_dep.png
+│       ├── dir_ffd15e349ea497166a76d5042b2f5c37.html
+│       ├── docd.svg
+│       ├── doc.svg
+│       ├── doxygen.css
+│       ├── doxygen.svg
+│       ├── dynsections.js
+│       ├── Entity_8cpp.html
+│       ├── Entity_8cpp__incl.map
+│       ├── Entity_8cpp__incl.md5
+│       ├── Entity_8cpp__incl.png
+│       ├── Entity_8hpp__dep__incl.map
+│       ├── Entity_8hpp__dep__incl.md5
+│       ├── Entity_8hpp__dep__incl.png
+│       ├── Entity_8hpp.html
+│       ├── Entity_8hpp__incl.map
+│       ├── Entity_8hpp__incl.md5
+│       ├── Entity_8hpp__incl.png
+│       ├── Entity_8hpp_source.html
+│       ├── ExcelReader_8hpp_source.html
+│       ├── files.html
+│       ├── folderclosedd.svg
+│       ├── folderclosed.svg
+│       ├── folderopend.svg
+│       ├── folderopen.svg
+│       ├── FuelType_8hpp__dep__incl.map
+│       ├── FuelType_8hpp__dep__incl.md5
+│       ├── FuelType_8hpp__dep__incl.png
+│       ├── FuelType_8hpp.html
+│       ├── FuelType_8hpp__incl.map
+│       ├── FuelType_8hpp__incl.md5
+│       ├── FuelType_8hpp__incl.png
+│       ├── FuelType_8hpp_source.html
+│       ├── functions_func.html
+│       ├── functions.html
+│       ├── GearboxType_8cpp.html
+│       ├── GearboxType_8cpp__incl.map
+│       ├── GearboxType_8cpp__incl.md5
+│       ├── GearboxType_8cpp__incl.png
+│       ├── GearboxType_8hpp__dep__incl.map
+│       ├── GearboxType_8hpp__dep__incl.md5
+│       ├── GearboxType_8hpp__dep__incl.png
+│       ├── GearboxType_8hpp.html
+│       ├── GearboxType_8hpp__incl.map
+│       ├── GearboxType_8hpp__incl.md5
+│       ├── GearboxType_8hpp__incl.png
+│       ├── GearboxType_8hpp_source.html
+│       ├── graph_legend.html
+│       ├── graph_legend.md5
+│       ├── graph_legend.png
+│       ├── hierarchy.html
+│       ├── HttpClient_8hpp_source.html
+│       ├── index.html
+│       ├── inherit_graph_0.map
+│       ├── inherit_graph_0.md5
+│       ├── inherit_graph_0.png
+│       ├── inherit_graph_1.map
+│       ├── inherit_graph_1.md5
+│       ├── inherit_graph_1.png
+│       ├── inherit_graph_2.map
+│       ├── inherit_graph_2.md5
+│       ├── inherit_graph_2.png
+│       ├── inherit_graph_3.map
+│       ├── inherit_graph_3.md5
+│       ├── inherit_graph_3.png
+│       ├── inherit_graph_4.map
+│       ├── inherit_graph_4.md5
+│       ├── inherit_graph_4.png
+│       ├── inherit_graph_5.map
+│       ├── inherit_graph_5.md5
+│       ├── inherit_graph_5.png
+│       ├── inherit_graph_6.map
+│       ├── inherit_graph_6.md5
+│       ├── inherit_graph_6.png
+│       ├── inherits.html
+│       ├── jquery.js
+│       ├── Logger_8cpp.html
+│       ├── Logger_8cpp__incl.map
+│       ├── Logger_8cpp__incl.md5
+│       ├── Logger_8cpp__incl.png
+│       ├── Logger_8hpp__dep__incl.map
+│       ├── Logger_8hpp__dep__incl.md5
+│       ├── Logger_8hpp__dep__incl.png
+│       ├── Logger_8hpp.html
+│       ├── Logger_8hpp__incl.map
+│       ├── Logger_8hpp__incl.md5
+│       ├── Logger_8hpp__incl.png
+│       ├── Logger_8hpp_source.html
+│       ├── menudata.js
+│       ├── menu.js
+│       ├── minusd.svg
+│       ├── minus.svg
+│       ├── namespaceCarScraper_1_1Validation.html
+│       ├── namespaceCarScraper.html
+│       ├── namespacemembers_func.html
+│       ├── namespacemembers.html
+│       ├── namespaces.html
+│       ├── nav_fd.png
+│       ├── nav_f.png
+│       ├── nav_g.png
+│       ├── nav_hd.png
+│       ├── nav_h.png
+│       ├── open.png
+│       ├── plusd.svg
+│       ├── plus.svg
+│       ├── search
+│       │   ├── all_0.js
+│       │   ├── all_1.js
+│       │   ├── all_2.js
+│       │   ├── all_3.js
+│       │   ├── all_4.js
+│       │   ├── all_5.js
+│       │   ├── all_6.js
+│       │   ├── all_7.js
+│       │   ├── all_8.js
+│       │   ├── all_9.js
+│       │   ├── all_a.js
+│       │   ├── all_b.js
+│       │   ├── all_c.js
+│       │   ├── all_d.js
+│       │   ├── all_e.js
+│       │   ├── all_f.js
+│       │   ├── classes_0.js
+│       │   ├── classes_1.js
+│       │   ├── classes_2.js
+│       │   ├── classes_3.js
+│       │   ├── classes_4.js
+│       │   ├── classes_5.js
+│       │   ├── close.svg
+│       │   ├── files_0.js
+│       │   ├── files_1.js
+│       │   ├── files_2.js
+│       │   ├── files_3.js
+│       │   ├── files_4.js
+│       │   ├── files_5.js
+│       │   ├── functions_0.js
+│       │   ├── functions_1.js
+│       │   ├── functions_2.js
+│       │   ├── functions_3.js
+│       │   ├── functions_4.js
+│       │   ├── functions_5.js
+│       │   ├── functions_6.js
+│       │   ├── functions_7.js
+│       │   ├── functions_8.js
+│       │   ├── functions_9.js
+│       │   ├── functions_a.js
+│       │   ├── functions_b.js
+│       │   ├── mag_d.svg
+│       │   ├── mag_seld.svg
+│       │   ├── mag_sel.svg
+│       │   ├── mag.svg
+│       │   ├── namespaces_0.js
+│       │   ├── search.css
+│       │   ├── searchdata.js
+│       │   └── search.js
+│       ├── splitbard.png
+│       ├── splitbar.png
+│       ├── structCarScraper_1_1AntiBlockPolicy.html
+│       ├── structCarScraper_1_1AntiBlockPolicy-members.html
+│       ├── structCarScraper_1_1HttpResponse.html
+│       ├── structCarScraper_1_1HttpResponse-members.html
+│       ├── structCarScraper_1_1ProxyConfig.html
+│       ├── structCarScraper_1_1ProxyConfig-members.html
+│       ├── sync_off.png
+│       ├── sync_on.png
+│       ├── tab_ad.png
+│       ├── tab_a.png
+│       ├── tab_bd.png
+│       ├── tab_b.png
+│       ├── tab_hd.png
+│       ├── tab_h.png
+│       ├── tabs.css
+│       ├── tab_sd.png
+│       ├── tab_s.png
+│       ├── Validation_8cpp.html
+│       ├── Validation_8cpp__incl.map
+│       ├── Validation_8cpp__incl.md5
+│       ├── Validation_8cpp__incl.png
+│       ├── Validation_8hpp__dep__incl.map
+│       ├── Validation_8hpp__dep__incl.md5
+│       ├── Validation_8hpp__dep__incl.png
+│       ├── Validation_8hpp.html
+│       ├── Validation_8hpp__incl.map
+│       ├── Validation_8hpp__incl.md5
+│       ├── Validation_8hpp__incl.png
+│       └── Validation_8hpp_source.html
+├── Doxyfile
 ├── generate_tree.sh
 ├── libs
 │   ├── catch2
@@ -58,4 +342,4 @@
     │   └── testValidation.cpp
     └── testAll.cpp
 
-20 directories, 39 files
+23 directories, 320 files
