@@ -26,14 +26,14 @@ int main() {
 
 
     // New Car
-    CarScraper::Car car;
-    std::cout << car << std::endl;
+    //CarScraper::Car car;
+    //std::cout << car << std::endl;
 
 
     // Get the raw HTML of a car listing page (for testing purposes)
-    //CarScraper::HttpClient httpClient;
-    //CarScraper::HttpResponse response = httpClient.get("https://www.largus.fr/fiche-technique/Renault/Clio/IV+B98/2020/Berline+5+Portes/09+TCe+75ch+G%C3%A9n%C3%A9ration+-+19+5p-2149663.html");
-    //std::cout << response.body << std::endl;
+    CarScraper::HttpClient httpClient;
+    CarScraper::HttpResponse response = httpClient.get("https://www.largus.fr/fiche-technique/Renault/Clio/IV+B98/2020/Berline+5+Portes/09+TCe+75ch+G%C3%A9n%C3%A9ration+-+19+5p-2149663.html");
+    std::cout << response.body << std::endl;
     
 
 

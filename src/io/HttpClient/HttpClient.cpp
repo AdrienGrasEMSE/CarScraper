@@ -10,6 +10,7 @@
 
 // Imports
 #include "HttpClient.hpp"
+#include "core/logger/Logger.hpp"
 #include <curl/curl.h>
 #include <stdexcept>
 #include <sstream>
@@ -29,11 +30,11 @@ namespace CarScraper {
 
     /**
      * @brief Callback function for writing the response body.
-     * @param ptr Pointer to the data buffer.
-     * @param size Size of each element in the buffer.
-     * @param nmemb Number of elements in the buffer.
-     * @param userdata Pointer to user data.
-     * @return The number of bytes written.
+     * @param ptr     Pointer to the data buffer received from libcurl.
+     * @param size    Size of each element (always 1 for HTTP).
+     * @param nmemb   Number of elements in the buffer.
+     * @param userdata Pointer to the std::string accumulating the body.
+     * @return The number of bytes consumed (must equal size * nmemb or libcurl aborts).
      */
     static size_t writeBodyCallback(char* ptr, size_t size, size_t nmemb, void* userdata) {
 
@@ -41,19 +42,18 @@ namespace CarScraper {
         std::string* body = static_cast<std::string*>(userdata);
         body->append(ptr, size * nmemb);
 
-
-        // Return the number of bytes processed (must be size * nmemb or libcurl will consider it an error)
+        // Return the number of bytes processed
         return size * nmemb;
     }
 
 
     /**
      * @brief Callback function for writing response headers.
-     * @param buffer Pointer to the header buffer.
-     * @param size Size of each element in the buffer.
-     * @param nitems Number of elements in the buffer.
-     * @param userdata Pointer to user data.
-     * @return The number of bytes written.
+     * @param buffer  Pointer to the header line buffer (format: "Name: Value\r\n").
+     * @param size    Size of each element (always 1 for HTTP).
+     * @param nitems  Number of elements in the buffer.
+     * @param userdata Pointer to the std::map accumulating the headers.
+     * @return The number of bytes consumed (must equal size * nitems or libcurl aborts).
      */
     static size_t writeHeaderCallback(char* buffer, size_t size, size_t nitems, void* userdata) {
 
@@ -65,7 +65,7 @@ namespace CarScraper {
         std::string line(buffer, size * nitems);
         auto colon = line.find(':');
 
-
+        
         // Only process lines that contain a colon (valid header lines)
         if (colon != std::string::npos) {
 
@@ -76,18 +76,15 @@ namespace CarScraper {
 
             // Strip trailing \r\n
             while (!value.empty() && (value.back() == '\r' || value.back() == '\n')) {
-
-                // Remove the last character if it's \r or \n
                 value.pop_back();
-
             }
 
-            // Store the header in the map (header names are case-insensitive, but we keep the original case)
+            
+            // Store the header in the map
             (*headers)[name] = value;
         }
 
-
-        // Return the number of bytes processed (must be size * nitems or libcurl will consider it an error)
+        // Return the number of bytes processed
         return size * nitems;
     }
 
@@ -101,9 +98,9 @@ namespace CarScraper {
 
     /**
      * @brief Converts the proxy configuration to a URL string.
-     * @details If username and password are provided, the URL will include them in the format
-     * "http://username:password@host:port".
-     * @return The proxy URL
+     * @details Builds "http://username:password\@host:port" if credentials are provided,
+     *          or "http://host:port" otherwise.
+     * @return The proxy URL as a string.
      */
     std::string ProxyConfig::toUrl() const {
 
@@ -114,10 +111,7 @@ namespace CarScraper {
 
         // If username and password are provided, include them in the URL
         if (!_username.empty()) {
-
-            // Append username and password in the format "username:password@"
             oss << _username << ':' << _password << '@';
-
         }
 
         
@@ -133,17 +127,19 @@ namespace CarScraper {
 
     /**
      * @brief Constructs a new HttpClient instance.
+     * @details Calls the Entity constructor with the "HTTP-CLIENT" prefix to register the instance
+     *          in the UUID system. Initializes libcurl globally, creates an easy handle,
+     *          seeds the RNG, and loads the default User-Agent pool.
+     * @throws std::runtime_error if the libcurl handle cannot be created.
      */
-    HttpClient::HttpClient() {
+    HttpClient::HttpClient() : Entity("HTTP-CLIENT"), _rng(std::random_device{}()) {
 
         // Initialize members
         _curl       = nullptr;
-        _rng        = std::random_device{}();
         _userAgents = defaultUserAgents();
 
 
-        // Initialize libcurl globally (only needed once per application) and create an easy handle
-        // for this instance
+        // Initialize libcurl globally and create the easy handle for this instance
         curl_global_init(CURL_GLOBAL_ALL);
         _curl = curl_easy_init();
 
@@ -158,12 +154,14 @@ namespace CarScraper {
 
     /**
      * @brief Destructs the HttpClient instance.
+     * @details Cleans up the libcurl easy handle and releases global libcurl resources.
      */
     HttpClient::~HttpClient() {
 
         // Clean up the libcurl easy handle and global resources
         if (_curl) { curl_easy_cleanup(_curl); }
         curl_global_cleanup();
+
     }
 
 
@@ -175,7 +173,7 @@ namespace CarScraper {
     // =========================================================================
 
     /**
-     * @brief Enables or disables cookie handling.
+     * @brief Enables or disables in-memory cookie handling.
      * @param enable Whether to enable cookies.
      */
     void HttpClient::enableCookies(bool enable) {
@@ -183,17 +181,17 @@ namespace CarScraper {
         // Set the flag
         _cookiesEnabled = enable;
 
-
+        
         // Empty string activates in-memory cookie engine (no file on disk)
         if (enable) {
             curl_easy_setopt(_curl, CURLOPT_COOKIEFILE, "");
         }
-
+        
     }
 
 
     /**
-     * @brief Clears all cookies.
+     * @brief Clears all stored cookies.
      */
     void HttpClient::clearCookies() {
         curl_easy_setopt(_curl, CURLOPT_COOKIELIST, "ALL");
@@ -208,8 +206,8 @@ namespace CarScraper {
     // =========================================================================
 
     /**
-     * @brief Sets the list of user agents.
-     * @param agents The list of user agents.
+     * @brief Replaces the User-Agent pool with a custom list.
+     * @param agents The new list of User-Agent strings. Has no effect if empty.
      */
     void HttpClient::setUserAgents(const std::vector<std::string>& agents) {
 
@@ -217,13 +215,13 @@ namespace CarScraper {
         if (!agents.empty()) {
             _userAgents = agents;
         }
-
+        
     }
 
 
     /**
-     * @brief Sets the user agent.
-     * @param agent The user agent.
+     * @brief Forces a single fixed User-Agent and disables rotation.
+     * @param agent The User-Agent string to use for all requests.
      */
     void HttpClient::setUserAgent(const std::string& agent) {
 
@@ -242,20 +240,24 @@ namespace CarScraper {
     // =========================================================================
 
     /**
-     * @brief Sends a GET request to the specified URL.
-     * @param url The URL to send the request to.
-     * @return The response from the server.
+     * @brief Sends an HTTP GET request to the given URL.
+     * @param url The target URL.
+     * @return The HttpResponse containing the status code, body, and headers.
      */
     HttpResponse HttpClient::get(const std::string& url) {
+
+        // Debug
+        Logger::debug("[{}].get({})", getFullId(), url);
         return executeWithRetry(url, "GET", "", "");
+
     }
 
 
     /**
-     * @brief Sends a POST request to the specified URL.
-     * @param url The URL to send the request to.
-     * @param formData The form data to send.
-     * @return The response from the server.
+     * @brief Sends an HTTP POST request with a form-encoded body.
+     * @param url      The target URL.
+     * @param formData Key-value pairs to encode as application/x-www-form-urlencoded.
+     * @return The HttpResponse containing the status code, body, and headers.
      */
     HttpResponse HttpClient::post(const std::string& url,
                                   const std::map<std::string, std::string>& formData) {
@@ -263,30 +265,30 @@ namespace CarScraper {
         // Build the form-encoded body string (e.g. "key1=value1&key2=value2")
         std::string body;
         for (auto it = formData.begin(); it != formData.end(); ++it) {
-
-            // Append an '&' before each key-value pair except the first one
-            if (it != formData.begin()) {
-                body += '&';
-            }
+            if (it != formData.begin()) body += '&';
             body += urlEncode(it->first) + '=' + urlEncode(it->second);
-
         }
 
 
-        // Send the POST request with the form-encoded body
+        // Debug
+        Logger::debug("[{}].post({})", getFullId(), url);
         return executeWithRetry(url, "POST", body, "application/x-www-form-urlencoded");
 
     }
 
 
     /**
-     * @brief Sends a POST request with JSON data to the specified URL.
-     * @param url The URL to send the request to.
-     * @param jsonBody The JSON data to send.
-     * @return The response from the server.
+     * @brief Sends an HTTP POST request with a raw JSON body.
+     * @param url      The target URL.
+     * @param jsonBody The raw JSON string to send as application/json.
+     * @return The HttpResponse containing the status code, body, and headers.
      */
     HttpResponse HttpClient::postJson(const std::string& url, const std::string& jsonBody) {
+
+        // Debug
+        Logger::debug("[{}].postJson({})", getFullId(), url);
         return executeWithRetry(url, "POST", jsonBody, "application/json");
+        
     }
 
 
@@ -298,12 +300,14 @@ namespace CarScraper {
     // =========================================================================
 
     /**
-     * @brief Executes a request with retry logic.
-     * @param url The URL to send the request to.
-     * @param method The HTTP method.
-     * @param body The request body.
-     * @param contentType The content type of the request.
-     * @return The response from the server.
+     * @brief Executes an HTTP request with retry logic.
+     * @details Applies rate limiting before the first attempt, then retries up to
+     *          maxRetries times with exponential backoff on retriable status codes.
+     * @param url         The target URL.
+     * @param method      The HTTP method ("GET" or "POST").
+     * @param body        The request body (empty for GET).
+     * @param contentType The Content-Type header value (empty for GET).
+     * @return The final HttpResponse (from the last attempt).
      */
     HttpResponse HttpClient::executeWithRetry(const std::string& url,
                                               const std::string& method,
@@ -319,13 +323,11 @@ namespace CarScraper {
         int attempt = 0;
         while (attempt <= _policy.maxRetries) {
 
-            // If this is a retry attempt, wait for the computed delay before retrying
+            // On retry: log and wait with exponential backoff
             if (attempt > 0) {
                 auto delay = computeRetryDelay(attempt);
-                std::cerr << "[HttpClient] Retry " << attempt
-                          << "/" << _policy.maxRetries
-                          << " in " << delay.count() << "ms"
-                          << " (status=" << response.statusCode << ")\n";
+                Logger::debug("[{}].executeWithRetry() → Retry {}/{} in {}ms (status={})",
+                    getFullId(), attempt, _policy.maxRetries, delay.count(), response.statusCode);
                 std::this_thread::sleep_for(delay);
             }
 
@@ -333,8 +335,7 @@ namespace CarScraper {
             response = executeOnce(url, method, body, contentType);
             ++_totalRequests;
 
-
-            // If the request was successful or if it should not be retried based on the status code, break the loop
+            // Stop if the request succeeded or if the status code should not be retried
             if (response.success || !shouldRetry(response.statusCode)) {
                 break;
             }
@@ -348,17 +349,19 @@ namespace CarScraper {
 
         // Return the final response
         return response;
-
+        
     }
 
 
     /**
-     * @brief Executes a single request.
-     * @param url The URL to send the request to.
-     * @param method The HTTP method.
-     * @param body The request body.
-     * @param contentType The content type of the request.
-     * @return The response from the server.
+     * @brief Performs a single HTTP request without retry logic.
+     * @details Configures the libcurl handle with all current settings (UA, proxy,
+     *          headers, SSL, timeouts) and executes the request.
+     * @param url         The target URL.
+     * @param method      The HTTP method ("GET" or "POST").
+     * @param body        The request body (empty for GET).
+     * @param contentType The Content-Type header value (empty for GET).
+     * @return The HttpResponse for this single attempt.
      */
     HttpResponse HttpClient::executeOnce(const std::string& url,
                                          const std::string& method,
@@ -406,7 +409,7 @@ namespace CarScraper {
         curl_easy_setopt(_curl, CURLOPT_ACCEPT_ENCODING, "");
 
 
-
+        
         // ---- Cookies ----
         if (_cookiesEnabled) {
             curl_easy_setopt(_curl, CURLOPT_COOKIEFILE, "");
@@ -418,7 +421,7 @@ namespace CarScraper {
         const std::string& ua = pickUserAgent();
         curl_easy_setopt(_curl, CURLOPT_USERAGENT, ua.c_str());
 
-
+        
 
         // ---- Proxy ----
         const ProxyConfig* proxy = pickProxy();
@@ -437,6 +440,7 @@ namespace CarScraper {
                 std::string creds = proxy->_username + ':' + proxy->_password;
                 curl_easy_setopt(_curl, CURLOPT_PROXYUSERPWD, creds.c_str());
             }
+            
         }
 
 
@@ -502,6 +506,7 @@ namespace CarScraper {
         if (res != CURLE_OK) {
             response.success    = false;
             response.errorMsg   = curl_easy_strerror(res);
+            Logger::debug("[{}] Request failed: {}", getFullId(), response.errorMsg);
             return response;
         }
 
@@ -527,12 +532,13 @@ namespace CarScraper {
         // If the request was not successful, set the error message to include the HTTP status code
         if (!response.success) {
             response.errorMsg = "HTTP " + std::to_string(httpCode);
+            Logger::debug("[{}] HTTP error: {}", getFullId(), response.errorMsg);
         }
 
 
         // HTML Response
         return response;
-
+        
     }
 
 
@@ -544,8 +550,9 @@ namespace CarScraper {
     // =========================================================================
 
     /**
-     * @brief Picks a random User-Agent from the pool
-     * @return A reference to the selected User-Agent string
+     * @brief Picks a random User-Agent from the pool.
+     * @details Returns the first entry if rotation is disabled or the pool has only one entry.
+     * @return A const reference to the selected User-Agent string.
      */
     const std::string& HttpClient::pickUserAgent() {
 
@@ -558,13 +565,14 @@ namespace CarScraper {
         // Otherwise, pick a random user agent from the pool
         std::uniform_int_distribution<size_t> dist(0, _userAgents.size() - 1);
         return _userAgents[dist(_rng)];
-
+        
     }
 
 
     /**
-     * @brief Picks a random proxy from the pool
-     * @return A pointer to the selected proxy configuration, or nullptr if no proxy is available
+     * @brief Picks a random proxy from the pool.
+     * @details Returns nullptr if rotation is disabled or the pool is empty.
+     * @return A pointer to the selected ProxyConfig, or nullptr if none is available.
      */
     const ProxyConfig* HttpClient::pickProxy() {
 
@@ -577,12 +585,12 @@ namespace CarScraper {
         // Otherwise, pick a random proxy from the pool
         std::uniform_int_distribution<size_t> dist(0, _proxyPool.size() - 1);
         return &_proxyPool[dist(_rng)];
-
+        
     }
 
 
     /**
-     * @brief Applies rate limiting by sleeping for a random duration within the specified range
+     * @brief Applies rate limiting by sleeping for a random duration in [minDelay, maxDelay].
      */
     void HttpClient::applyRateLimit() {
 
@@ -599,14 +607,15 @@ namespace CarScraper {
         // Otherwise, sleep for a random duration between the minimum and maximum delay
         std::uniform_int_distribution<long long> dist(minMs, maxMs);
         std::this_thread::sleep_for(Ms(dist(_rng)));
-
+        
     }
 
 
     /**
-     * @brief Computes the delay for a retry attempt
-     * @param attempt The retry attempt number
-     * @return The delay as a std::chrono::milliseconds object
+     * @brief Computes the exponential backoff delay for a given retry attempt.
+     * @details Delay = retryBaseDelay × 2^(attempt-1), capped at 30 seconds.
+     * @param attempt The current retry attempt number (1-based).
+     * @return The computed delay as std::chrono::milliseconds.
      */
     std::chrono::milliseconds HttpClient::computeRetryDelay(int attempt) const {
 
@@ -625,9 +634,9 @@ namespace CarScraper {
 
 
     /**
-     * @brief Determines whether a request should be retried based on its status code
-     * @param statusCode The HTTP status code of the request
-     * @return true if the request should be retried, false otherwise
+     * @brief Determines whether a failed request should be retried.
+     * @param statusCode The HTTP status code of the response.
+     * @return true if the request should be retried, false otherwise.
      */
     bool HttpClient::shouldRetry(int statusCode) const {
         if (_policy.retryOn429 && statusCode == 429) return true;
@@ -644,9 +653,9 @@ namespace CarScraper {
     // =========================================================================
 
     /**
-     * @brief URL-encodes a string
-     * @param value The string to encode
-     * @return The URL-encoded string
+     * @brief Percent-encodes a string for safe use in URLs or form bodies.
+     * @param value The raw string to encode.
+     * @return The URL-encoded string.
      */
     std::string HttpClient::urlEncode(const std::string& value) {
 
@@ -664,7 +673,7 @@ namespace CarScraper {
         curl_free(encoded);
         curl_easy_cleanup(tmp);
         return result;
-
+        
     }
 
 
@@ -676,8 +685,9 @@ namespace CarScraper {
     // =========================================================================
 
     /**
-     * @brief Returns the default user agents
-     * @return A vector of default user agent strings
+     * @brief Returns the built-in list of realistic browser User-Agent strings.
+     * @details Covers Chrome, Firefox, Safari and Edge across Windows, macOS and Linux.
+     * @return A vector of User-Agent strings.
      */
     std::vector<std::string> HttpClient::defaultUserAgents() {
         return {
