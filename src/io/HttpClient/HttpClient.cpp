@@ -79,7 +79,7 @@ namespace CarScraper {
                 value.pop_back();
             }
 
-            
+
             // Store the header in the map
             (*headers)[name] = value;
         }
@@ -132,11 +132,16 @@ namespace CarScraper {
      *          seeds the RNG, and loads the default User-Agent pool.
      * @throws std::runtime_error if the libcurl handle cannot be created.
      */
-    HttpClient::HttpClient() : Entity("HTTP-CLIENT"), _rng(std::random_device{}()) {
+    HttpClient::HttpClient() : Entity("HTTP-CLIENT") {
 
         // Initialize members
         _curl       = nullptr;
         _userAgents = defaultUserAgents();
+
+
+        // Initialize RNG with a random seed
+        std::random_device rd;
+        _rng = std::mt19937(rd());
 
 
         // Initialize libcurl globally and create the easy handle for this instance
@@ -506,7 +511,7 @@ namespace CarScraper {
         if (res != CURLE_OK) {
             response.success    = false;
             response.errorMsg   = curl_easy_strerror(res);
-            Logger::debug("[{}] Request failed: {}", getFullId(), response.errorMsg);
+            Logger::debug("[{}].executeOnce() → Request failed: {}", getFullId(), response.errorMsg);
             return response;
         }
 
@@ -532,7 +537,7 @@ namespace CarScraper {
         // If the request was not successful, set the error message to include the HTTP status code
         if (!response.success) {
             response.errorMsg = "HTTP " + std::to_string(httpCode);
-            Logger::debug("[{}] HTTP error: {}", getFullId(), response.errorMsg);
+            Logger::debug("[{}].executeOnce() → HTTP error: {}", getFullId(), response.errorMsg);
         }
 
 
