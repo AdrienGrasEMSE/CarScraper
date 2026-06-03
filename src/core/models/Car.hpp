@@ -46,6 +46,8 @@ namespace CarScraper {
      * Every values are set with their corresponding default sentinel value. Every setter method
      * validates the input value. In a case of invalid value, it sets the error sentinel value
      * and logs an error message.
+     *
+     * @see Entity
      */
     class Car : public Entity {
 
