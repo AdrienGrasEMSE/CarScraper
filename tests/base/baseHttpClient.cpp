@@ -10,13 +10,7 @@
 
 // Imports
 #include <catch2/catch.hpp>
-#include "core/logger/Logger.hpp"
-#include "core/enum/FuelType.hpp"
-#include "core/enum/GearboxType.hpp"
-#include "core/enum/Co2Class.hpp"
-#include "core/utils/Constant.hpp"
-#include "core/utils/Validation.hpp"
-#include "core/models/Car.hpp"
+#include "io/HttpClient/HttpClient.hpp"
 
 using namespace CarScraper;
 

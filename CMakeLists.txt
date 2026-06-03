@@ -161,6 +161,13 @@ target_link_libraries(TestCar           PRIVATE CarScraperLibTest)
 carscraper_configure_target(TestCar)
 target_compile_definitions(TestCar      PRIVATE TESTING)
 
+# test HttpClient
+add_executable(TestHttpClient             tests/mono/testHttpClient.cpp)
+target_link_libraries(TestHttpClient      PRIVATE CarScraperLibTest)
+carscraper_configure_target(TestHttpClient)
+target_compile_definitions(TestHttpClient PRIVATE TESTING)
+# ./testHttpClient "[httpclient]" "~[network]"      -> to disable network tests (e.g., in CI)
+
 
 # ==============================================================================
 # Tests — all

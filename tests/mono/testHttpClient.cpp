@@ -15,7 +15,7 @@
 // Imports
 #include <catch2/catch.hpp>
 #include "core/logger/Logger.hpp"
-#include "../src/io/HttpClient/HttpClient.cpp"
+#include "../base/baseHttpClient.cpp"
 
 
 // =============================================================================
