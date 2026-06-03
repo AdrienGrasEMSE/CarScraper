@@ -101,6 +101,9 @@ set(CORE_SOURCES
 
     # IO — HttpClient
     src/io/HttpClient/HttpClient.cpp
+
+    # IO — HtmlSaver
+    src/io/HtmlSaver/HtmlSaver.cpp
 )
 
 
@@ -167,6 +170,12 @@ target_link_libraries(TestHttpClient      PRIVATE CarScraperLibTest)
 carscraper_configure_target(TestHttpClient)
 target_compile_definitions(TestHttpClient PRIVATE TESTING)
 # ./testHttpClient "[httpclient]" "~[network]"      -> to disable network tests (e.g., in CI)
+
+# test HtmlSaver
+add_executable(TestHtmlSaver              tests/mono/testHtmlSaver.cpp)
+target_link_libraries(TestHtmlSaver       PRIVATE CarScraperLibTest)
+carscraper_configure_target(TestHtmlSaver)
+target_compile_definitions(TestHtmlSaver  PRIVATE TESTING)
 
 
 # ==============================================================================

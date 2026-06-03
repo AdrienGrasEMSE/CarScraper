@@ -1,7 +1,8 @@
 .
 ├── CMakeLists.txt
 ├── data
-│   └── save_html
+│   ├── save_html
+│   └── test_save_html
 ├── docs
 │   └── html
 │       ├── annotated.html
@@ -296,6 +297,7 @@
 │   ├── log.txt
 │   ├── test_car.txt
 │   ├── test_entity.txt
+│   ├── test_htmlSaver.txt
 │   ├── test_httpClient.txt
 │   └── test_validation.txt
 ├── projectTree.txt
@@ -338,15 +340,17 @@
     ├── base
     │   ├── baseCar.cpp
     │   ├── baseEntity.cpp
+    │   ├── baseHtmlSaver.cpp
     │   ├── baseHttpClient.cpp
     │   ├── baseLogger.cpp
     │   └── baseValidation.cpp
     ├── mono
     │   ├── testCar.cpp
     │   ├── testEntity.cpp
+    │   ├── testHtmlSaver.cpp
     │   ├── testHttpClient.cpp
     │   ├── testLogger.cpp
     │   └── testValidation.cpp
     └── testAll.cpp
 
-25 directories, 325 files
+26 directories, 328 files
