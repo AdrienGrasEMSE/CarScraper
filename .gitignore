@@ -2,7 +2,8 @@
 build/
 
 # Data folder
-data/
+data/save_html/
+data/test_save_html/
 
 # VSCode folder
 .vscode/
