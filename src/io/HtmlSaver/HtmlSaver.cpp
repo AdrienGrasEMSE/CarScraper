@@ -56,6 +56,7 @@ namespace CarScraper {
      * @return The full path written
      */
     std::string HtmlSaver::save() const {
+        
         // Ensure the output directory exists
         fs::create_directories(_outputDir);
         const std::string path = getFilePath();
@@ -72,7 +73,7 @@ namespace CarScraper {
         // File writting and close
         file << _content;
         file.close();
-        Logger::trace("[{}].save() the file has been written and saved ()", this->getFullId(), path);
+        Logger::trace("[{}].save() the file has been written and saved ({})", this->getFullId(), path);
 
 
         // Return the complete file path

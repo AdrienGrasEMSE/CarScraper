@@ -21,12 +21,12 @@ include(FetchContent)
 
 
 # --- OpenXLSX (compiled — FetchContent mandatory) ---
-FetchContent_Declare(
-    OpenXLSX
-    GIT_REPOSITORY  https://github.com/troldal/OpenXLSX.git
-    GIT_TAG         master
-)
-FetchContent_MakeAvailable(OpenXLSX)
+#FetchContent_Declare(
+#    OpenXLSX
+#    GIT_REPOSITORY  https://github.com/troldal/OpenXLSX.git
+#    GIT_TAG         master
+#)
+#FetchContent_MakeAvailable(OpenXLSX)
 
 
 # --- libcurl (system library) ---
@@ -115,8 +115,12 @@ add_executable(${PROJECT_NAME}
     src/main.cpp
     ${CORE_SOURCES}
 )
-target_link_libraries(${PROJECT_NAME} PRIVATE OpenXLSX::OpenXLSX)
+#target_link_libraries(${PROJECT_NAME} PRIVATE OpenXLSX::OpenXLSX)
 carscraper_configure_target(${PROJECT_NAME})
+set_target_properties(${PROJECT_NAME} PROPERTIES
+    VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+    RUNTIME_OUTPUT_DIRECTORY      "${CMAKE_SOURCE_DIR}/build"
+)
 
 
 # ==============================================================================
@@ -140,35 +144,48 @@ target_compile_definitions(CarScraperLibTest PRIVATE TESTING)
 # Tests — mono
 # ==============================================================================
 
+# Helper — apply working directory to any test target
+function(carscraper_configure_test TARGET)
+    set_target_properties(${TARGET} PROPERTIES
+        VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+        RUNTIME_OUTPUT_DIRECTORY      "${CMAKE_SOURCE_DIR}/build/tests"
+    )
+endfunction()
+
 # test Logger
 add_executable(TestLogger               tests/mono/testLogger.cpp)
 target_link_libraries(TestLogger        PRIVATE CarScraperLibTest)
 carscraper_configure_target(TestLogger)
 target_compile_definitions(TestLogger   PRIVATE TESTING)
+carscraper_configure_test(TestLogger)
 
 # test Validation
 add_executable(TestValidation           tests/mono/testValidation.cpp)
 target_link_libraries(TestValidation    PRIVATE CarScraperLibTest)
 carscraper_configure_target(TestValidation)
 target_compile_definitions(TestValidation PRIVATE TESTING)
+carscraper_configure_test(TestValidation)
 
 # test Entity
 add_executable(TestEntity               tests/mono/testEntity.cpp)
 target_link_libraries(TestEntity        PRIVATE CarScraperLibTest)
 carscraper_configure_target(TestEntity)
 target_compile_definitions(TestEntity   PRIVATE TESTING)
+carscraper_configure_test(TestEntity)
 
 # test Car
 add_executable(TestCar                  tests/mono/testCar.cpp)
 target_link_libraries(TestCar           PRIVATE CarScraperLibTest)
 carscraper_configure_target(TestCar)
 target_compile_definitions(TestCar      PRIVATE TESTING)
+carscraper_configure_test(TestCar)
 
 # test HttpClient
 add_executable(TestHttpClient             tests/mono/testHttpClient.cpp)
 target_link_libraries(TestHttpClient      PRIVATE CarScraperLibTest)
 carscraper_configure_target(TestHttpClient)
 target_compile_definitions(TestHttpClient PRIVATE TESTING)
+carscraper_configure_test(TestHttpClient)
 # ./testHttpClient "[httpclient]" "~[network]"      -> to disable network tests (e.g., in CI)
 
 # test HtmlSaver
@@ -176,6 +193,7 @@ add_executable(TestHtmlSaver              tests/mono/testHtmlSaver.cpp)
 target_link_libraries(TestHtmlSaver       PRIVATE CarScraperLibTest)
 carscraper_configure_target(TestHtmlSaver)
 target_compile_definitions(TestHtmlSaver  PRIVATE TESTING)
+carscraper_configure_test(TestHtmlSaver)
 
 
 # ==============================================================================
@@ -186,6 +204,7 @@ add_executable(TestAll                  tests/testAll.cpp)
 target_link_libraries(TestAll           PRIVATE CarScraperLibTest)
 carscraper_configure_target(TestAll)
 target_compile_definitions(TestAll      PRIVATE TESTING)
+carscraper_configure_test(TestAll)
 
 
 # ==============================================================================
