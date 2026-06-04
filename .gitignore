@@ -1,12 +1,27 @@
+# Main
+src/main.cpp
+
+
 # Build folder
-build/
+build/*
+!build/.gitkeep
+
 
 # Data folder
-data/save_html/
-data/test_save_html/
+data/save_html/*
+!data/save_html/.gitkeep
+data/test_save_html/*
+!data/test_save_html/.gitkeep
 
-# VSCode folder
-.vscode/
 
 # Documentation folder
 docs/
+
+
+# Log folder
+logs/*
+!logs/.gitkeep
+
+
+# VSCode folder
+.vscode/
