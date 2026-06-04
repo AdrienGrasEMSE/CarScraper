@@ -520,6 +520,15 @@ namespace CarScraper {
              */
             std::string toString() const;
 
+
+            /**
+             * @brief Saves the car data to a file in JSON format
+             * @param filename The file path (without the filename). If empty, the file will saved at data/car
+             * @return The path of the saved file
+             * @note The file will be named with the car full ID (ex: "CAR-123e45...json")
+             */
+            std::string save(const std::string& filename = "") const;
+
     };
 
 
