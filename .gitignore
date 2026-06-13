@@ -4,7 +4,7 @@ src/main.cpp
 
 # Build folder
 build/*
-!build/.gitkeep
+!build/data/input_excel/ExcelReaderTest.xlsx
 
 
 # Data folder
