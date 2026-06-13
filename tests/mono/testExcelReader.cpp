@@ -16,6 +16,7 @@
 // Imports
 #include <catch2/catch.hpp>
 #include "core/logger/Logger.hpp"
+#include "../base/baseExcelReader.cpp"
 
 
 // =============================================================================
