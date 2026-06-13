@@ -17,21 +17,11 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # Dependencies (FetchContent) — compiled libs only
 # ==============================================================================
 
-include(FetchContent)
-
-
-# --- OpenXLSX (compiled — FetchContent mandatory) ---
-#FetchContent_Declare(
-#    OpenXLSX
-#    GIT_REPOSITORY  https://github.com/troldal/OpenXLSX.git
-#    GIT_TAG         master
-#)
-#FetchContent_MakeAvailable(OpenXLSX)
-
-
-# --- libcurl (system library) ---
+# --- libzip / libcurl / libxml2 (system libraries) ---
 find_package(PkgConfig REQUIRED)
-pkg_check_modules(CURL REQUIRED libcurl)
+pkg_check_modules(LIBZIP  REQUIRED libzip)
+pkg_check_modules(CURL    REQUIRED libcurl)
+pkg_check_modules(LIBXML2 REQUIRED libxml-2.0)
 
 
 # ==============================================================================
@@ -64,9 +54,13 @@ function(carscraper_configure_target TARGET)
     target_include_directories(${TARGET} PRIVATE
         ${CMAKE_SOURCE_DIR}/src
         ${CURL_INCLUDE_DIRS}
+        ${LIBZIP_INCLUDE_DIRS}
+        ${LIBXML2_INCLUDE_DIRS}
     )
     target_link_libraries(${TARGET} PRIVATE
         ${CURL_LIBRARIES}
+        ${LIBZIP_LIBRARIES}
+        ${LIBXML2_LIBRARIES}
         spdlog
         uni-algo
         stduuid
@@ -104,6 +98,10 @@ set(CORE_SOURCES
 
     # IO — HtmlSaver
     src/io/HtmlSaver/HtmlSaver.cpp
+
+    # IO — ExcelReader
+    src/io/ExcelReader/ExcelReader.cpp
+
 )
 
 
@@ -116,6 +114,7 @@ add_executable(${PROJECT_NAME}
     ${CORE_SOURCES}
 )
 #target_link_libraries(${PROJECT_NAME} PRIVATE OpenXLSX::OpenXLSX)
+target_link_libraries(${PROJECT_NAME} PRIVATE ${LIBZIP_LIBRARIES})
 carscraper_configure_target(${PROJECT_NAME})
 set_target_properties(${PROJECT_NAME} PROPERTIES
     VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
