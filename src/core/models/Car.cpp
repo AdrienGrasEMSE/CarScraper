@@ -734,8 +734,9 @@ namespace CarScraper {
      * @note The file will be named with the car full ID (ex: "CAR-123e45...json")
      * @todo Implement the save() method
      */
-    std::string save(const std::string& filepath) const {
-        logger::info("[{}].save()", this->getFullId());
+    std::string Car::save(const std::string& filepath) const {
+        Logger::info("[{}].save()", this->getFullId());
+        return filepath;
     }
 
 
