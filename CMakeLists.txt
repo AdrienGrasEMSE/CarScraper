@@ -194,6 +194,13 @@ carscraper_configure_target(TestHtmlSaver)
 target_compile_definitions(TestHtmlSaver  PRIVATE TESTING)
 carscraper_configure_test(TestHtmlSaver)
 
+# test ExcelReader
+add_executable(TestExcelReader            tests/mono/testExcelReader.cpp)
+target_link_libraries(TestExcelReader     PRIVATE CarScraperLibTest)
+carscraper_configure_target(TestExcelReader)
+target_compile_definitions(TestExcelReader  PRIVATE TESTING)
+carscraper_configure_test(TestExcelReader)
+
 
 # ==============================================================================
 # Tests — all
