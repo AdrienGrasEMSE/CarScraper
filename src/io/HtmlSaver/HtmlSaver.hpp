@@ -94,6 +94,13 @@ namespace CarScraper {
             const std::string& getOutputDir() const { return _outputDir; }
 
 
+            /**
+             * @brief Gets the full file path
+             * @return The full path
+             */
+            std::string getFilePath() const;
+
+
 
 
 
@@ -130,16 +137,10 @@ namespace CarScraper {
             // -------------------------------------------------------------------------
 
             /**
-            * @brief Save the file
-            * @return The full path written
-            */
+             * @brief Save the file
+             * @return The full path written
+             */
             std::string save() const;
-
-
-            /**
-            * @return The path
-            */
-            std::string getFilePath() const;
 
     };
 
