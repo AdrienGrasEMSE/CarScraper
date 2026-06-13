@@ -13,7 +13,7 @@ build/data/input_excel/*
 
 # Data folder
 data/input_excel/*
-!data/input_excel/ExcelReaderTest.xlsx
+!data/input_excel/.gitkeep
 data/save_html/*
 !data/save_html/.gitkeep
 data/test_save_html/*
