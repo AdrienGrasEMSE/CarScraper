@@ -10,6 +10,7 @@
  * parsing the raw XML with libxml2.
  *
  * @author Adrien GRAS
+ * @date 2026-06-13
  */
 
 
