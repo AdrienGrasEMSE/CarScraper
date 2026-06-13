@@ -19,6 +19,8 @@
 #include "base/baseValidation.cpp"
 #include "base/baseEntity.cpp"
 #include "base/baseCar.cpp"
+#include "base/baseHttpClient.cpp"
+#include "base/baseHtmlSaver.cpp"
 
 
 // =============================================================================
