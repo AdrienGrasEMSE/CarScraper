@@ -4,6 +4,10 @@ src/main.cpp
 
 # Build folder
 build/*
+!build/data/
+build/data/*
+!build/data/input_excel/
+build/data/input_excel/*
 !build/data/input_excel/ExcelReaderTest.xlsx
 
 
