@@ -30,6 +30,7 @@
 #include <zip.h>
 #include <cctype>
 #include <stdexcept>
+#include <regex>
 
 
 /**
@@ -406,7 +407,6 @@ namespace CarScraper {
                 auto it = rIdToUrl.find(rid);
                 if (it != rIdToUrl.end()) {
                     rowToUrl[row] = it->second;
-                    Logger::trace("[{}].excelReadLinkList : row {} → \"{}\"", getFullId(), row, it->second);
                 }
             }
         }
@@ -429,6 +429,35 @@ namespace CarScraper {
 
         // Debug
         Logger::trace("[{}].excelReadLinkList : End on \"{}\"", getFullId(), _filePath);
+
+    }
+
+
+    /**
+     * @brief Get rid of all invalid link in the list
+     */
+    void ExcelReader::cleanLinkList() {
+
+        // Regex to verify link shape
+        const std::regex urlRegex(R"(^https://.+)");
+
+
+        // Getting the size before erasing invalid link
+        const int sizeBefore = static_cast<int>(_linkList.size());
+
+
+        // Deleting invalid link
+        _linkList.erase(
+            std::remove_if(_linkList.begin(), _linkList.end(), [&](const std::string& link) {
+                return !std::regex_match(link, urlRegex);
+            }),
+            _linkList.end()
+        );
+
+
+        // Debug
+        Logger::trace("[{}].cleanLinkList : {} link erased",
+            getFullId(), sizeBefore - static_cast<int>(_linkList.size()));
 
     }
 

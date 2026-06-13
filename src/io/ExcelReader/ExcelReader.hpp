@@ -167,6 +167,12 @@ namespace CarScraper {
              * The list is cleared and rebuilt on every call.
              */
             void excelReadLinkList();
+
+
+            /**
+             * @brief Get rid of all invalid link in the list
+             */
+            void cleanLinkList();
             
     };
 
