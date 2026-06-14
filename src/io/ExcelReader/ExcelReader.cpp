@@ -31,6 +31,7 @@
 #include <cctype>
 #include <stdexcept>
 #include <regex>
+#include <filesystem>
 
 
 /**
@@ -69,10 +70,23 @@ namespace CarScraper {
     /**
      * @brief Sets the file path
      * @param filePath The file path
-     * @todo Set a validation on the file path
+     * @note Check if the file exists
      */
     void ExcelReader::setFilePath(const std::string& filePath) {
-        _filePath = filePath;
+
+        // Getting namespace
+        namespace fs = std::filesystem;
+
+
+        // Checking if the file exists
+        if (fs::exists(filePath)) {
+            _filePath = filePath;
+            Logger::trace("[{}].setFilePath : {}", getFullId(), _filePath);
+        } else {
+            _filePath = DEFAULT_STR;
+            Logger::debug("[{}].setFilePath : File {} does not exists", getFullId(), _filePath);
+        }
+
     }
 
 
@@ -89,6 +103,12 @@ namespace CarScraper {
      * @return Raw XML content as a string, empty string on failure.
      */
     std::string ExcelReader::_extractZipEntry(const std::string& entryPath) const {
+
+        // Checking file
+        if (_filePath = DEFAULT_STR) {
+            Logger::debug("[{}]._extractZipEntry : File not set", getFullId());
+        }
+
     
         // Opening the whole archive
         int zipError = 0;
@@ -378,6 +398,13 @@ namespace CarScraper {
         // Debug
         Logger::trace("[{}].excelReadLinkList : Start on \"{}\"", getFullId(), _filePath);
 
+
+        // Checking file
+        if (_filePath = DEFAULT_STR) {
+            Logger::debug("[{}]._extractZipEntry : File not set", getFullId());
+        }
+        
+        
         _linkList.clear();
 
 
