@@ -105,7 +105,7 @@ namespace CarScraper {
     std::string ExcelReader::_extractZipEntry(const std::string& entryPath) const {
 
         // Checking file
-        if (_filePath = DEFAULT_STR) {
+        if (_filePath == DEFAULT_STR) {
             Logger::debug("[{}]._extractZipEntry : File not set", getFullId());
         }
 
@@ -400,11 +400,11 @@ namespace CarScraper {
 
 
         // Checking file
-        if (_filePath = DEFAULT_STR) {
+        if (_filePath == DEFAULT_STR) {
             Logger::debug("[{}]._extractZipEntry : File not set", getFullId());
         }
         
-        
+
         _linkList.clear();
 
 
