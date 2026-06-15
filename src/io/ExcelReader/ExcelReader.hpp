@@ -77,22 +77,6 @@ namespace CarScraper {
             std::map<std::string, std::string> _parseHyperlinkRefs() const;
 
 
-            /**
-             * @brief Converts an Excel column letter string to a 0-based index.
-             * @param col  Column letters (e.g. "A", "B", "AA").
-             * @return 0-based column index.
-             */
-            static int _colLetterToIndex(const std::string& col);
-
-
-            /**
-             * @brief Splits a cell reference such as "A3" into {"A", "3"}.
-             * @param cellRef  Full cell reference string.
-             * @return Pair {colLetters, rowDigits}.
-             */
-            static std::pair<std::string, std::string> _splitCellRef(const std::string& cellRef);
-
-
 
 
 
@@ -149,6 +133,29 @@ namespace CarScraper {
              * @param filePath The file path
              */
             void setFilePath(const std::string& filePath);
+
+
+            
+
+
+            // -------------------------------------------------------------------------
+            // Public helpers
+            // -------------------------------------------------------------------------
+
+            /**
+             * @brief Converts an Excel column letter string to a 0-based index.
+             * @param col  Column letters (e.g. "A", "B", "AA").
+             * @return 0-based column index.
+             */
+            static int _colLetterToIndex(const std::string& col);
+
+
+            /**
+             * @brief Splits a cell reference such as "A3" into {"A", "3"}.
+             * @param cellRef  Full cell reference string.
+             * @return Pair {colLetters, rowDigits}.
+             */
+            static std::pair<std::string, std::string> _splitCellRef(const std::string& cellRef);
 
 
 
