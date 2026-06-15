@@ -84,7 +84,7 @@ namespace CarScraper {
             Logger::trace("[{}].setFilePath : {}", getFullId(), _filePath);
         } else {
             _filePath = DEFAULT_STR;
-            Logger::debug("[{}].setFilePath : File {} does not exists", getFullId(), _filePath);
+            Logger::debug("[{}].setFilePath : File {} does not exists", getFullId(), filePath);
         }
 
     }
