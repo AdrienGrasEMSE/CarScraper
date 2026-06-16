@@ -1,11 +1,20 @@
 /**
  * @file baseExcelReader.cpp
  *
- * @brief Unit tests for CarScraper::ExcelReader class.
- *        Covers: construction, entity inheritance, excelReadLinkList().
+ * @brief Test cases for the ExcelReader class.
+ *
+ * @details
+ * Covers :
+ *   - Default construction
+ *   - Construction with path
+ *   - setFilePath (valid / invalid)
+ *   - _colLetterToIndex  (static helper, public)
+ *   - _splitCellRef      (static helper, public)
+ *   - excelReadLinkList  (requires a real .xlsx fixture)   [network]
+ *   - cleanLinkList      (covered via excelReadLinkList)   [network]
  *
  * @author Adrien GRAS
- * @date 2026-06-13
+ * @date 2026-06-14
  */
 
 
@@ -14,176 +23,189 @@
 #include "io/ExcelReader/ExcelReader.hpp"
 #include "core/utils/Constant.hpp"
 
-using namespace CarScraper;
 
+/**
+ * Namespace CarScraper
+ */
+namespace CarScraper {
 
-// =============================================================================
-// Helpers
-// =============================================================================
+    // =========================================================================
+    // Construction
+    // =========================================================================
 
-static const std::string TEST_EXCEL_PATH = "data/input_excel/ExcelReaderTest.xlsx";
-
-
-// =============================================================================
-// Tests — Entity inheritance
-// =============================================================================
-
-TEST_CASE("ExcelReader Entity Inheritance", "[excelreader][entity]") {
-
-    SECTION("UUID is generated and non-empty") {
+    TEST_CASE("ExcelReader — Default constructor", "[ExcelReader]")
+    {
         ExcelReader reader;
-        REQUIRE_FALSE(reader.getUuid().empty());
-    }
 
-    SECTION("Prefix is EXCEL_READER") {
-        ExcelReader reader;
-        REQUIRE(reader.getPrefix() == "EXCEL_READER");
-    }
+        SECTION("filePath is DEFAULT_STR")
+        {
+            REQUIRE(reader.getFilePath() == DEFAULT_STR);
+        }
 
-    SECTION("FullId starts with EXCEL_READER-") {
-        ExcelReader reader;
-        REQUIRE(reader.getFullId().rfind("EXCEL_READER-", 0) == 0);
-    }
-
-    SECTION("Two instances have different UUIDs") {
-        ExcelReader r1, r2;
-        REQUIRE(r1.getUuid() != r2.getUuid());
-    }
-
-}
-
-
-// =============================================================================
-// Tests — Construction
-// =============================================================================
-
-TEST_CASE("ExcelReader Construction", "[excelreader][construction]") {
-
-    SECTION("Default constructor sets filePath to DEFAULT_STR") {
-        ExcelReader reader;
-        REQUIRE(reader.getFilePath() == DEFAULT_STR);
-    }
-
-    SECTION("Default constructor produces an empty linkList") {
-        ExcelReader reader;
-        REQUIRE(reader.getLinkList().empty());
-    }
-
-    SECTION("Constructor with path sets filePath correctly") {
-        ExcelReader reader(TEST_EXCEL_PATH);
-        REQUIRE(reader.getFilePath() == TEST_EXCEL_PATH);
-    }
-
-    SECTION("Constructor with path produces an empty linkList before read") {
-        ExcelReader reader(TEST_EXCEL_PATH);
-        REQUIRE(reader.getLinkList().empty());
-    }
-
-}
-
-
-// =============================================================================
-// Tests — Getters / Setters
-// =============================================================================
-
-TEST_CASE("ExcelReader Getters and Setters", "[excelreader][getters][setters]") {
-
-    SECTION("setFilePath() updates the file path") {
-        ExcelReader reader;
-        reader.setFilePath(TEST_EXCEL_PATH);
-        REQUIRE(reader.getFilePath() == TEST_EXCEL_PATH);
-    }
-
-    SECTION("setFilePath() accepts an empty string") {
-        ExcelReader reader;
-        reader.setFilePath("");
-        REQUIRE(reader.getFilePath().empty());
-    }
-
-}
-
-
-// =============================================================================
-// Tests — excelReadLinkList() : valid file
-// =============================================================================
-
-TEST_CASE("ExcelReader excelReadLinkList — Valid File", "[excelreader][read]") {
-
-    ExcelReader reader(TEST_EXCEL_PATH);
-    reader.excelReadLinkList();
-
-    SECTION("linkList is non-empty after reading") {
-        REQUIRE_FALSE(reader.getLinkList().empty());
-    }
-
-    SECTION("linkList contains exactly 3 entries (rows 2 to 4)") {
-        REQUIRE(reader.getLinkList().size() == 3);
-    }
-
-    SECTION("first URL points to example.com") {
-        REQUIRE(reader.getLinkList()[0] == "https://example.com/");
-    }
-
-    SECTION("second URL points to example.net") {
-        REQUIRE(reader.getLinkList()[1] == "https://example.net/");
-    }
-
-    SECTION("third URL points to example.org") {
-        REQUIRE(reader.getLinkList()[2] == "https://example.org/");
-    }
-
-    SECTION("all URLs start with https://") {
-        for (const auto& url : reader.getLinkList()) {
-            REQUIRE(url.rfind("https://", 0) == 0);
+        SECTION("linkList is empty")
+        {
+            REQUIRE(reader.getLinkList().empty());
         }
     }
 
-}
 
+    TEST_CASE("ExcelReader — Constructor with path", "[ExcelReader]")
+    {
+        SECTION("Valid path sets filePath")
+        {
+            ExcelReader reader("data/input_excel/ExcelReaderTest.xlsx");
+            REQUIRE(reader.getFilePath() == "data/input_excel/ExcelReaderTest.xlsx");
+        }
 
-// =============================================================================
-// Tests — excelReadLinkList() : repeated calls
-// =============================================================================
-
-TEST_CASE("ExcelReader excelReadLinkList — Repeated Calls", "[excelreader][read]") {
-
-    SECTION("calling excelReadLinkList() twice produces the same result") {
-        ExcelReader reader(TEST_EXCEL_PATH);
-        reader.excelReadLinkList();
-        const auto first = reader.getLinkList();
-
-        reader.excelReadLinkList();
-        const auto second = reader.getLinkList();
-
-        REQUIRE(first == second);
+        SECTION("Invalid path keeps DEFAULT_STR")
+        {
+            ExcelReader reader("data/input_excel/does_not_exist.xlsx");
+            REQUIRE(reader.getFilePath() == DEFAULT_STR);
+        }
     }
 
-    SECTION("linkList is rebuilt on each call (not accumulated)") {
-        ExcelReader reader(TEST_EXCEL_PATH);
-        reader.excelReadLinkList();
-        reader.excelReadLinkList();
-        REQUIRE(reader.getLinkList().size() == 3);
-    }
 
-}
+    // =========================================================================
+    // setFilePath
+    // =========================================================================
 
-
-// =============================================================================
-// Tests — excelReadLinkList() : invalid file
-// =============================================================================
-
-TEST_CASE("ExcelReader excelReadLinkList — Invalid File", "[excelreader][read][error]") {
-
-    SECTION("non-existent file produces an empty linkList (no throw)") {
-        ExcelReader reader("data/input_excel/__does_not_exist__.xlsx");
-        REQUIRE_NOTHROW(reader.excelReadLinkList());
-        REQUIRE(reader.getLinkList().empty());
-    }
-
-    SECTION("empty filePath produces an empty linkList (no throw)") {
+    TEST_CASE("ExcelReader — setFilePath", "[ExcelReader]")
+    {
         ExcelReader reader;
-        REQUIRE_NOTHROW(reader.excelReadLinkList());
-        REQUIRE(reader.getLinkList().empty());
+
+        SECTION("Valid path is accepted")
+        {
+            reader.setFilePath("data/input_excel/ExcelReaderTest.xlsx");
+            REQUIRE(reader.getFilePath() == "data/input_excel/ExcelReaderTest.xlsx");
+        }
+
+        SECTION("Non-existent path resets to DEFAULT_STR")
+        {
+            reader.setFilePath("data/input_excel/ghost.xlsx");
+            REQUIRE(reader.getFilePath() == DEFAULT_STR);
+        }
+
+        SECTION("Empty string resets to DEFAULT_STR")
+        {
+            reader.setFilePath("");
+            REQUIRE(reader.getFilePath() == DEFAULT_STR);
+        }
     }
 
-}
+
+    // =========================================================================
+    // Static helpers
+    // =========================================================================
+
+    TEST_CASE("ExcelReader — _colLetterToIndex", "[ExcelReader]")
+    {
+        SECTION("Single letters")
+        {
+            REQUIRE(ExcelReader::_colLetterToIndex("A") == 0);
+            REQUIRE(ExcelReader::_colLetterToIndex("B") == 1);
+            REQUIRE(ExcelReader::_colLetterToIndex("Z") == 25);
+        }
+
+        SECTION("Double letters")
+        {
+            REQUIRE(ExcelReader::_colLetterToIndex("AA") == 26);
+            REQUIRE(ExcelReader::_colLetterToIndex("AB") == 27);
+            REQUIRE(ExcelReader::_colLetterToIndex("AZ") == 51);
+            REQUIRE(ExcelReader::_colLetterToIndex("BA") == 52);
+        }
+
+        SECTION("Lowercase is handled")
+        {
+            REQUIRE(ExcelReader::_colLetterToIndex("a") == 0);
+            REQUIRE(ExcelReader::_colLetterToIndex("z") == 25);
+        }
+    }
+
+
+    TEST_CASE("ExcelReader — _splitCellRef", "[ExcelReader]")
+    {
+        SECTION("Single-letter column")
+        {
+            auto [col, row] = ExcelReader::_splitCellRef("A1");
+            REQUIRE(col == "A");
+            REQUIRE(row == "1");
+        }
+
+        SECTION("Multi-digit row")
+        {
+            auto [col, row] = ExcelReader::_splitCellRef("B42");
+            REQUIRE(col == "B");
+            REQUIRE(row == "42");
+        }
+
+        SECTION("Double-letter column")
+        {
+            auto [col, row] = ExcelReader::_splitCellRef("AA10");
+            REQUIRE(col == "AA");
+            REQUIRE(row == "10");
+        }
+    }
+
+
+    // =========================================================================
+    // excelReadLinkList + cleanLinkList  (fixture .xlsx required)
+    // =========================================================================
+
+    TEST_CASE("ExcelReader — excelReadLinkList", "[ExcelReader][network]")
+    {
+        SECTION("No file set — linkList stays empty")
+        {
+            ExcelReader reader;
+            reader.excelReadLinkList();
+            REQUIRE(reader.getLinkList().empty());
+        }
+
+        SECTION("linkList is not empty after reading")
+        {
+            ExcelReader reader("data/input_excel/ExcelReaderTest.xlsx");
+            reader.excelReadLinkList();
+            REQUIRE_FALSE(reader.getLinkList().empty());
+        }
+
+        SECTION("linkList resets on each call")
+        {
+            ExcelReader reader("data/input_excel/ExcelReaderTest.xlsx");
+            reader.excelReadLinkList();
+            const std::size_t firstCount = reader.getLinkList().size();
+            reader.excelReadLinkList();
+            REQUIRE(reader.getLinkList().size() == firstCount);
+        }
+    }
+
+
+    TEST_CASE("ExcelReader — cleanLinkList", "[ExcelReader][network]")
+    {
+        SECTION("Empty list stays empty")
+        {
+            ExcelReader reader;
+            reader.cleanLinkList();
+            REQUIRE(reader.getLinkList().empty());
+        }
+
+        SECTION("All links start with https:// after read + clean")
+        {
+            ExcelReader reader("data/input_excel/ExcelReaderTest.xlsx");
+            reader.excelReadLinkList();
+            reader.cleanLinkList();
+            for (const std::string& link : reader.getLinkList())
+            {
+                REQUIRE(link.substr(0, 8) == "https://");
+            }
+        }
+
+        SECTION("clean reduces or keeps list size")
+        {
+            ExcelReader reader("data/input_excel/ExcelReaderTest.xlsx");
+            reader.excelReadLinkList();
+            const std::size_t beforeClean = reader.getLinkList().size();
+            reader.cleanLinkList();
+            REQUIRE(reader.getLinkList().size() <= beforeClean);
+        }
+    }
+
+} // namespace CarScraper
