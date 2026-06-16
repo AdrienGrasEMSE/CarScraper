@@ -140,7 +140,7 @@ namespace CarScraper {
             /**
              * @brief Save all HTML
              */
-            void saveAllHtml();
+            //void saveAllHtml();
 
     };
 

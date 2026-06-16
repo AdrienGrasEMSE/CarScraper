@@ -9,6 +9,7 @@
 
 
 // Imports
+#include "ArgusScraper.hpp"
 #include "core/models/Entity.hpp"
 #include "core/logger/Logger.hpp"
 #include <string>
@@ -107,14 +108,21 @@ namespace CarScraper {
     /**
      * @brief Extract a link list from all Excel files available
      */
-    void getAllLink() {
+    void ArgusScraper::getAllLink() {
+
+        // Checking folder path
+        if (_inputFolder == DEFAULT_STR) {
+            Logger::error("[{}].getAllLink : File not set", getFullId());
+            return;
+        }
+
 
         // Using the namespace for a better lisibility
         namespace fs = std::filesystem;
 
 
         // Running through all files
-        for (const auto& entry : fs::directory_iterator(dirPath))
+        for (const auto& entry : fs::directory_iterator(_inputFolder))
         {
             const std::string filename = entry.path().filename().string();
 
@@ -122,7 +130,7 @@ namespace CarScraper {
                 filename.size() > 11 &&
                 filename.substr(filename.size() - 11) == "_ARGUS.xlsx")
             {
-                files.push_back(entry.path().string());
+                _linkList.push_back(entry.path().string());
             }
         }
 
@@ -132,12 +140,17 @@ namespace CarScraper {
     /**
      * @brief Scarp all Html using the link list
      */
-    void ArgusScraper::scrapAll() {
+    void ArgusScraper::scrapAllLink() {
 
         // Running through all link list
         for (const std::string& link : _linkList) {
-            client.get(link);
-            _extractedHtml.push_back(client.getBody());
+
+            // Getting response and saving HTML if no error
+            CarScraper::HttpResponse response = _client.get(link);
+            if (response.statusCode == 200) {
+                _extractedHtml.push_back(client.getBody());
+            }
+
         }
         
     }
