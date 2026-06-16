@@ -56,7 +56,7 @@ namespace CarScraper {
      * @param filePath The file path
      */
     ExcelReader::ExcelReader(const std::string& filePath) : ExcelReader() {
-        _filePath = filePath;
+        this->setFilePath(filePath);
     }
 
 
