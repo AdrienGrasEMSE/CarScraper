@@ -132,7 +132,7 @@ namespace CarScraper {
              * @brief Sets the file path
              * @param filePath The file path
              */
-            void setFilePath(const std::string& filePath);
+            bool setFilePath(const std::string& filePath);
 
 
             

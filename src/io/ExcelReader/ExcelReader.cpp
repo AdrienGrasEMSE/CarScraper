@@ -72,7 +72,7 @@ namespace CarScraper {
      * @param filePath The file path
      * @note Check if the file exists
      */
-    void ExcelReader::setFilePath(const std::string& filePath) {
+    bool ExcelReader::setFilePath(const std::string& filePath) {
 
         // Getting namespace
         namespace fs = std::filesystem;
@@ -82,9 +82,11 @@ namespace CarScraper {
         if (fs::exists(filePath)) {
             _filePath = filePath;
             Logger::trace("[{}].setFilePath : {}", getFullId(), _filePath);
+            return true;
         } else {
             _filePath = DEFAULT_STR;
             Logger::debug("[{}].setFilePath : File {} does not exists", getFullId(), filePath);
+            return false;
         }
 
     }
