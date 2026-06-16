@@ -410,6 +410,7 @@ namespace CarScraper {
         // Checking file
         if (_filePath == DEFAULT_STR) {
             Logger::error("[{}]._extractZipEntry : File not set", getFullId());
+            return;
         }
         
 
