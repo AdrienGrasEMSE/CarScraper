@@ -404,7 +404,7 @@ namespace CarScraper {
     /**
      * @brief Extract a list of link to technical document
      */
-    void ExcelReader::excelReadLinkList() {
+    bool ExcelReader::excelReadLinkList() {
 
         // Debug
         Logger::trace("[{}].excelReadLinkList : Start on \"{}\"", getFullId(), _filePath);
@@ -413,7 +413,7 @@ namespace CarScraper {
         // Checking file
         if (_filePath == DEFAULT_STR) {
             Logger::error("[{}]._extractZipEntry : File not set", getFullId());
-            return;
+            return false;
         }
         
 
@@ -423,8 +423,8 @@ namespace CarScraper {
         // --- Step 1 : rId → URL --------------------------------------------------
         auto rIdToUrl = _parseRels();
         if (rIdToUrl.empty()) {
-            Logger::warn("[{}].excelReadLinkList : no hyperlink relationships found — aborting", getFullId());
-            return;
+            Logger::error("[{}].excelReadLinkList : no hyperlink relationships found — aborting", getFullId());
+            return false;
         }
 
 
@@ -453,8 +453,8 @@ namespace CarScraper {
 
         // --- Step 3 : fill _linkList in row order, skip header row 1 -------------
         if (rowToUrl.empty()) {
-            Logger::warn("[{}].excelReadLinkList : no hyperlinks found in column A", getFullId());
-            return;
+            Logger::error("[{}].excelReadLinkList : no hyperlinks found in column A", getFullId());
+            return false;
         }
 
 
@@ -468,6 +468,7 @@ namespace CarScraper {
 
         // Debug
         Logger::trace("[{}].excelReadLinkList : End on \"{}\"", getFullId(), _filePath);
+        return true;
 
     }
 

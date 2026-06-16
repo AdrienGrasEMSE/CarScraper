@@ -173,7 +173,7 @@ namespace CarScraper {
              * Cells with no hyperlink produce an empty string in the list.
              * The list is cleared and rebuilt on every call.
              */
-            void excelReadLinkList();
+            bool excelReadLinkList();
 
 
             /**
