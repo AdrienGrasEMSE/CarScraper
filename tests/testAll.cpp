@@ -21,6 +21,7 @@
 #include "base/baseCar.cpp"
 #include "base/baseHttpClient.cpp"
 #include "base/baseHtmlSaver.cpp"
+#include "base/baseExcelReader.cpp"
 
 
 // =============================================================================

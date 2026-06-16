@@ -10,7 +10,7 @@
 
 // Imports
 #include <catch2/catch.hpp>
-#include "io/HttpClient/HttpClient.hpp"
+#include "io/httpClient/HttpClient.hpp"
 
 using namespace CarScraper;
 

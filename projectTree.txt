@@ -31,22 +31,25 @@
 │   │   │   ├── Car.hpp
 │   │   │   ├── Entity.cpp
 │   │   │   └── Entity.hpp
+│   │   ├── scraper
+│   │   │   ├── ArgusScraper.cpp
+│   │   │   └── ArgusScraper.hpp
 │   │   └── utils
 │   │       ├── Constant.hpp
 │   │       ├── Validation.cpp
 │   │       └── Validation.hpp
 │   ├── gui
 │   ├── io
-│   │   ├── ExcelReader
+│   │   ├── excelReader
 │   │   │   ├── ExcelReader.cpp
 │   │   │   └── ExcelReader.hpp
-│   │   ├── HtmlParser
+│   │   ├── htmlParser
 │   │   │   ├── HtmlParser.cpp
 │   │   │   └── HtmlParser.hpp
-│   │   ├── HtmlSaver
+│   │   ├── htmlSaver
 │   │   │   ├── HtmlSaver.cpp
 │   │   │   └── HtmlSaver.hpp
-│   │   └── HttpClient
+│   │   └── httpClient
 │   │       ├── HttpClient.cpp
 │   │       └── HttpClient.hpp
 │   └── main.cpp
@@ -69,4 +72,4 @@
     │   └── testValidation.cpp
     └── testAll.cpp
 
-23 directories, 47 files
+24 directories, 49 files

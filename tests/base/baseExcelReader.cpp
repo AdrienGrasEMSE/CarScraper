@@ -20,7 +20,7 @@
 
 // Imports
 #include <catch2/catch.hpp>
-#include "io/ExcelReader/ExcelReader.hpp"
+#include "io/excelReader/ExcelReader.hpp"
 #include "core/utils/Constant.hpp"
 
 

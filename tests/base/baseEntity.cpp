@@ -12,7 +12,7 @@
 #include <catch2/catch.hpp>
 #include <regex>
 #include "core/models/Entity.hpp"
-#include "core/Logger/Logger.hpp"
+#include "core/logger/Logger.hpp"
 
 
 // =============================================================================

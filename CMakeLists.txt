@@ -79,7 +79,7 @@ endfunction()
 
 set(CORE_SOURCES
     # Core — Logger
-    src/core/Logger/Logger.cpp
+    src/core/logger/Logger.cpp
 
     # Core — Utils
     src/core/utils/Validation.cpp
@@ -97,13 +97,13 @@ set(CORE_SOURCES
     src/core/scraper/ArgusScraper.cpp
 
     # IO — HttpClient
-    src/io/HttpClient/HttpClient.cpp
+    src/io/httpClient/HttpClient.cpp
 
     # IO — HtmlSaver
-    src/io/HtmlSaver/HtmlSaver.cpp
+    src/io/htmlSaver/HtmlSaver.cpp
 
     # IO — ExcelReader
-    src/io/ExcelReader/ExcelReader.cpp
+    src/io/excelReader/ExcelReader.cpp
 
 )
 
