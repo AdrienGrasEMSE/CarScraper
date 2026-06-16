@@ -10,6 +10,7 @@
 
 // Imports
 #include "HtmlSaver.hpp"
+#include "core/utils/Constant.hpp"
 #include "core/logger/Logger.hpp"
 #include <fstream>
 #include <filesystem>
@@ -27,18 +28,35 @@ namespace CarScraper {
     namespace fs = std::filesystem;
 
     // =========================================================================
-    // Private data and methods
+    // Constructor / Destructor
     // =========================================================================
+
+    /**
+     * @brief Default Constructor
+     * @note Set every attributes to DEFAULT_STR
+     */
+    HtmlSaver::HtmlSaver() : Entity("HTML-SAVER") {
+        _name       = DEFAULT_STR;
+        _content    = DEFAULT_STR;
+        _outputDir  = DEFAULT_STR;
+    }
+
+
+    /**
+     * @brief Constructor which initialize all attributes
+     */
     HtmlSaver::HtmlSaver(   const std::string& name,
                             const std::string& content,
-                            const std::string& outputDir) : Entity("HTML-SAVER") {
+                            const std::string& outputDir) : HtmlSaver() {
 
-            // File details
-            _name       = name;
-            _content    = content;
-            _outputDir  = outputDir;
+        // File details
+        _name       = name;
+        _content    = content;
+        _outputDir  = outputDir;
 
     }
+
+
 
 
 
@@ -48,14 +66,14 @@ namespace CarScraper {
     // Core
     // =========================================================================
 
-    
-
-
     /**
      * @brief Save the file
      * @return The full path written
      */
     std::string HtmlSaver::save() const {
+
+        // Getting namespace
+        namespace fs = std::filesystem;
         
         // Ensure the output directory exists
         fs::create_directories(_outputDir);
@@ -79,14 +97,6 @@ namespace CarScraper {
         // Return the complete file path
         return path;
 
-    }
-
-
-    /**
-     * @return The path
-     */
-    std::string HtmlSaver::getFilePath() const {
-        return _outputDir + _name + ".txt";
     }
 
 } // namespace CarScraper

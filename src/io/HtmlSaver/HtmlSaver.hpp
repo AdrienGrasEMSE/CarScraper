@@ -35,9 +35,9 @@ namespace CarScraper {
         // =========================================================================
         private:
 
-            std::string _name;      ///< File Name      | ex : "SaveHtml1"
-            std::string _content;   ///< File Content   | ex : "File which contains a very interesting content..."
-            std::string _outputDir; ///< File Path      | ex : "/data/save_html/"
+            std::string _name;      ///< File Name          | ex : "SaveHtml1"
+            std::string _content;   ///< File Content       | ex : "File which contains a very interesting content..."
+            std::string _outputDir; ///< Output Folder Path | ex : "/data/save_html/"
 
 
 
@@ -51,6 +51,13 @@ namespace CarScraper {
             // -------------------------------------------------------------------------
             // Constructor / Destructor
             // -------------------------------------------------------------------------
+
+            /**
+             * @brief Default Constructor
+             * @note Set every attributes to DEFAULT_STR
+             */
+            HtmlSaver();
+
 
             /**
              * @brief Constructor which initialize all attributes
@@ -88,8 +95,8 @@ namespace CarScraper {
 
 
             /**
-             * @brief Gets the file path
-             * @return The file path
+             * @brief Gets the output folder path
+             * @return The output folder path
              */
             const std::string& getOutputDir() const { return _outputDir; }
 
@@ -98,7 +105,7 @@ namespace CarScraper {
              * @brief Gets the full file path
              * @return The full path
              */
-            std::string getFilePath() const;
+            const std::string getFilePath() const { return _outputDir + _name + ".txt"; }
 
 
 
@@ -123,8 +130,8 @@ namespace CarScraper {
 
 
             /**
-             * @brief Set the file path
-             * @param outputDir The file path
+             * @brief Set the output folder path
+             * @param outputDir The output folder path
              */
             void setOutputDir(const std::string& outputDir) { _outputDir = outputDir; }
 
