@@ -31,7 +31,19 @@ namespace CarScraper {
     constexpr       double      DEFAULT_DOUBLE = 9999.0;        ///< Sentinel default value for double
     constexpr       double      ERROR_DOUBLE   = -1.0;          ///< Sentinel error value for double
 
-    inline const     std::string DEFAULT_STR    = "#";          ///< Sentinel default value for string
-    inline const     std::string ERROR_STR      = "error";      ///< Sentinel error value for string
+    inline const    std::string DEFAULT_STR    = "#";          ///< Sentinel default value for string
+    inline const    std::string ERROR_STR      = "error";      ///< Sentinel error value for string
+
+
+
+
+
+    // =========================================================================
+    // Default directory path
+    // =========================================================================
+
+    inline const    std::string HTML_DIR        = "data/save_html";      ///< Default path for the saved html directory
+    inline const    std::string LINK_DIR        = "data/save_link";      ///< Default path for the saved link directory
+    inline const    std::string IN_XLSX_DIR     = "data/input_excel";    ///< Default path for the excel input directory
 
 } // namespace CarScraper
