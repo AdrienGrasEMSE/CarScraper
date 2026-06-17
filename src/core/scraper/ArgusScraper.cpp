@@ -13,6 +13,8 @@
 #include "core/utils/Constant.hpp"
 #include <filesystem>
 #include <iostream>
+#include <algorithm>
+#include <random>
 
 
 /**
@@ -30,6 +32,7 @@ namespace CarScraper {
     ArgusScraper::ArgusScraper() : Entity("ARGUS_SCRAPER") {
         _saver.setOutputDir("data/save_html/");
     }
+
 
 
 
@@ -99,6 +102,22 @@ namespace CarScraper {
      */
     void ArgusScraper::setLinkList(const std::vector<std::string>& linkList) {
         _linkList = linkList;
+    }
+
+
+
+
+
+    // =========================================================================
+    // Internal helpers
+    // =========================================================================
+
+    /**
+     * @brief Shuffler the link list to randomize acces
+     */
+    void ArgusScraper::_shuffleLinkList() {
+        auto rng = std::default_random_engine {};
+        std::ranges::shuffle(_linkList, rng);
     }
 
 
@@ -191,6 +210,10 @@ namespace CarScraper {
 
         // Debug
         Logger::trace("[{}].scrapAllLink : Starting", getFullId());
+
+
+        // Random link acces
+        this->_shuffleLinkList();
 
 
         // Running through all link list
