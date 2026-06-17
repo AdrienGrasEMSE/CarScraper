@@ -15,9 +15,9 @@
 // Imports
 #include "core/models/Entity.hpp"
 #include "core/logger/Logger.hpp"
-#include "io/ExcelReader/ExcelReader.hpp"
-#include "io/HttpClient/HttpClient.hpp"
-#include "io/HtmlSaver/HtmlSaver.hpp"
+#include "io/excelReader/ExcelReader.hpp"
+#include "io/httpClient/HttpClient.hpp"
+#include "io/htmlSaver/HtmlSaver.hpp"
 #include <string>
 #include <vector>
 #include <map>
@@ -43,6 +43,7 @@ namespace CarScraper {
             // Data
             std::string                 _inputFolder;       ///< Path to the input folder which contains all files
             std::string                 _outputFolder;      ///< Path to the ouput folder which will contains all saved files
+            std::vector<std::string>    _fileList;          ///< Target file list
             std::vector<std::string>    _linkList;          ///< Target link list
             std::vector<std::string>    _extractedHtml;     ///< All HTML extracted
 
@@ -89,6 +90,24 @@ namespace CarScraper {
             const std::string& getOutputFolder() const { return _outputFolder; }
 
 
+            /** @brief Gets the file list
+             *  @return The file list
+             */
+            const std::vector<std::string>& getFileList() const { return _fileList; }
+
+
+            /** @brief Gets the link list
+             *  @return The link list
+             */
+            const std::vector<std::string>& getLinkList() const { return _linkList; }
+
+
+            /** @brief Gets the saved html list
+             *  @return The saved html list
+             */
+            const std::vector<std::string>& getSavedHtml() const { return _extractedHtml; }
+
+
 
 
 
@@ -112,10 +131,17 @@ namespace CarScraper {
 
 
             /**
+             * @brief Set the file list
+             * @param fileList The file list
+             */
+            void setFileList(const std::vector<std::string>& fileList);
+
+
+            /**
              * @brief Set the link list
              * @param linkList The link list
              */
-            void setLinkList(const std::vector<std::string> linkList);
+            void setLinkList(const std::vector<std::string>& linkList);
 
 
 
@@ -124,6 +150,12 @@ namespace CarScraper {
             // -------------------------------------------------------------------------
             // Main logic
             // -------------------------------------------------------------------------
+
+            /**
+             * @brief Extract a file list from the input folder
+             */
+            void getAllFile();
+
 
             /**
              * @brief Extract a link list from all Excel files available
