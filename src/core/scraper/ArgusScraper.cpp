@@ -252,7 +252,7 @@ namespace CarScraper {
                     _saver.save();
 
                 } else {
-                    Logger::warn("[{}].scrapAllLink : code status {} for {}", response.statusCode, getFullId(), link);
+                    Logger::warn("[{}].scrapAllLink : code status {} for {}", getFullId(), response.statusCode, link);
                 }
 
             }
