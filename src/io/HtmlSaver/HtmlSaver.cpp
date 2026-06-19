@@ -82,7 +82,7 @@ namespace CarScraper {
         if (fs::exists(outputDir)) {
             _outputDir = outputDir;
         } else {
-            _outputDir = LINK_DIR;
+            _outputDir = HTML_DIR;
             Logger::debug("[{}].setOutputDir : Directory {} does not exists", getFullId(), outputDir);
         }
         Logger::trace("[{}].setOutputDir : {}", getFullId(), _outputDir);
