@@ -25,6 +25,18 @@ namespace CarScraper {
     // =========================================================================
     // String and numeric validation constants
     // =========================================================================
+    constexpr       int         SUCCESS_CODE        = 0;        ///< Sentinel return value for success
+    constexpr       int         ERROR_CODE          = 0;        ///< Sentinel return value for error
+    constexpr       int         IGNORED_ACTION_CODE = 0;        ///< Sentinel return value for ignored action
+
+
+
+
+
+
+    // =========================================================================
+    // String and numeric validation constants
+    // =========================================================================
     constexpr       int         DEFAULT_INT    = 9999;          ///< Sentinel default value for int
     constexpr       int         ERROR_INT      = -1;            ///< Sentinel error value for int
 
@@ -42,8 +54,8 @@ namespace CarScraper {
     // Default directory path
     // =========================================================================
 
-    inline const    std::string HTML_DIR        = "data/save_html";      ///< Default path for the saved html directory
-    inline const    std::string LINK_DIR        = "data/save_link";      ///< Default path for the saved link directory
-    inline const    std::string IN_XLSX_DIR     = "data/input_excel";    ///< Default path for the excel input directory
+    inline const    std::string HTML_DIR        = "data/save_html/";     ///< Default path for the saved html directory
+    inline const    std::string LINK_DIR        = "data/save_link/";     ///< Default path for the saved link directory
+    inline const    std::string IN_XLSX_DIR     = "data/input_excel/";   ///< Default path for the excel input directory
 
 } // namespace CarScraper
