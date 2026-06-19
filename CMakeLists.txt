@@ -45,6 +45,10 @@ target_include_directories(stduuid INTERFACE ${CMAKE_SOURCE_DIR}/libs)
 add_library(catch2 INTERFACE)
 target_include_directories(catch2 INTERFACE ${CMAKE_SOURCE_DIR}/libs)
 
+# --- Catch2 v2 (header-only) : libs/nlohmann/json.hpp ---
+add_library(nlohmann INTERFACE)
+target_include_directories(nlohmann INTERFACE ${CMAKE_SOURCE_DIR}/libs)
+
 
 # ==============================================================================
 # Helper — apply common settings to any target
@@ -65,6 +69,7 @@ function(carscraper_configure_target TARGET)
         uni-algo
         stduuid
         catch2
+        nlohmann
     )
     target_compile_options(${TARGET} PRIVATE
         $<$<CXX_COMPILER_ID:GNU,Clang>: -Wall -Wextra -Wpedantic>

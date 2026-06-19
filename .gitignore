@@ -16,6 +16,8 @@ data/input_excel/*
 !data/input_excel/.gitkeep
 data/save_html/*
 !data/save_html/.gitkeep
+data/save_link/*
+!data/save_link/.gitkeep
 data/test_save_html/*
 !data/test_save_html/.gitkeep
 
