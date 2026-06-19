@@ -30,7 +30,21 @@ namespace CarScraper {
      * @brief Default constructor
      */
     ArgusScraper::ArgusScraper() : Entity("ARGUS_SCRAPER") {
-        _saver.setOutputDir("data/save_html/");
+
+        // Importing the list of already saved link
+        _saver.importSavedLink();
+
+    }
+
+
+    /**
+     * @brief Default destructor
+     */
+    ArgusScraper::~ArgusScraper() {
+
+        // Exporting the list of already saved link
+        _saver.exportSavedLink();
+
     }
 
 
@@ -219,10 +233,24 @@ namespace CarScraper {
         // Running through all link list
         for (const std::string& link : _linkList) {
 
-            // Getting response and saving HTML if no error
-            CarScraper::HttpResponse response = _client.get(link);
-            if (response.statusCode == 200) {
-                _extractedHtml.push_back(response.body);
+            // Only getting unsaved link
+            if (_saver.alreadySaved(link)) {
+                Logger::trace("[{}].scrapAllLink : ignoring {}", getFullId(), link);
+            } else {
+
+                // Getting response and saving HTML if no error
+                CarScraper::HttpResponse response = _client.get(link);
+                if (response.statusCode == 200) {
+                    _extractedHtml.push_back(response.body);
+                }
+
+                
+                // Setting up the saver
+                // _saver.setName(#); TODO : Scrap the name of the car and the date for the file name
+                _saver.setLink(link);
+                _saver.setContent(response.body);
+                _saver.save();
+
             }
 
         }

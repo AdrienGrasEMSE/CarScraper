@@ -85,6 +85,12 @@ namespace CarScraper {
             ArgusScraper();
 
 
+            /**
+             * @brief Default Destructor.
+             */
+            ~ArgusScraper();
+
+
 
 
             // -------------------------------------------------------------------------
