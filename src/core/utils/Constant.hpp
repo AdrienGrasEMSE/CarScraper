@@ -26,8 +26,8 @@ namespace CarScraper {
     // String and numeric validation constants
     // =========================================================================
     constexpr       int         SUCCESS_CODE        = 0;        ///< Sentinel return value for success
-    constexpr       int         ERROR_CODE          = 0;        ///< Sentinel return value for error
-    constexpr       int         IGNORED_ACTION_CODE = 0;        ///< Sentinel return value for ignored action
+    constexpr       int         ERROR_CODE          = -1;       ///< Sentinel return value for error
+    constexpr       int         IGNORED_ACTION_CODE = 1;        ///< Sentinel return value for ignored action
 
 
 
