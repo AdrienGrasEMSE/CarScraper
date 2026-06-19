@@ -130,7 +130,8 @@ namespace CarScraper {
      * @brief Shuffler the link list to randomize acces
      */
     void ArgusScraper::_shuffleLinkList() {
-        auto rng = std::default_random_engine {};
+        std::random_device  rd;
+        std::mt19937        rng = std::mt19937(rd());
         std::ranges::shuffle(_linkList, rng);
     }
 
@@ -242,14 +243,17 @@ namespace CarScraper {
                 CarScraper::HttpResponse response = _client.get(link);
                 if (response.statusCode == 200) {
                     _extractedHtml.push_back(response.body);
-                }
 
-                
-                // Setting up the saver
-                // _saver.setName(#); TODO : Scrap the name of the car and the date for the file name
-                _saver.setLink(link);
-                _saver.setContent(response.body);
-                _saver.save();
+
+                    // Setting up the saver
+                    // _saver.setName(#); TODO : Scrap the name of the car and the date for the file name
+                    _saver.setLink(link);
+                    _saver.setContent(response.body);
+                    _saver.save();
+
+                } else {
+                    Logger::warn("[{}].scrapAllLink : code status {} for {}", response.statusCode, getFullId(), link);
+                }
 
             }
 
