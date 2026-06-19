@@ -180,16 +180,25 @@ namespace CarScraper {
     /**
      * @brief Enables or disables in-memory cookie handling.
      * @param enable Whether to enable cookies.
+     * @param jarPath Path to the cookie jar file for persistence across sessions.
+     *                Empty string (default) = in-memory only, cookies lost on destruction
      */
-    void HttpClient::enableCookies(bool enable) {
+    void HttpClient::enableCookies(bool enable, const std::string& jarPath) {
 
         // Set the flag
         _cookiesEnabled = enable;
+        _cookieJarPath  = jarPath;
 
-        
-        // Empty string activates in-memory cookie engine (no file on disk)
+
+        // Applying cookies policy
         if (enable) {
-            curl_easy_setopt(_curl, CURLOPT_COOKIEFILE, "");
+
+            // Empty string activates in-memory cookie engine (no file on disk)
+            curl_easy_setopt(_curl, CURLOPT_COOKIEFILE, jarPath.c_str());
+            if (!jarPath.empty()) {
+                curl_easy_setopt(_curl, CURLOPT_COOKIEJAR, jarPath.c_str());
+            }
+            
         }
         
     }
@@ -417,7 +426,10 @@ namespace CarScraper {
         
         // ---- Cookies ----
         if (_cookiesEnabled) {
-            curl_easy_setopt(_curl, CURLOPT_COOKIEFILE, "");
+            curl_easy_setopt(_curl, CURLOPT_COOKIEFILE, _cookieJarPath.c_str());
+            if (!_cookieJarPath.empty()) {
+                curl_easy_setopt(_curl, CURLOPT_COOKIEJAR, _cookieJarPath.c_str());
+            }
         }
 
 
@@ -466,6 +478,11 @@ namespace CarScraper {
         // Add a Referer header if the policy requires it (some sites may block requests that don't include it or that don't have a realistic Referer)
         if (_policy.sendReferer) {
             headerList = curl_slist_append(headerList, "Referer: https://www.google.com/");
+            headerList = curl_slist_append(headerList, "Upgrade-Insecure-Requests: 1");
+            headerList = curl_slist_append(headerList, "Sec-Fetch-Dest: document");
+            headerList = curl_slist_append(headerList, "Sec-Fetch-Mode: navigate");
+            headerList = curl_slist_append(headerList, "Sec-Fetch-Site: none");
+            headerList = curl_slist_append(headerList, "Sec-Fetch-User: ?1");
         }
 
 

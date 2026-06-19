@@ -100,18 +100,19 @@ namespace CarScraper {
         std::chrono::milliseconds   maxDelayBetweenRequests { 1500 };   ///< Maximum delay between requests (in milliseconds, for random jitter)
 
         // Retry
-        int                         maxRetries              = 3;        ///< Maximum number of retry attempts on failure
-        bool                        retryOn429              = true;     ///< Whether to retry on HTTP 429 Too Many Requests
-        bool                        retryOn503              = true;     ///< Whether to retry on HTTP 503 Service Unavailable
+        int     maxRetries          = 3;        ///< Maximum number of retry attempts on failure
+        bool    retryOn429          = true;     ///< Whether to retry on HTTP 429 Too Many Requests
+        bool    retryOn503          = true;     ///< Whether to retry on HTTP 503 Service Unavailable
         std::chrono::milliseconds   retryBaseDelay          { 2000 };   ///< Base delay for retries (doubled on each attempt — exponential backoff)
 
         // Rotation
-        bool                        rotateUserAgent         = true;     ///< Whether to rotate User-Agent header by picking a random one from the pool
-        bool                        rotateProxy             = false;    ///< Whether to rotate proxies by picking a random one from the proxy pool
+        bool    rotateUserAgent     = true;     ///< Whether to rotate User-Agent header by picking a random one from the pool
+        bool    rotateProxy         = false;    ///< Whether to rotate proxies by picking a random one from the proxy pool
 
         // Realistic headers
-        bool                        sendAcceptHeaders       = true;     ///< Whether to send realistic Accept and Accept-Language headers
-        bool                        sendReferer             = false;    ///< Whether to send a spoofed Referer header (e.g. "https://www.google.com/")
+        bool    sendAcceptHeaders   = true;     ///< Whether to send realistic Accept and Accept-Language headers
+        bool    sendReferer         = false;    ///< Whether to send a spoofed Referer header (e.g. "https://www.google.com/")
+        bool    sendSecFetchHeaders = true;     ///< Whether to send Sec-Fetch-* headers (Dest, Mode, Site, Upgrade-Insecure-Requests)
 
     };
 
@@ -157,7 +158,8 @@ namespace CarScraper {
             std::vector<ProxyConfig>            _proxyPool;             ///< List of proxies to rotate for requests (if rotation enabled)
             std::map<std::string, std::string>  _customHeaders;         ///< Custom headers to include in every request (header name -> header value)
             std::mt19937                        _rng;                   ///< Random number generator for User-Agent and proxy rotation, and rate limit jitter
-            bool                                _cookiesEnabled = false;///< Whether to enable cookie handling (in-memory, no file storage)
+            bool                                _cookiesEnabled = false;///< Whether to enable cookie handling
+            std::string                         _cookieJarPath;         ///< Path to the cookie jar file (empty = in-memory only)
             bool                                _followRedirects = true;///< Whether to follow HTTP redirects (3xx) automatically
             int                                 _maxRedirects   = 10;   ///< Maximum number of redirects to follow if _followRedirects is true
             bool                                _verifySSL      = true; ///< Whether to verify SSL certificates (set to false only in dev/test)
@@ -357,8 +359,10 @@ namespace CarScraper {
             /**
              * @brief Enables or disables in-memory cookie handling.
              * @param enable Whether to enable cookies (default: true).
+             * @param jarPath Path to the cookie jar file for persistence across sessions.
+             *                Empty string (default) = in-memory only, cookies lost on destruction
              */
-            void enableCookies(bool enable = true);
+            void enableCookies(bool enable = true, const std::string& jarPath = "");
 
 
             /**
