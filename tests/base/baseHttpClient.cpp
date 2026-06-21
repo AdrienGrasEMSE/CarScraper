@@ -35,6 +35,23 @@ static HttpClient buildFastClient() {
     return client;
 }
 
+/**
+ * @brief Builds an HttpClient with sendReferer enabled (navigation headers active).
+ */
+static HttpClient buildRefererClient() {
+    HttpClient client;
+
+    AntiBlockPolicy policy;
+    policy.minDelayBetweenRequests  = std::chrono::milliseconds(50);
+    policy.maxDelayBetweenRequests  = std::chrono::milliseconds(100);
+    policy.maxRetries               = 0;
+    policy.rotateUserAgent          = false;
+    policy.sendReferer              = true;
+    client.setPolicy(policy);
+
+    return client;
+}
+
 
 // =============================================================================
 // Tests — Entity inheritance
@@ -244,9 +261,19 @@ TEST_CASE("HttpClient Configuration", "[httpclient][config]") {
         REQUIRE_NOTHROW(client.setFollowRedirects(true, 5));
     }
 
-    SECTION("enableCookies does not throw") {
+    SECTION("enableCookies without jarPath does not throw") {
         HttpClient client;
         REQUIRE_NOTHROW(client.enableCookies(true));
+    }
+
+    SECTION("enableCookies with jarPath does not throw") {
+        HttpClient client;
+        REQUIRE_NOTHROW(client.enableCookies(true, "/tmp/carscraper_test_cookies.txt"));
+    }
+
+    SECTION("enableCookies false does not throw") {
+        HttpClient client;
+        REQUIRE_NOTHROW(client.enableCookies(false));
     }
 
     SECTION("clearCookies does not throw") {
@@ -276,6 +303,121 @@ TEST_CASE("HttpClient Configuration", "[httpclient][config]") {
         p._port = 8080;
         REQUIRE_NOTHROW(client.addProxy(p));
         REQUIRE_NOTHROW(client.clearProxies());
+    }
+
+}
+
+
+// =============================================================================
+// Tests — Referer dynamique
+// =============================================================================
+
+TEST_CASE("HttpClient Referer Management", "[httpclient][referer]") {
+
+    SECTION("setReferer does not throw") {
+        HttpClient client;
+        REQUIRE_NOTHROW(client.setReferer("https://www.google.fr/"));
+    }
+
+    SECTION("clearReferer does not throw") {
+        HttpClient client;
+        client.setReferer("https://www.google.fr/");
+        REQUIRE_NOTHROW(client.clearReferer());
+    }
+
+    SECTION("GET succeeds with sendReferer enabled and no Referer set (fallback google.fr)") {
+        HttpClient client = buildRefererClient();
+        HttpResponse r = client.get("https://example.com");
+        REQUIRE(r.success);
+    }
+
+    SECTION("GET succeeds with sendReferer enabled and an explicit Referer") {
+        HttpClient client = buildRefererClient();
+        client.setReferer("https://example.com/");
+        HttpResponse r = client.get("https://example.com");
+        REQUIRE(r.success);
+    }
+
+    SECTION("GET succeeds after clearing the Referer (fallback to google.fr)") {
+        HttpClient client = buildRefererClient();
+        client.setReferer("https://example.com/");
+        client.clearReferer();
+        HttpResponse r = client.get("https://example.com");
+        REQUIRE(r.success);
+    }
+
+    SECTION("Simulated navigation chain — three sequential GETs with updated Referer") {
+        HttpClient client = buildRefererClient();
+
+        // Step 1 : Google → example.com (accueil)
+        client.setReferer("https://www.google.fr/");
+        HttpResponse r1 = client.get("https://example.com");
+        REQUIRE(r1.success);
+
+        // Step 2 : example.com → example.org (page intermédiaire)
+        client.setReferer("https://example.com/");
+        HttpResponse r2 = client.get("https://example.org");
+        REQUIRE(r2.success);
+
+        // Step 3 : example.org → example.net (fiche terminale)
+        client.setReferer("https://example.org/");
+        HttpResponse r3 = client.get("https://example.net");
+        REQUIRE(r3.success);
+
+        REQUIRE(client.getTotalRequests() == 3);
+    }
+
+}
+
+
+// =============================================================================
+// Tests — Navigation headers (Sec-Fetch-* via sendReferer)
+// =============================================================================
+
+TEST_CASE("HttpClient Navigation Headers", "[httpclient][secfetch]") {
+
+    SECTION("GET succeeds with sendReferer = true (Sec-Fetch-* headers active)") {
+        HttpClient client = buildRefererClient();
+        HttpResponse r = client.get("https://example.com");
+        REQUIRE(r.success);
+        REQUIRE(r.statusCode == 200);
+    }
+
+    SECTION("GET succeeds with sendReferer = false (no navigation headers)") {
+        HttpClient client = buildFastClient();   // sendReferer = false par défaut
+        HttpResponse r = client.get("https://example.com");
+        REQUIRE(r.success);
+        REQUIRE(r.statusCode == 200);
+    }
+
+}
+
+
+// =============================================================================
+// Tests — Cookie persistence
+// =============================================================================
+
+TEST_CASE("HttpClient Cookie Persistence", "[httpclient][cookies]") {
+
+    SECTION("In-memory cookies: GET after enableCookies succeeds") {
+        HttpClient client = buildFastClient();
+        client.enableCookies(true);
+        HttpResponse r = client.get("https://example.com");
+        REQUIRE(r.success);
+    }
+
+    SECTION("Cookie jar path: GET after enableCookies with jarPath succeeds") {
+        HttpClient client = buildFastClient();
+        client.enableCookies(true, "/tmp/carscraper_test_cookies.txt");
+        HttpResponse r = client.get("https://example.com");
+        REQUIRE(r.success);
+    }
+
+    SECTION("clearCookies after a GET does not throw") {
+        HttpClient client = buildFastClient();
+        client.enableCookies(true);
+        client.get("https://example.com");
+        REQUIRE_NOTHROW(client.clearCookies());
     }
 
 }
