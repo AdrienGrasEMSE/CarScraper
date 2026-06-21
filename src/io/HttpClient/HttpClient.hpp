@@ -18,7 +18,6 @@
 #include <vector>
 #include <map>
 #include <chrono>
-#include <memory>
 #include <random>
 
 
@@ -112,7 +111,6 @@ namespace CarScraper {
         // Realistic headers
         bool    sendAcceptHeaders   = true;     ///< Whether to send realistic Accept and Accept-Language headers
         bool    sendReferer         = false;    ///< Whether to send a spoofed Referer header (e.g. "https://www.google.com/")
-        bool    sendSecFetchHeaders = true;     ///< Whether to send Sec-Fetch-* headers (Dest, Mode, Site, Upgrade-Insecure-Requests)
 
     };
 
@@ -156,6 +154,7 @@ namespace CarScraper {
             AntiBlockPolicy                     _policy;                ///< Anti-blocking policy configuration
             std::vector<std::string>            _userAgents;            ///< List of User-Agent strings to rotate for requests
             std::vector<ProxyConfig>            _proxyPool;             ///< List of proxies to rotate for requests (if rotation enabled)
+            std::string                         _currentReferer;        ///< Referer header value sent with each request (empty = none)
             std::map<std::string, std::string>  _customHeaders;         ///< Custom headers to include in every request (header name -> header value)
             std::mt19937                        _rng;                   ///< Random number generator for User-Agent and proxy rotation, and rate limit jitter
             bool                                _cookiesEnabled = false;///< Whether to enable cookie handling
@@ -299,25 +298,25 @@ namespace CarScraper {
             /**
              * @brief Copy constructor (deleted — libcurl handles are not copyable).
              */
-            HttpClient(const HttpClient&)               = delete;
+            HttpClient(const HttpClient&) = delete;
 
 
             /**
              * @brief Copy assignment operator (deleted — libcurl handles are not copyable).
              */
-            HttpClient& operator=(const HttpClient&)    = delete;
+            HttpClient& operator=(const HttpClient&) = delete;
 
 
             /**
              * @brief Move constructor.
              */
-            HttpClient(HttpClient&&)                    = default;
+            HttpClient(HttpClient&&) = default;
 
 
             /**
              * @brief Move assignment operator.
              */
-            HttpClient& operator=(HttpClient&&)         = default;
+            HttpClient& operator=(HttpClient&&) = default;
 
 
 
@@ -331,21 +330,21 @@ namespace CarScraper {
              * @brief Sets the anti-block policy.
              * @param policy The AntiBlockPolicy to apply for subsequent requests.
              */
-            void setPolicy(const AntiBlockPolicy& policy)               { _policy           = policy; }
+            void setPolicy(const AntiBlockPolicy& policy) { _policy = policy; }
 
 
             /**
              * @brief Sets the request timeout.
              * @param seconds Timeout in seconds (0 = no timeout).
              */
-            void setTimeout(long seconds)                               { _timeoutSeconds   = seconds; }
+            void setTimeout(long seconds) { _timeoutSeconds = seconds; }
 
 
             /**
              * @brief Sets whether to verify SSL certificates.
              * @param verify Set to false only in development/testing environments.
              */
-            void setVerifySSL(bool verify)                              { _verifySSL        = verify; }
+            void setVerifySSL(bool verify) { _verifySSL = verify; }
 
 
             /**
@@ -353,7 +352,7 @@ namespace CarScraper {
              * @param follow       Whether to follow redirects.
              * @param maxRedirects Maximum number of redirects to follow (default: 10).
              */
-            void setFollowRedirects(bool follow, int maxRedirects = 10) { _followRedirects  = follow; _maxRedirects = maxRedirects; }
+            void setFollowRedirects(bool follow, int maxRedirects = 10) { _followRedirects = follow; _maxRedirects = maxRedirects; }
 
 
             /**
@@ -404,20 +403,20 @@ namespace CarScraper {
              * @brief Replaces the proxy pool with the given list.
              * @param proxies The new list of ProxyConfig entries.
              */
-            void setProxyPool(const std::vector<ProxyConfig>& proxies)  { _proxyPool = proxies; }
+            void setProxyPool(const std::vector<ProxyConfig>& proxies) { _proxyPool = proxies; }
 
 
             /**
              * @brief Adds a single proxy to the pool.
              * @param proxy The ProxyConfig to add.
              */
-            void addProxy(const ProxyConfig& proxy)                     { _proxyPool.push_back(proxy); }
+            void addProxy(const ProxyConfig& proxy) { _proxyPool.push_back(proxy); }
 
 
             /**
              * @brief Clears the proxy pool.
              */
-            void clearProxies()                                         { _proxyPool.clear(); }
+            void clearProxies() { _proxyPool.clear(); }
 
 
 
@@ -438,7 +437,20 @@ namespace CarScraper {
             /**
              * @brief Removes all custom headers.
              */
-            void clearHeaders()                                                { _customHeaders.clear(); }
+            void clearHeaders() { _customHeaders.clear(); }
+
+
+            /**
+             * @brief Sets referer
+             * @param referer The referer
+             */
+            void setReferer(const std::string& referer) { _currentReferer = referer; }
+
+
+            /**
+             * @brief Reset the referer
+             */
+            void clearReferer() { _currentReferer.clear(); }
 
 
 

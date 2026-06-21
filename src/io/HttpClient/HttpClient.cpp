@@ -477,11 +477,13 @@ namespace CarScraper {
 
         // Add a Referer header if the policy requires it (some sites may block requests that don't include it or that don't have a realistic Referer)
         if (_policy.sendReferer) {
-            headerList = curl_slist_append(headerList, "Referer: https://www.google.com/");
+            std::string referer = _currentReferer.empty() ? "https://www.google.fr/" : _currentReferer;
+            headerList = curl_slist_append(headerList, ("Referer: " + referer).c_str());
             headerList = curl_slist_append(headerList, "Upgrade-Insecure-Requests: 1");
             headerList = curl_slist_append(headerList, "Sec-Fetch-Dest: document");
             headerList = curl_slist_append(headerList, "Sec-Fetch-Mode: navigate");
-            headerList = curl_slist_append(headerList, "Sec-Fetch-Site: none");
+            std::string secFetchSite = _currentReferer.empty() ? "none" : "same-origin";
+            headerList = curl_slist_append(headerList, ("Sec-Fetch-Site: " + secFetchSite).c_str());
             headerList = curl_slist_append(headerList, "Sec-Fetch-User: ?1");
         }
 
