@@ -95,14 +95,14 @@ namespace CarScraper {
     struct AntiBlockPolicy {
 
         // Rate limiting
-        std::chrono::milliseconds   minDelayBetweenRequests { 500 };    ///< Minimum delay between requests (in milliseconds)
-        std::chrono::milliseconds   maxDelayBetweenRequests { 1500 };   ///< Maximum delay between requests (in milliseconds, for random jitter)
+        std::chrono::milliseconds   minDelayBetweenRequests { 8000 };    ///< Minimum delay between requests (in milliseconds)
+        std::chrono::milliseconds   maxDelayBetweenRequests { 30000 };   ///< Maximum delay between requests (in milliseconds, for random jitter)
 
         // Retry
-        int     maxRetries          = 3;        ///< Maximum number of retry attempts on failure
+        int     maxRetries          = 2;        ///< Maximum number of retry attempts on failure
         bool    retryOn429          = true;     ///< Whether to retry on HTTP 429 Too Many Requests
         bool    retryOn503          = true;     ///< Whether to retry on HTTP 503 Service Unavailable
-        std::chrono::milliseconds   retryBaseDelay          { 2000 };   ///< Base delay for retries (doubled on each attempt — exponential backoff)
+        std::chrono::milliseconds   retryBaseDelay          { 60000 };   ///< Base delay for retries (doubled on each attempt — exponential backoff)
 
         // Rotation
         bool    rotateUserAgent     = true;     ///< Whether to rotate User-Agent header by picking a random one from the pool
