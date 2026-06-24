@@ -2,9 +2,12 @@
  * @file baseHtmlSaver.cpp
  *
  * @brief Unit tests for CarScraper::HtmlSaver class.
+ *        The [network] tests fetch a real page from example.org and save it
+ *        to data/test_html/ so the fixture can be inspected manually.
+ *        Run without network tests: ./TestHtmlSaver "[HtmlSaver]" "~[network]"
  *
  * @author Adrien GRAS
- * @date 2026-06-03
+ * @date 2026-06-24
  */
 
 
@@ -14,18 +17,23 @@
 #include <fstream>
 #include <sstream>
 #include <nlohmann/json.hpp>
-#include "io/htmlSaver/HtmlSaver.hpp"
+#include "io/HtmlSaver/HtmlSaver.hpp"
+#include "io/HttpClient/HttpClient.hpp"
 #include "core/utils/Constant.hpp"
 
+using namespace CarScraper;
 namespace fs = std::filesystem;
 
-static const std::string TEST_HTML_DIR = "data/test_save_html/";
-static const std::string TEST_LINK_DIR = "data/test_save_link/";
+static const std::string TEST_HTML_DIR  = "data/test_save_html/";
+static const std::string TEST_LINK_DIR  = "data/test_save_link/";
+static const std::string TEST_NET_DIR   = "data/test_html/";
+static const std::string EXAMPLE_URL    = "https://www.example.org";
+static const std::string EXAMPLE_FILE   = TEST_NET_DIR + "example_org.txt";
 
 
-// ============================================================================
+// =============================================================================
 // Helpers
-// ============================================================================
+// =============================================================================
 
 static std::string readFile(const std::string& path) {
     std::ifstream file(path);
@@ -45,27 +53,26 @@ static void cleanDirectories() {
 }
 
 
-// ============================================================================
+// =============================================================================
 // Constructor
-// ============================================================================
+// =============================================================================
 
 TEST_CASE("HtmlSaver Constructor", "[HtmlSaver][Constructor]") {
 
     prepareDirectories();
 
     SECTION("Default constructor") {
-        CarScraper::HtmlSaver saver;
+        HtmlSaver saver;
 
-        REQUIRE(saver.getName() == CarScraper::DEFAULT_STR);
-        REQUIRE(saver.getContent() == CarScraper::DEFAULT_STR);
-        REQUIRE(saver.getOutputDir() == CarScraper::HTML_DIR);
-        REQUIRE(saver.getInputLinkDir() == CarScraper::LINK_DIR);
-        REQUIRE(saver.getOutputLinkDir() == CarScraper::LINK_DIR);
+        REQUIRE(saver.getName()         == DEFAULT_STR);
+        REQUIRE(saver.getContent()      == DEFAULT_STR);
+        REQUIRE(saver.getOutputDir()    == HTML_DIR);
+        REQUIRE(saver.getInputLinkDir() == LINK_DIR);
+        REQUIRE(saver.getOutputLinkDir()== LINK_DIR);
     }
 
     SECTION("Parameterized constructor") {
-
-        CarScraper::HtmlSaver saver(
+        HtmlSaver saver(
             "page",
             "<html>Hello</html>",
             "https://example.com",
@@ -74,11 +81,11 @@ TEST_CASE("HtmlSaver Constructor", "[HtmlSaver][Constructor]") {
             TEST_LINK_DIR
         );
 
-        REQUIRE(saver.getName() == "page");
-        REQUIRE(saver.getContent() == "<html>Hello</html>");
-        REQUIRE(saver.getLink() == "https://example.com");
-        REQUIRE(saver.getOutputDir() == TEST_HTML_DIR);
-        REQUIRE(saver.getInputLinkDir() == TEST_LINK_DIR);
+        REQUIRE(saver.getName()          == "page");
+        REQUIRE(saver.getContent()       == "<html>Hello</html>");
+        REQUIRE(saver.getLink()          == "https://example.com");
+        REQUIRE(saver.getOutputDir()     == TEST_HTML_DIR);
+        REQUIRE(saver.getInputLinkDir()  == TEST_LINK_DIR);
         REQUIRE(saver.getOutputLinkDir() == TEST_LINK_DIR);
     }
 
@@ -86,15 +93,15 @@ TEST_CASE("HtmlSaver Constructor", "[HtmlSaver][Constructor]") {
 }
 
 
-// ============================================================================
-// Getters / Setters
-// ============================================================================
+// =============================================================================
+// Setters
+// =============================================================================
 
 TEST_CASE("HtmlSaver Setters", "[HtmlSaver][Setters]") {
 
     prepareDirectories();
 
-    CarScraper::HtmlSaver saver;
+    HtmlSaver saver;
 
     SECTION("setName") {
         saver.setName("new_name");
@@ -130,41 +137,37 @@ TEST_CASE("HtmlSaver Setters", "[HtmlSaver][Setters]") {
 }
 
 
-// ============================================================================
+// =============================================================================
 // getFilePath
-// ============================================================================
+// =============================================================================
 
 TEST_CASE("HtmlSaver getFilePath", "[HtmlSaver][FilePath]") {
 
     prepareDirectories();
 
-    CarScraper::HtmlSaver saver(
+    HtmlSaver saver(
         "test_file",
         "<html/>",
         "https://example.com",
         TEST_HTML_DIR
     );
 
-    REQUIRE(
-        saver.getFilePath() ==
-        TEST_HTML_DIR + "test_file.txt"
-    );
+    REQUIRE(saver.getFilePath() == TEST_HTML_DIR + "test_file.txt");
 
     cleanDirectories();
 }
 
 
-// ============================================================================
+// =============================================================================
 // save()
-// ============================================================================
+// =============================================================================
 
 TEST_CASE("HtmlSaver save()", "[HtmlSaver][Save]") {
 
     prepareDirectories();
 
     SECTION("Successful save") {
-
-        CarScraper::HtmlSaver saver(
+        HtmlSaver saver(
             "page",
             "<html>Hello</html>",
             "https://example.com",
@@ -173,35 +176,26 @@ TEST_CASE("HtmlSaver save()", "[HtmlSaver][Save]") {
             TEST_LINK_DIR
         );
 
-        REQUIRE(saver.save() == CarScraper::SUCCESS_CODE);
-
-        REQUIRE(
-            fs::exists(TEST_HTML_DIR + "page.txt")
-        );
-
-        REQUIRE(
-            readFile(TEST_HTML_DIR + "page.txt")
-            == "<html>Hello</html>"
-        );
+        REQUIRE(saver.save() == SUCCESS_CODE);
+        REQUIRE(fs::exists(TEST_HTML_DIR + "page.txt"));
+        REQUIRE(readFile(TEST_HTML_DIR + "page.txt") == "<html>Hello</html>");
     }
 
     SECTION("Save fails when link is not set") {
-
-        CarScraper::HtmlSaver saver(
+        HtmlSaver saver(
             "page",
             "<html>Hello</html>",
-            CarScraper::DEFAULT_STR,
+            DEFAULT_STR,
             TEST_HTML_DIR,
             TEST_LINK_DIR,
             TEST_LINK_DIR
         );
 
-        REQUIRE(saver.save() == CarScraper::ERROR_CODE);
+        REQUIRE(saver.save() == ERROR_CODE);
     }
 
     SECTION("Saving same link twice returns ignored code") {
-
-        CarScraper::HtmlSaver saver(
+        HtmlSaver saver(
             "page",
             "<html>Hello</html>",
             "https://example.com",
@@ -210,26 +204,23 @@ TEST_CASE("HtmlSaver save()", "[HtmlSaver][Save]") {
             TEST_LINK_DIR
         );
 
-        REQUIRE(saver.save() == CarScraper::SUCCESS_CODE);
-
-        REQUIRE(
-            saver.save() == CarScraper::IGNORED_ACTION_CODE
-        );
+        REQUIRE(saver.save() == SUCCESS_CODE);
+        REQUIRE(saver.save() == IGNORED_ACTION_CODE);
     }
 
     cleanDirectories();
 }
 
 
-// ============================================================================
+// =============================================================================
 // alreadySaved()
-// ============================================================================
+// =============================================================================
 
 TEST_CASE("HtmlSaver alreadySaved()", "[HtmlSaver][AlreadySaved]") {
 
     prepareDirectories();
 
-    CarScraper::HtmlSaver saver(
+    HtmlSaver saver(
         "page",
         "<html>Hello</html>",
         "https://example.com",
@@ -238,29 +229,25 @@ TEST_CASE("HtmlSaver alreadySaved()", "[HtmlSaver][AlreadySaved]") {
         TEST_LINK_DIR
     );
 
-    REQUIRE_FALSE(
-        saver.alreadySaved("https://example.com")
-    );
+    REQUIRE_FALSE(saver.alreadySaved("https://example.com"));
 
     saver.save();
 
-    REQUIRE(
-        saver.alreadySaved("https://example.com")
-    );
+    REQUIRE(saver.alreadySaved("https://example.com"));
 
     cleanDirectories();
 }
 
 
-// ============================================================================
+// =============================================================================
 // exportSavedLink()
-// ============================================================================
+// =============================================================================
 
 TEST_CASE("HtmlSaver exportSavedLink()", "[HtmlSaver][Export]") {
 
     prepareDirectories();
 
-    CarScraper::HtmlSaver saver(
+    HtmlSaver saver(
         "page",
         "<html>Hello</html>",
         "https://example.com",
@@ -271,18 +258,10 @@ TEST_CASE("HtmlSaver exportSavedLink()", "[HtmlSaver][Export]") {
 
     saver.save();
 
-    REQUIRE(
-        saver.exportSavedLink() == CarScraper::SUCCESS_CODE
-    );
+    REQUIRE(saver.exportSavedLink() == SUCCESS_CODE);
+    REQUIRE(fs::exists(TEST_LINK_DIR + "saved_link.json"));
 
-    REQUIRE(
-        fs::exists(TEST_LINK_DIR + "saved_link.json")
-    );
-
-    std::ifstream file(
-        TEST_LINK_DIR + "saved_link.json"
-    );
-
+    std::ifstream file(TEST_LINK_DIR + "saved_link.json");
     nlohmann::json json;
     file >> json;
 
@@ -294,30 +273,25 @@ TEST_CASE("HtmlSaver exportSavedLink()", "[HtmlSaver][Export]") {
 }
 
 
-// ============================================================================
+// =============================================================================
 // importSavedLink()
-// ============================================================================
+// =============================================================================
 
 TEST_CASE("HtmlSaver importSavedLink()", "[HtmlSaver][Import]") {
 
     prepareDirectories();
 
     SECTION("Import valid json file") {
-
-        nlohmann::json json =
-        {
+        nlohmann::json json = {
             "https://example.com",
             "https://google.com"
         };
 
-        std::ofstream file(
-            TEST_LINK_DIR + "saved_link.json"
-        );
-
+        std::ofstream file(TEST_LINK_DIR + "saved_link.json");
         file << json.dump(4);
         file.close();
 
-        CarScraper::HtmlSaver saver(
+        HtmlSaver saver(
             "page",
             "<html>Hello</html>",
             "https://dummy.com",
@@ -326,23 +300,13 @@ TEST_CASE("HtmlSaver importSavedLink()", "[HtmlSaver][Import]") {
             TEST_LINK_DIR
         );
 
-        REQUIRE(
-            saver.importSavedLink()
-            == CarScraper::SUCCESS_CODE
-        );
-
-        REQUIRE(
-            saver.alreadySaved("https://example.com")
-        );
-
-        REQUIRE(
-            saver.alreadySaved("https://google.com")
-        );
+        REQUIRE(saver.importSavedLink() == SUCCESS_CODE);
+        REQUIRE(saver.alreadySaved("https://example.com"));
+        REQUIRE(saver.alreadySaved("https://google.com"));
     }
 
     SECTION("Missing json file") {
-
-        CarScraper::HtmlSaver saver(
+        HtmlSaver saver(
             "page",
             "<html>Hello</html>",
             "https://dummy.com",
@@ -351,11 +315,60 @@ TEST_CASE("HtmlSaver importSavedLink()", "[HtmlSaver][Import]") {
             TEST_LINK_DIR
         );
 
-        REQUIRE(
-            saver.importSavedLink()
-            == CarScraper::ERROR_CODE
-        );
+        REQUIRE(saver.importSavedLink() == ERROR_CODE);
     }
 
     cleanDirectories();
+}
+
+
+// =============================================================================
+// Network — fetch example.org and save to data/test_html/
+// Tag: [network] — exclude with "~[network]" to run offline
+// =============================================================================
+
+TEST_CASE("HtmlSaver save() with real HTTP content from example.org", "[HtmlSaver][network]") {
+
+    fs::create_directories(TEST_NET_DIR);
+    fs::create_directories(TEST_LINK_DIR);
+
+    // --- Fetch the page ------------------------------------------------------
+    HttpClient client;
+    HttpResponse response = client.get(EXAMPLE_URL);
+
+    REQUIRE(response.statusCode == 200);
+    REQUIRE_FALSE(response.body.empty());
+
+    // --- Save via HtmlSaver --------------------------------------------------
+    HtmlSaver saver(
+        "example_org",
+        response.body,
+        EXAMPLE_URL,
+        TEST_NET_DIR,
+        TEST_LINK_DIR,
+        TEST_LINK_DIR
+    );
+
+    REQUIRE(saver.save() == SUCCESS_CODE);
+
+    // --- Verify the file was written -----------------------------------------
+    REQUIRE(fs::exists(EXAMPLE_FILE));
+
+    std::string saved = readFile(EXAMPLE_FILE);
+    REQUIRE_FALSE(saved.empty());
+
+    // example.org always contains these strings
+    REQUIRE(saved.find("Example Domain") != std::string::npos);
+    REQUIRE(saved.find("<html")          != std::string::npos);
+
+    // --- Verify the link was tracked -----------------------------------------
+    REQUIRE(saver.alreadySaved(EXAMPLE_URL));
+
+    // --- Verify a second save is ignored (dedup) -----------------------------
+    REQUIRE(saver.save() == IGNORED_ACTION_CODE);
+
+    // Note: TEST_NET_DIR is intentionally NOT cleaned — the file persists at
+    // data/test_html/example_org.txt for manual inspection and for
+    // baseHtmlParser tests that may want real-world HTML.
+    fs::remove_all(TEST_LINK_DIR);
 }
