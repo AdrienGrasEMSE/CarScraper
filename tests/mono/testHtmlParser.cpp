@@ -1,10 +1,10 @@
 /**
- * @file testAll.cpp
+ * @file testHtmlParser.cpp
  *
- * @brief Run all unit tests for CarScraper project.
+ * @brief Unit tests for CarScraper::HtmlParser class.
  *
  * @author Adrien GRAS
- * @date 2026-05-29
+ * @date 2026-06-24
  */
 
 
@@ -15,14 +15,7 @@
 // Imports
 #include <catch2/catch.hpp>
 #include "core/logger/Logger.hpp"
-#include "base/baseLogger.cpp"
-#include "base/baseValidation.cpp"
-#include "base/baseEntity.cpp"
-#include "base/baseCar.cpp"
-#include "base/baseHttpClient.cpp"
-#include "base/baseHtmlSaver.cpp"
-#include "base/baseExcelReader.cpp"
-#include "base/baseHtmlParser.cpp"
+#include "../base/baseHtmlParser.cpp"
 
 
 // =============================================================================
@@ -31,7 +24,7 @@
 int main(int argc, char* argv[]) {
 
     // Catch2 runner
-    CarScraper::Logger::init("logs/test_all.txt");
+    CarScraper::Logger::init("logs/test_htmlParser.txt");
     return Catch::Session().run(argc, argv);
 
 }

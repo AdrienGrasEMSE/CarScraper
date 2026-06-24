@@ -110,6 +110,9 @@ set(CORE_SOURCES
     # IO — ExcelReader
     src/io/excelReader/ExcelReader.cpp
 
+    # IO — HtmlParser
+    src/io/htmlParser/HtmlParser.cpp
+
 )
 
 
@@ -208,6 +211,13 @@ target_link_libraries(TestExcelReader     PRIVATE CarScraperLibTest)
 carscraper_configure_target(TestExcelReader)
 target_compile_definitions(TestExcelReader  PRIVATE TESTING)
 carscraper_configure_test(TestExcelReader)
+
+# Test HtmlParser
+add_executable(TestHtmlParser             tests/mono/testHtmlParser.cpp)
+target_link_libraries(TestHtmlParser      PRIVATE CarScraperLibTest)
+carscraper_configure_target(TestHtmlParser)
+target_compile_definitions(TestHtmlParser PRIVATE TESTING)
+carscraper_configure_test(TestHtmlParser)
 
 
 # ==============================================================================

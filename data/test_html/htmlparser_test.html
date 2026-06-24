@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Page de test HtmlParser</title>
+</head>
+<body>
+
+    <!-- =====================================================================
+         Headings
+    ====================================================================== -->
+    <h1>Titre principal</h1>
+    <h2>Section moteur</h2>
+    <h2>Section dimensions</h2>
+    <h3>Sous-section transmission</h3>
+
+
+    <!-- =====================================================================
+         Text nodes with class / id selectors
+    ====================================================================== -->
+    <p class="intro">Premier paragraphe d'introduction.</p>
+    <p class="intro">Deuxième paragraphe d'introduction.</p>
+    <span id="price">15 000 €</span>
+    <span id="whitespace">   valeur avec espaces   </span>
+
+
+    <!-- =====================================================================
+         Attribute nodes
+    ====================================================================== -->
+    <a href="/fiche-technique/Renault/Clio/2017.html" class="marques-name">Fiche technique RENAULT Clio 2017</a>
+    <a href="/fiche-technique/Renault/Clio/2016.html" class="marques-name">Fiche technique RENAULT Clio 2016</a>
+    <a href="/fiche-technique/Renault/Clio/2015.html" class="marques-name">Fiche technique RENAULT Clio 2015</a>
+    <a href="/fiche-technique/Renault/Clio/2014.html" class="marques-name">Fiche technique RENAULT Clio 2014</a>
+    <a href="/fiche-technique/Renault/Clio/2013.html" class="marques-name">Fiche technique RENAULT Clio 2013</a>
+    <a href="/fiche-technique/Renault/Clio/2012.html" class="marques-name">Fiche technique RENAULT Clio 2012</a>
+
+
+    <!-- =====================================================================
+         Table with <th> headers (specs table)
+    ====================================================================== -->
+    <table id="specs">
+        <thead>
+            <tr>
+                <th>Marque</th>
+                <th>Modèle</th>
+                <th>Puissance</th>
+                <th>Énergie</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Peugeot</td>
+                <td>308</td>
+                <td>130 ch</td>
+                <td>Essence</td>
+            </tr>
+            <tr>
+                <td>Renault</td>
+                <td>Mégane</td>
+                <td>115 ch</td>
+                <td>Diesel</td>
+            </tr>
+        </tbody>
+    </table>
+
+
+    <!-- =====================================================================
+         Table without <th> — first row acts as implicit header
+    ====================================================================== -->
+    <table id="consumption">
+        <tr><td>Carburant</td><td>Boîte</td><td>Consommation</td></tr>
+        <tr><td>Essence</td><td>Manuelle</td><td>6.5 L/100</td></tr>
+        <tr><td>Diesel</td><td>Automatique</td><td>5.2 L/100</td></tr>
+    </table>
+
+
+    <!-- =====================================================================
+         Version listing table (links in <td>)
+    ====================================================================== -->
+    <table id="versions">
+        <thead>
+            <tr>
+                <th>Version</th>
+                <th>Carrosserie</th>
+                <th>Énergie</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><a href="/fiche-technique/Renault/Clio/V/2026/Berline/10-TCe-90ch-Evolution.html">1.0 TCe 90ch Evolution</a></td>
+                <td>Berline</td>
+                <td>Essence</td>
+            </tr>
+            <tr>
+                <td><a href="/fiche-technique/Renault/Clio/V/2026/Berline/15-dCi-100ch-Evolution.html">1.5 dCi 100ch Evolution</a></td>
+                <td>Berline</td>
+                <td>Diesel</td>
+            </tr>
+            <tr>
+                <td><a href="/fiche-technique/Renault/Clio/V/2026/Berline/16-ETech-145ch-Evolution.html">1.6 E-Tech 145ch Evolution</a></td>
+                <td>Berline</td>
+                <td>Hybride</td>
+            </tr>
+        </tbody>
+    </table>
+
+</body>
+</html>

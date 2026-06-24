@@ -7,8 +7,11 @@ build/*
 !build/data/
 build/data/*
 !build/data/input_excel/
+!build/data/test_html/
 build/data/input_excel/*
 !build/data/input_excel/ExcelReaderTest.xlsx
+build/data/test_html/*
+!build/data/test_html/htmlparser_test.html
 
 
 # Data folder
