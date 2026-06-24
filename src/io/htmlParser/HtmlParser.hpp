@@ -201,8 +201,16 @@ namespace CarScraper {
             * @param attribute Name of the attribute to retrieve.
             * @return Optional string containing the attribute value, or std::nullopt if not found.
             */
-            std::optional<std::string> getAttribute(const std::string& xpath,
-                                                    const std::string& attribute) const;
+            std::optional<std::string> getAttribute(const std::string& xpath, const std::string& attribute) const;
+
+            
+            /**
+             * @brief Returns the value of `attribute` for every node matching `xpath`.
+             * @param xpath      XPath expression to select the nodes.
+             * @param attribute  Name of the HTML attribute to retrieve (e.g. "href", "src").
+             * @return Vector of trimmed attribute values.
+             */
+            std::vector<std::string> getAllAttributes(const std::string& xpath, const std::string& attribute) const;
 
 
 

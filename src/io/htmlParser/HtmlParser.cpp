@@ -319,6 +319,51 @@ namespace CarScraper {
     }
 
 
+    /**
+     * @brief Returns the value of `attribute` for every node matching `xpath`.
+     *
+     * Iterates over all nodes in the XPath result set and calls xmlGetProp() on
+     * each one. Nodes that do not carry the requested attribute are silently
+     * skipped, so the output vector may be smaller than the node set.
+     *
+     * Typical use-cases:
+     *   - Extract all href from a <ul> of year links (with or without XPath filter).
+     *   - Extract all href from a table's <td><a> cells (version listing).
+     *
+     * @param xpath      XPath expression to select the nodes.
+     * @param attribute  Name of the HTML attribute to retrieve (e.g. "href", "src").
+     * @return Vector of trimmed attribute values. Returns an empty vector if no
+     *         nodes match or if none of the matched nodes carry the attribute.
+     */
+    std::vector<std::string> HtmlParser::getAllAttributes(const std::string& xpath,
+                                                        const std::string& attribute) const
+    {
+        std::vector<std::string> values;
+
+        xmlXPathObjectPtr result = _evalXPath(xpath);
+        if (!result) return values;
+
+        xmlNodeSetPtr nodes = result->nodesetval;
+        for (int i = 0; i < nodes->nodeNr; ++i) {
+
+            xmlChar* raw = xmlGetProp(nodes->nodeTab[i],
+                reinterpret_cast<const xmlChar*>(attribute.c_str()));
+
+            if (!raw) continue; // attribute absent on this node — skip
+
+            std::string value(reinterpret_cast<const char*>(raw));
+            xmlFree(raw);
+
+            std::string trimmed = _trimWhitespace(value);
+            if (!trimmed.empty())
+                values.push_back(std::move(trimmed));
+        }
+
+        xmlXPathFreeObject(result);
+        return values;
+    }
+
+
 
 
 
