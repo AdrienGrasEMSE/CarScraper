@@ -204,6 +204,7 @@ target_link_libraries(TestHtmlSaver       PRIVATE CarScraperLibTest)
 carscraper_configure_target(TestHtmlSaver)
 target_compile_definitions(TestHtmlSaver  PRIVATE TESTING)
 carscraper_configure_test(TestHtmlSaver)
+# ./TestHtmlSaver "[HtmlSaver]" "~[network]"        -> to disable network tests (e.g., in CI)
 
 # test ExcelReader
 add_executable(TestExcelReader            tests/mono/testExcelReader.cpp)
