@@ -3,8 +3,8 @@
  *
  * @brief Unit tests for CarScraper::HtmlParser class.
  *        Covers: construction, isLoaded, getText, getAllTexts,
- *                getHeading, getAllHeadings, getAttribute, getTableAsMap,
- *                getAllTablesAsMap.
+ *                getHeading, getAllHeadings, getAttribute, getAllAttributes,
+ *                getTableAsMap, getAllTablesAsMap.
  *
  * @author Adrien GRAS
  * @date 2026-06-24
@@ -27,12 +27,12 @@ using namespace CarScraper;
 static const std::string TEST_HTML_PATH = "data/test_html/htmlparser_test.html";
 
 /**
- * Loads the shared HTML test fixture from disk.
+ * @brief Loads the shared HTML test fixture from disk.
  * All TEST_CASEs that need a real document call this helper.
  */
 static std::string loadTestHtml() {
     std::ifstream file(TEST_HTML_PATH);
-    REQUIRE(file.is_open()); // fail fast if the fixture is missing
+    REQUIRE(file.is_open());
     std::ostringstream ss;
     ss << file.rdbuf();
     return ss.str();
@@ -95,7 +95,6 @@ TEST_CASE("HtmlParser getText", "[HtmlParser][getText]") {
     }
 
     SECTION("Returns first match when multiple nodes exist") {
-        // Two <h2> in the fixture — only the first should come back
         auto result = parser.getText("//h2");
         REQUIRE(result.has_value());
         REQUIRE(result.value() == "Section moteur");
@@ -186,7 +185,6 @@ TEST_CASE("HtmlParser getHeading", "[HtmlParser][getHeading]") {
     }
 
     SECTION("Returns nullopt for absent heading level") {
-        // No <h5> in the fixture
         REQUIRE_FALSE(parser.getHeading(5).has_value());
     }
 
@@ -254,7 +252,6 @@ TEST_CASE("HtmlParser getAttribute", "[HtmlParser][getAttribute]") {
     }
 
     SECTION("Returns nullopt for absent attribute") {
-        // <h1> has no href
         REQUIRE_FALSE(parser.getAttribute("//h1", "href").has_value());
     }
 
@@ -265,6 +262,65 @@ TEST_CASE("HtmlParser getAttribute", "[HtmlParser][getAttribute]") {
     SECTION("Returns nullopt on unloaded parser") {
         HtmlParser empty("");
         REQUIRE_FALSE(empty.getAttribute("//a", "href").has_value());
+    }
+}
+
+
+// =============================================================================
+// getAllAttributes
+// =============================================================================
+
+TEST_CASE("HtmlParser getAllAttributes", "[HtmlParser][getAllAttributes]") {
+
+    HtmlParser parser(loadTestHtml());
+
+    SECTION("Returns all href from anchors with class marques-name") {
+        auto hrefs = parser.getAllAttributes("//a[@class='marques-name']", "href");
+
+        REQUIRE(hrefs.size() == 6);
+        REQUIRE(hrefs[0] == "/fiche-technique/Renault/Clio/2017.html");
+        REQUIRE(hrefs[1] == "/fiche-technique/Renault/Clio/2016.html");
+        REQUIRE(hrefs[2] == "/fiche-technique/Renault/Clio/2015.html");
+        REQUIRE(hrefs[3] == "/fiche-technique/Renault/Clio/2014.html");
+        REQUIRE(hrefs[4] == "/fiche-technique/Renault/Clio/2013.html");
+        REQUIRE(hrefs.back() == "/fiche-technique/Renault/Clio/2012.html");
+    }
+
+    SECTION("Filtered XPath returns only matching years (2014-2015)") {
+        auto hrefs = parser.getAllAttributes(
+            "//a[@class='marques-name']"
+            "[contains(@href,'/2014.') or contains(@href,'/2015.')]",
+            "href"
+        );
+
+        REQUIRE(hrefs.size() == 2);
+        REQUIRE(hrefs[0] == "/fiche-technique/Renault/Clio/2015.html");
+        REQUIRE(hrefs[1] == "/fiche-technique/Renault/Clio/2014.html");
+    }
+
+    SECTION("Returns all href from version table links") {
+        auto hrefs = parser.getAllAttributes("//table[@id='versions']//td/a", "href");
+
+        REQUIRE(hrefs.size() == 3);
+        REQUIRE(hrefs[0] == "/fiche-technique/Renault/Clio/V/2026/Berline/10-TCe-90ch-Evolution.html");
+        REQUIRE(hrefs[1] == "/fiche-technique/Renault/Clio/V/2026/Berline/15-dCi-100ch-Evolution.html");
+        REQUIRE(hrefs[2] == "/fiche-technique/Renault/Clio/V/2026/Berline/16-ETech-145ch-Evolution.html");
+    }
+
+    SECTION("Nodes without the requested attribute are silently skipped") {
+        // <h1> and <h2> have no href — result should be empty
+        auto hrefs = parser.getAllAttributes("//h1 | //h2", "href");
+        REQUIRE(hrefs.empty());
+    }
+
+    SECTION("Returns empty vector for unmatched XPath") {
+        auto hrefs = parser.getAllAttributes("//video", "src");
+        REQUIRE(hrefs.empty());
+    }
+
+    SECTION("Returns empty vector on unloaded parser") {
+        HtmlParser empty("");
+        REQUIRE(empty.getAllAttributes("//a", "href").empty());
     }
 }
 
@@ -315,7 +371,6 @@ TEST_CASE("HtmlParser getTableAsMap", "[HtmlParser][getTableAsMap]") {
     }
 
     SECTION("Default XPath returns first table in document") {
-        // First table is #specs
         auto rows = parser.getTableAsMap();
         REQUIRE(rows.size() == 2);
         REQUIRE(rows[0].count("Marque"));
@@ -343,7 +398,6 @@ TEST_CASE("HtmlParser getAllTablesAsMap", "[HtmlParser][getAllTablesAsMap]") {
 
     SECTION("Returns all tables in the document") {
         auto tables = parser.getAllTablesAsMap();
-
         // Fixture has 3 tables: specs, consumption, versions
         REQUIRE(tables.size() == 3);
     }
