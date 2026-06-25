@@ -402,75 +402,179 @@ namespace CarScraper {
         ctx->node = tableNode;
 
         // Lambda for concise relative XPath evaluation within this table
-        auto fetchRows = [&](const std::string& xp) -> xmlXPathObjectPtr {
+        auto fetch = [&](const std::string& xp) -> xmlXPathObjectPtr {
             return xmlXPathEvalExpression(
                 reinterpret_cast<const xmlChar*>(xp.c_str()), ctx);
         };
 
-        // --- Step 1: extract column headers ----------------------------------
-        // Preferred: <th> cells in the first row (semantic header row)
-        xmlXPathObjectPtr thResult = fetchRows(".//tr[1]/th");
-        if (thResult && !xmlXPathNodeSetIsEmpty(thResult->nodesetval)) {
-            xmlNodeSetPtr thNodes = thResult->nodesetval;
-            for (int i = 0; i < thNodes->nodeNr; ++i)
-                headers.push_back(_nodeText(thNodes->nodeTab[i]));
-            xmlXPathFreeObject(thResult);
+
+        // =====================================================================
+        // Step 1 — extract column headers
+        // =====================================================================
+        //
+        // Strategy (in order of preference) :
+        //   A) <thead> exists → read <th> from its <tr>
+        //   B) No <thead>     → read <th> from the first <tr> anywhere
+        //   C) No <th> at all → read <td> from the first <tr> anywhere
+        //                       (first row is treated as implicit header)
+        //
+        // We avoid .//tr[1] and .//tr[position()>1] because position() is
+        // evaluated per-parent-group by libxml2 : in a thead/tbody table,
+        // position() resets to 1 inside tbody, so tbody/tr[1] (the first data
+        // row) would be incorrectly skipped.
+
+        // A) <thead> present — most reliable source of headers
+        xmlXPathObjectPtr theadTh = fetch(".//thead/tr/th");
+        if (theadTh && !xmlXPathNodeSetIsEmpty(theadTh->nodesetval)) {
+            xmlNodeSetPtr nodes = theadTh->nodesetval;
+            for (int i = 0; i < nodes->nodeNr; ++i)
+                headers.push_back(_nodeText(nodes->nodeTab[i]));
+            xmlXPathFreeObject(theadTh);
         } else {
-            // Fallback: <td> cells of the first row used as implicit headers
-            if (thResult) xmlXPathFreeObject(thResult);
-            xmlXPathObjectPtr tdHeaderResult = fetchRows(".//tr[1]/td");
-            if (tdHeaderResult && !xmlXPathNodeSetIsEmpty(tdHeaderResult->nodesetval)) {
-                xmlNodeSetPtr tdNodes = tdHeaderResult->nodesetval;
-                for (int i = 0; i < tdNodes->nodeNr; ++i)
-                    headers.push_back(_nodeText(tdNodes->nodeTab[i]));
-                xmlXPathFreeObject(tdHeaderResult);
+            if (theadTh) xmlXPathFreeObject(theadTh);
+
+            // B) No <thead>, but there are <th> somewhere in the first <tr>
+            xmlXPathObjectPtr firstTh = fetch(".//tr/th");
+            if (firstTh && !xmlXPathNodeSetIsEmpty(firstTh->nodesetval)) {
+                // Only take the <th> siblings of the very first <tr> that has one
+                xmlNodePtr firstTr = firstTh->nodesetval->nodeTab[0]->parent;
+                xmlXPathFreeObject(firstTh);
+
+                xmlXPathContextPtr trCtx = xmlXPathNewContext(_doc);
+                trCtx->node = firstTr;
+                xmlXPathObjectPtr thInTr = xmlXPathEvalExpression(
+                    reinterpret_cast<const xmlChar*>("th"), trCtx);
+                xmlXPathFreeContext(trCtx);
+
+                if (thInTr && !xmlXPathNodeSetIsEmpty(thInTr->nodesetval)) {
+                    for (int i = 0; i < thInTr->nodesetval->nodeNr; ++i)
+                        headers.push_back(_nodeText(thInTr->nodesetval->nodeTab[i]));
+                }
+                if (thInTr) xmlXPathFreeObject(thInTr);
             } else {
-                // No usable header row found: abort and return empty
-                if (tdHeaderResult) xmlXPathFreeObject(tdHeaderResult);
+                if (firstTh) xmlXPathFreeObject(firstTh);
+
+                // C) No <th> at all — first <tr> cells are the implicit headers
+                xmlXPathObjectPtr firstTds = fetch(".//tr/td");
+                if (!firstTds || xmlXPathNodeSetIsEmpty(firstTds->nodesetval)) {
+                    if (firstTds) xmlXPathFreeObject(firstTds);
+                    xmlXPathFreeContext(ctx);
+                    return rows;  // empty table, nothing to extract
+                }
+
+                // Collect only the <td> children of the very first <tr>
+                xmlNodePtr firstTr = firstTds->nodesetval->nodeTab[0]->parent;
+                xmlXPathFreeObject(firstTds);
+
+                xmlXPathContextPtr trCtx = xmlXPathNewContext(_doc);
+                trCtx->node = firstTr;
+                xmlXPathObjectPtr tdInTr = xmlXPathEvalExpression(
+                    reinterpret_cast<const xmlChar*>("td"), trCtx);
+                xmlXPathFreeContext(trCtx);
+
+                if (!tdInTr || xmlXPathNodeSetIsEmpty(tdInTr->nodesetval)) {
+                    if (tdInTr) xmlXPathFreeObject(tdInTr);
+                    xmlXPathFreeContext(ctx);
+                    return rows;
+                }
+                for (int i = 0; i < tdInTr->nodesetval->nodeNr; ++i)
+                    headers.push_back(_nodeText(tdInTr->nodesetval->nodeTab[i]));
+                xmlXPathFreeObject(tdInTr);
+
+                // The first <tr> was consumed as headers — remember it to skip it
+                // when collecting data rows in Step 2.
+                // We mark it by storing its pointer; Step 2 checks against it.
+                xmlXPathContextPtr dataCtx = xmlXPathNewContext(_doc);
+                dataCtx->node = tableNode;
+                xmlXPathObjectPtr allTrs = xmlXPathEvalExpression(
+                    reinterpret_cast<const xmlChar*>(".//tr"), dataCtx);
+                xmlXPathFreeContext(dataCtx);
+
+                if (!allTrs || xmlXPathNodeSetIsEmpty(allTrs->nodesetval)) {
+                    if (allTrs) xmlXPathFreeObject(allTrs);
+                    xmlXPathFreeContext(ctx);
+                    return rows;
+                }
+
+                // Collect data rows — skip the first <tr> (used as header)
+                xmlNodeSetPtr trNodes = allTrs->nodesetval;
+                for (int i = 1; i < trNodes->nodeNr; ++i) {
+                    xmlXPathContextPtr rowCtx = xmlXPathNewContext(_doc);
+                    rowCtx->node = trNodes->nodeTab[i];
+                    xmlXPathObjectPtr tds = xmlXPathEvalExpression(
+                        reinterpret_cast<const xmlChar*>("td"), rowCtx);
+                    xmlXPathFreeContext(rowCtx);
+
+                    if (!tds || xmlXPathNodeSetIsEmpty(tds->nodesetval)) {
+                        if (tds) xmlXPathFreeObject(tds);
+                        continue;
+                    }
+
+                    std::map<std::string, std::string> rowMap;
+                    for (int j = 0; j < tds->nodesetval->nodeNr; ++j) {
+                        if (j < static_cast<int>(headers.size()))
+                            rowMap[headers[j]] = _nodeText(tds->nodesetval->nodeTab[j]);
+                    }
+                    xmlXPathFreeObject(tds);
+
+                    if (!rowMap.empty())
+                        rows.push_back(std::move(rowMap));
+                }
+
+                xmlXPathFreeObject(allTrs);
                 xmlXPathFreeContext(ctx);
-                return rows;
+                return rows;  // early return — data rows already collected above
             }
         }
 
-        // --- Step 2: extract data rows (all <tr> after the first) ------------
-        xmlXPathObjectPtr trResult = fetchRows(".//tr[position()>1]");
-        if (!trResult || xmlXPathNodeSetIsEmpty(trResult->nodesetval)) {
-            if (trResult) xmlXPathFreeObject(trResult);
+
+        // =====================================================================
+        // Step 2 — extract data rows
+        // =====================================================================
+        //
+        // If we reach here, headers came from <th> cells (cases A or B).
+        // Data rows are all <tr> that contain <td> — i.e. rows in <tbody>,
+        // or any <tr> without <th> in a flat table.
+        // We explicitly target <tbody> first; fall back to all <tr> with <td>.
+
+        xmlXPathObjectPtr dataTrs = fetch(".//tbody/tr");
+        if (!dataTrs || xmlXPathNodeSetIsEmpty(dataTrs->nodesetval)) {
+            // No <tbody> — flat table: collect every <tr> that has <td> children
+            if (dataTrs) xmlXPathFreeObject(dataTrs);
+            dataTrs = fetch(".//tr[td]");
+        }
+
+        if (!dataTrs || xmlXPathNodeSetIsEmpty(dataTrs->nodesetval)) {
+            if (dataTrs) xmlXPathFreeObject(dataTrs);
             xmlXPathFreeContext(ctx);
             return rows;
         }
 
-        xmlNodeSetPtr trNodes = trResult->nodesetval;
+        xmlNodeSetPtr trNodes = dataTrs->nodesetval;
         for (int i = 0; i < trNodes->nodeNr; ++i) {
-
-            // Each row gets its own context so .//td is relative to that <tr>
             xmlXPathContextPtr rowCtx = xmlXPathNewContext(_doc);
             rowCtx->node = trNodes->nodeTab[i];
-
-            xmlXPathObjectPtr tdResult = xmlXPathEvalExpression(
-                reinterpret_cast<const xmlChar*>(".//td"), rowCtx);
+            xmlXPathObjectPtr tds = xmlXPathEvalExpression(
+                reinterpret_cast<const xmlChar*>("td"), rowCtx);
             xmlXPathFreeContext(rowCtx);
 
-            // Skip rows with no <td> cells (e.g. header-only or spacer rows)
-            if (!tdResult || xmlXPathNodeSetIsEmpty(tdResult->nodesetval)) {
-                if (tdResult) xmlXPathFreeObject(tdResult);
+            if (!tds || xmlXPathNodeSetIsEmpty(tds->nodesetval)) {
+                if (tds) xmlXPathFreeObject(tds);
                 continue;
             }
 
-            // Map each cell to its corresponding header
             std::map<std::string, std::string> rowMap;
-            xmlNodeSetPtr tdNodes = tdResult->nodesetval;
-            for (int j = 0; j < tdNodes->nodeNr; ++j) {
+            for (int j = 0; j < tds->nodesetval->nodeNr; ++j) {
                 if (j < static_cast<int>(headers.size()))
-                    rowMap[headers[j]] = _nodeText(tdNodes->nodeTab[j]);
+                    rowMap[headers[j]] = _nodeText(tds->nodesetval->nodeTab[j]);
             }
-            xmlXPathFreeObject(tdResult);
+            xmlXPathFreeObject(tds);
 
             if (!rowMap.empty())
                 rows.push_back(std::move(rowMap));
         }
 
-        xmlXPathFreeObject(trResult);
+        xmlXPathFreeObject(dataTrs);
         xmlXPathFreeContext(ctx);
         return rows;
     }
