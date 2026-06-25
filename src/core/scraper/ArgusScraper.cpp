@@ -16,6 +16,7 @@
 #include <filesystem>
 #include <algorithm>
 #include <random>
+#include <string>
 #include <uni_algo/case.h>
 #include <uni_algo/norm.h>
 #include <regex>
@@ -391,7 +392,8 @@ namespace CarScraper {
                 for (std::string current_link : hrefs) {
 
                     // Constructing full link
-                    current_link = "https://www.largus.fr" + current_link;response = _client.get(main_link);
+                    current_link = "https://www.largus.fr" + current_link;
+                    response = _client.get( current_link);
                     if (response.statusCode != 200) {
                         Logger::warn("[{}].scrapModel : ({}/{}) get ({}) code {} - ignoring link", getFullId(), round, total_link, main_link, response.statusCode);
                     } else {
@@ -399,9 +401,16 @@ namespace CarScraper {
 
 
                         // Getting designation and replacing whitespaces
-                        auto title = parser.getText("//h1[contains(@class,'ft-version-title')]");
+                        CarScraper::HtmlParser sheetParser(response.body);
+                        auto title = sheetParser.getText("//h1[contains(@class,'ft-version-title')]");
                         if (title.has_value()) {
                             std::string name = title.value();
+                            std::replace(name.begin(), name.end(), ' ', '_');
+                            Logger::trace("[{}].scrapModel : ({}/{}) filename {}", getFullId(), round, total_link, name);
+                            _saver.setName(name);
+                        } else {
+                            Logger::warn("[{}].scrapModel : ({}/{}) got no name", getFullId(), round, total_link);
+                            std::string name = _carBrand + "." + _carModel + "_" + std::to_string(round);
                             std::replace(name.begin(), name.end(), ' ', '_');
                             _saver.setName(name);
                         }
@@ -409,7 +418,7 @@ namespace CarScraper {
                         _saver.setContent(response.body);
                         _saver.save();
                         fetched_link++;
-                        
+
                     }
                     round++;
 
