@@ -11,10 +11,15 @@
 // Imports
 #include "ArgusScraper.hpp"
 #include "core/utils/Constant.hpp"
+#include "core/logger/Logger.hpp"
+#include "io/htmlParser/HtmlParser.hpp"
 #include <filesystem>
-#include <iostream>
 #include <algorithm>
 #include <random>
+#include <uni_algo/case.h>
+#include <uni_algo/norm.h>
+#include <regex>
+#include <numeric>
 
 
 /**
@@ -30,6 +35,10 @@ namespace CarScraper {
      * @brief Default constructor
      */
     ArgusScraper::ArgusScraper() : Entity("ARGUS_SCRAPER") {
+
+        // Default value
+        _carBrand = DEFAULT_STR;
+        _carModel = DEFAULT_STR;
 
         // Importing the list of already saved link
         _saver.importSavedLink();
@@ -58,6 +67,7 @@ namespace CarScraper {
     /**
      * @brief Sets the input folder path
      * @param inputFolder The input folder path
+     * @note Checks if the directory exists
      */
     void ArgusScraper::setInputFolder(const std::string& inputFolder) {
         
@@ -80,6 +90,7 @@ namespace CarScraper {
     /**
      * @brief Sets the output folder path
      * @param outputFolder The output folder path
+     * @note Checks if the directory exists
      */
     void ArgusScraper::setOutputFolder(const std::string& outputFolder) {
         
@@ -119,6 +130,24 @@ namespace CarScraper {
     }
 
 
+    /**
+     * @brief Set the car brand
+     * @param carBrand The car brand
+     */
+    void ArgusScraper::setCarBrand(const std::string& carBrand) {
+        _carBrand = una::cases::to_titlecase_utf8(una::norm::to_nfc_utf8(carBrand));
+    }
+
+
+    /**
+     * @brief Set the car model
+     * @param carModel The car model
+     */
+    void ArgusScraper::setCarModel(const std::string& carModel) {
+        _carModel = una::cases::to_titlecase_utf8(una::norm::to_nfc_utf8(carModel));
+    }
+
+
 
 
 
@@ -129,10 +158,11 @@ namespace CarScraper {
     /**
      * @brief Shuffler the link list to randomize acces
      */
-    void ArgusScraper::_shuffleLinkList() {
+    template<typename T>
+    void ArgusScraper::_shuffle(std::vector<T>& vector) {
         std::random_device  rd;
         std::mt19937        rng = std::mt19937(rd());
-        std::ranges::shuffle(_linkList, rng);
+        std::ranges::shuffle(vector, rng);
     }
 
 
@@ -228,7 +258,7 @@ namespace CarScraper {
 
 
         // Random link acces
-        this->_shuffleLinkList();
+        _shuffle(_linkList);
 
 
         // Running through all link list
@@ -263,6 +293,149 @@ namespace CarScraper {
         // Debug
         Logger::trace("[{}].scrapAllLink : got {} raw HTML", getFullId(), _extractedHtml.size());
         
+    }
+
+
+    /**
+     * @brief Scrap a car model on the Argus website
+     * @param startDate The start date which the scraping start after
+     * @param endDate The end date which the scraping start before
+     * @return ERROR_CODE / SUCCESS_CODE wheter the method is succesful or not
+     */
+    int ArgusScraper::scrapModel(const std::string& startDateStr, const std::string& endDateStr) {
+
+        // Checking car infos
+        if (_carBrand == DEFAULT_STR || _carModel == DEFAULT_STR) {
+            Logger::error("[{}].scrapModel : empty brand or model", getFullId());
+            return ERROR_CODE;
+        }
+
+
+        // Checking date format
+        std::regex pattern("^\\d{4}$");
+        if (!std::regex_match(startDateStr, pattern) || !std::regex_match(endDateStr, pattern)) {
+            Logger::error("[{}].scrapModel : invalid dates \"{}\" -> \"{}\"", getFullId(), startDateStr, endDateStr);
+            return ERROR_CODE;
+        }
+        std::vector<int> dateInterval(std::stoi(endDateStr) - std::stoi(startDateStr) + 1);
+        std::iota(dateInterval.begin(), dateInterval.end(), std::stoi(startDateStr));
+        _shuffle(dateInterval);
+
+
+
+        // ----- Step 1 - Navigate to largus.fr ---------------------------------------------------
+        Logger::debug("[{}].scrapModel : starting to scrap {} {}", getFullId(), _extractedHtml.size(), _carBrand, _carModel);
+        std::string main_link = "https://www.largus.fr/";
+        CarScraper::HttpResponse response = _client.get(main_link);
+        if (response.statusCode != 200) {
+            Logger::error("[{}].scrapModel : get ({}) code {}", getFullId(), main_link, response.statusCode);
+            return ERROR_CODE;
+        }
+
+
+
+        // ----- Step 2 - Navigate to l'argus.fr/BRAND.html ---------------------------------------
+        main_link = "https://www.largus.fr/" + _carBrand + ".html";
+        response = _client.get(main_link);
+        if (response.statusCode != 200) {
+            Logger::error("[{}].scrapModel : get ({}) code {}", getFullId(), main_link, response.statusCode);
+            return ERROR_CODE;
+        }
+
+
+
+        // ----- Step 3 - Navigate to l'argus.fr/fiche-technique/BRAND.html -----------------------
+        main_link = "https://www.largus.fr/fiche-technique/" + _carBrand + ".html";
+        response = _client.get(main_link);
+        if (response.statusCode != 200) {
+            Logger::error("[{}].scrapModel : get ({}) code {}", getFullId(), main_link, response.statusCode);
+            return ERROR_CODE;
+        }
+
+
+
+        // ----- Step 4 - Navigate to l'argus.fr/fiche-technique/BRAND/MODEL.html -----------------
+        main_link = "https://www.largus.fr/fiche-technique/" + _carBrand + "/" + _carModel + ".html";
+        response = _client.get(main_link);
+        if (response.statusCode != 200) {
+            Logger::error("[{}].scrapModel : get ({}) code {}", getFullId(), main_link, response.statusCode);
+            return ERROR_CODE;
+        }
+
+
+
+        // ----- Step 5 - Going through the year list ---------------------------------------------
+        for (int year : dateInterval) {
+
+            // Constructing main link
+            main_link = "https://www.largus.fr/fiche-technique/" + _carBrand + "/" + _carModel + "/" + std::to_string(year) + ".html";
+            response = _client.get(main_link);
+            if (response.statusCode == 200) {
+
+                // Debug
+                Logger::trace("[{}].scrapModel : get ({}) code {} - accessing link", getFullId(), main_link, response.statusCode);
+
+
+                // Setting up counters and getting all link
+                CarScraper::HtmlParser parser(response.body);
+                std::vector<std::string> hrefs = parser.getAllAttributes(
+                    "//div[contains(@class,'versions-table-wrapper')]//tbody//td//a",
+                    "href"
+                );
+                int round           = 0;
+                int fetched_link    = 0;
+                int total_link      = hrefs.size();
+
+
+                // Running through all link
+                for (std::string current_link : hrefs) {
+
+                    // Constructing full link
+                    current_link = "https://www.largus.fr" + current_link;response = _client.get(main_link);
+                    if (response.statusCode != 200) {
+                        Logger::warn("[{}].scrapModel : ({}/{}) get ({}) code {} - ignoring link", getFullId(), round, total_link, main_link, response.statusCode);
+                    } else {
+                        Logger::trace("[{}].scrapModel : ({}/{}) got {}", getFullId(), round, total_link, current_link);
+
+
+                        // Getting designation and replacing whitespaces
+                        auto title = parser.getText("//h1[contains(@class,'ft-version-title')]");
+                        if (title.has_value()) {
+                            std::string name = title.value();
+                            std::replace(name.begin(), name.end(), ' ', '_');
+                            _saver.setName(name);
+                        }
+                        _saver.setLink(current_link);
+                        _saver.setContent(response.body);
+                        _saver.save();
+                        fetched_link++;
+                        
+                    }
+                    round++;
+
+                }
+
+
+                // Debug
+                int missing_link = total_link - fetched_link;
+                if (missing_link == 0) {
+                    Logger::trace("[{}].scrapModel : got {} link out of {} from ({})", getFullId(), fetched_link, total_link, main_link);
+                } else {
+                    Logger::warn("[{}].scrapModel : missing {} link out of {} from ({})", getFullId(), missing_link, total_link, main_link);
+                }
+
+
+            } else {
+                Logger::error("[{}].scrapModel : get ({}) code {} - ignoring link", getFullId(), main_link, response.statusCode);
+            }
+
+        }
+
+
+        // Debug
+        Logger::debug("[{}].scrapModel : succes", getFullId(), _extractedHtml.size());
+        return SUCCESS_CODE;
+
     }
 
 
