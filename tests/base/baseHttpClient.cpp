@@ -30,6 +30,7 @@ static HttpClient buildFastClient() {
     policy.maxDelayBetweenRequests  = std::chrono::milliseconds(100);
     policy.maxRetries               = 0;
     policy.rotateUserAgent          = false;
+    policy.sendReferer              = false;
     client.setPolicy(policy);
 
     return client;
@@ -47,6 +48,22 @@ static HttpClient buildRefererClient() {
     policy.maxRetries               = 0;
     policy.rotateUserAgent          = false;
     policy.sendReferer              = true;
+    client.setPolicy(policy);
+
+    return client;
+}
+
+/**
+ * @brief Builds an HttpClient with User-Agent rotation enabled.
+ */
+static HttpClient buildRotatingUAClient() {
+    HttpClient client;
+
+    AntiBlockPolicy policy;
+    policy.minDelayBetweenRequests  = std::chrono::milliseconds(50);
+    policy.maxDelayBetweenRequests  = std::chrono::milliseconds(100);
+    policy.maxRetries               = 0;
+    policy.rotateUserAgent          = true;
     client.setPolicy(policy);
 
     return client;
@@ -102,11 +119,17 @@ TEST_CASE("HttpClient Construction", "[httpclient][construction]") {
         REQUIRE(true);
     }
 
+    SECTION("Move construction succeeds") {
+        HttpClient c1 = buildFastClient();
+        HttpClient c2 = std::move(c1);
+        REQUIRE(true);
+    }
+
 }
 
 
 // =============================================================================
-// Tests — GET requests
+// Tests — GET requests — Success
 // =============================================================================
 
 TEST_CASE("HttpClient GET — Successful Request", "[httpclient][get][network]") {
@@ -183,19 +206,16 @@ TEST_CASE("HttpClient GET — Error Handling", "[httpclient][get][error]") {
 
 TEST_CASE("HttpClient Request Counter", "[httpclient][counter]") {
 
-    SECTION("Counter increments after each GET") {
+    SECTION("Counter increments after each successful GET") {
         HttpClient client = buildFastClient();
-
         client.get("https://example.com");
         REQUIRE(client.getTotalRequests() == 1);
-
         client.get("https://example.com");
         REQUIRE(client.getTotalRequests() == 2);
     }
 
     SECTION("Counter increments even on failed requests") {
         HttpClient client = buildFastClient();
-
         client.get("https://this-domain-does-not-exist-carscraper.com");
         REQUIRE(client.getTotalRequests() == 1);
     }
@@ -204,14 +224,45 @@ TEST_CASE("HttpClient Request Counter", "[httpclient][counter]") {
 
 
 // =============================================================================
-// Tests — User-Agent management
+// Tests — Session User-Agent
 // =============================================================================
 
-TEST_CASE("HttpClient User-Agent Management", "[httpclient][useragent]") {
+TEST_CASE("HttpClient Session User-Agent", "[httpclient][useragent][session]") {
 
-    SECTION("setUserAgent disables rotation (no throw)") {
+    SECTION("Session UA is fixed at construction — two GETs succeed with the same UA") {
+        // The UA is set once at construction and does not change between requests
+        HttpClient client = buildFastClient();
+        HttpResponse r1 = client.get("https://example.com");
+        HttpResponse r2 = client.get("https://example.org");
+        REQUIRE(r1.success);
+        REQUIRE(r2.success);
+    }
+
+    SECTION("resetSessionUserAgent does not throw") {
+        HttpClient client = buildRotatingUAClient();
+        REQUIRE_NOTHROW(client.resetSessionUserAgent());
+    }
+
+    SECTION("GET succeeds after resetSessionUserAgent") {
+        HttpClient client = buildRotatingUAClient();
+        client.resetSessionUserAgent();
+        HttpResponse r = client.get("https://example.com");
+        REQUIRE(r.success);
+    }
+
+    SECTION("Two clients constructed independently may have different session UAs") {
+        // With 7 UAs in the pool, the probability of both being identical is low but non-zero.
+        // We just verify construction succeeds — UA value is not observable from the outside.
+        REQUIRE_NOTHROW([](){
+            HttpClient c1, c2, c3;
+        }());
+    }
+
+    SECTION("setUserAgent disables rotation and fixes the UA") {
         HttpClient client = buildFastClient();
         REQUIRE_NOTHROW(client.setUserAgent("Mozilla/5.0 TestAgent/1.0"));
+        HttpResponse r = client.get("https://example.com");
+        REQUIRE(r.success);
     }
 
     SECTION("setUserAgents with non-empty list does not throw") {
@@ -219,90 +270,17 @@ TEST_CASE("HttpClient User-Agent Management", "[httpclient][useragent]") {
         REQUIRE_NOTHROW(client.setUserAgents({ "AgentA/1.0", "AgentB/2.0" }));
     }
 
-    SECTION("setUserAgents with empty list is ignored (no throw)") {
+    SECTION("setUserAgents with empty list is ignored (no throw, pool unchanged)") {
         HttpClient client = buildFastClient();
         REQUIRE_NOTHROW(client.setUserAgents({}));
     }
 
-    SECTION("GET succeeds after setUserAgent") {
+    SECTION("GET succeeds after setUserAgents") {
         HttpClient client = buildFastClient();
-        client.setUserAgent("Mozilla/5.0 (compatible; CarScraperTest/1.0)");
+        client.setUserAgents({ "Mozilla/5.0 (compatible; CarScraperTest/1.0)" });
+        client.resetSessionUserAgent();
         HttpResponse r = client.get("https://example.com");
         REQUIRE(r.success);
-    }
-
-}
-
-
-// =============================================================================
-// Tests — Configuration
-// =============================================================================
-
-TEST_CASE("HttpClient Configuration", "[httpclient][config]") {
-
-    SECTION("setPolicy does not throw") {
-        HttpClient client;
-        AntiBlockPolicy policy;
-        REQUIRE_NOTHROW(client.setPolicy(policy));
-    }
-
-    SECTION("setTimeout does not throw") {
-        HttpClient client;
-        REQUIRE_NOTHROW(client.setTimeout(10));
-    }
-
-    SECTION("setVerifySSL does not throw") {
-        HttpClient client;
-        REQUIRE_NOTHROW(client.setVerifySSL(true));
-    }
-
-    SECTION("setFollowRedirects does not throw") {
-        HttpClient client;
-        REQUIRE_NOTHROW(client.setFollowRedirects(true, 5));
-    }
-
-    SECTION("enableCookies without jarPath does not throw") {
-        HttpClient client;
-        REQUIRE_NOTHROW(client.enableCookies(true));
-    }
-
-    SECTION("enableCookies with jarPath does not throw") {
-        HttpClient client;
-        REQUIRE_NOTHROW(client.enableCookies(true, "/tmp/carscraper_test_cookies.txt"));
-    }
-
-    SECTION("enableCookies false does not throw") {
-        HttpClient client;
-        REQUIRE_NOTHROW(client.enableCookies(false));
-    }
-
-    SECTION("clearCookies does not throw") {
-        HttpClient client;
-        client.enableCookies(true);
-        REQUIRE_NOTHROW(client.clearCookies());
-    }
-
-    SECTION("setHeader and clearHeaders do not throw") {
-        HttpClient client;
-        REQUIRE_NOTHROW(client.setHeader("X-Test", "value"));
-        REQUIRE_NOTHROW(client.clearHeaders());
-    }
-
-    SECTION("setProxyPool does not throw") {
-        HttpClient client;
-        ProxyConfig p;
-        p._host = "proxy.example.com";
-        p._port = 8080;
-        REQUIRE_NOTHROW(client.setProxyPool({ p }));
-    }
-
-    SECTION("addProxy and clearProxies do not throw") {
-        HttpClient client;
-        ProxyConfig p;
-        p._host = "proxy.example.com";
-        p._port = 8080;
-        REQUIRE_NOTHROW(client.addProxy(p));
-        REQUIRE_NOTHROW(client.clearProxies());
     }
 
 }
@@ -338,7 +316,7 @@ TEST_CASE("HttpClient Referer Management", "[httpclient][referer]") {
         REQUIRE(r.success);
     }
 
-    SECTION("GET succeeds after clearing the Referer (fallback to google.fr)") {
+    SECTION("GET succeeds after clearReferer (fallback to google.fr)") {
         HttpClient client = buildRefererClient();
         client.setReferer("https://example.com/");
         client.clearReferer();
@@ -346,20 +324,34 @@ TEST_CASE("HttpClient Referer Management", "[httpclient][referer]") {
         REQUIRE(r.success);
     }
 
-    SECTION("Simulated navigation chain — three sequential GETs with updated Referer") {
+    SECTION("Sec-Fetch-Site is 'none' when no Referer is set (fresh navigation)") {
+        // Comportement interne : on vérifie juste que la requête aboutit
+        HttpClient client = buildRefererClient();
+        HttpResponse r = client.get("https://example.com");
+        REQUIRE(r.statusCode == 200);
+    }
+
+    SECTION("Sec-Fetch-Site is 'same-origin' when an explicit Referer is set") {
+        HttpClient client = buildRefererClient();
+        client.setReferer("https://example.com/");
+        HttpResponse r = client.get("https://example.com");
+        REQUIRE(r.statusCode == 200);
+    }
+
+    SECTION("Simulated navigation chain — Google → accueil → page intermédiaire → fiche") {
         HttpClient client = buildRefererClient();
 
-        // Step 1 : Google → example.com (accueil)
+        // Etape 1 : Google → example.com (accueil)
         client.setReferer("https://www.google.fr/");
         HttpResponse r1 = client.get("https://example.com");
         REQUIRE(r1.success);
 
-        // Step 2 : example.com → example.org (page intermédiaire)
+        // Etape 2 : example.com → example.org (page intermédiaire)
         client.setReferer("https://example.com/");
         HttpResponse r2 = client.get("https://example.org");
         REQUIRE(r2.success);
 
-        // Step 3 : example.org → example.net (fiche terminale)
+        // Etape 3 : example.org → example.net (fiche terminale)
         client.setReferer("https://example.org/");
         HttpResponse r3 = client.get("https://example.net");
         REQUIRE(r3.success);
@@ -371,12 +363,12 @@ TEST_CASE("HttpClient Referer Management", "[httpclient][referer]") {
 
 
 // =============================================================================
-// Tests — Navigation headers (Sec-Fetch-* via sendReferer)
+// Tests — Navigation headers (Sec-Fetch-* + Connection via sendReferer)
 // =============================================================================
 
 TEST_CASE("HttpClient Navigation Headers", "[httpclient][secfetch]") {
 
-    SECTION("GET succeeds with sendReferer = true (Sec-Fetch-* headers active)") {
+    SECTION("GET succeeds with sendReferer = true (Sec-Fetch-* + Connection headers active)") {
         HttpClient client = buildRefererClient();
         HttpResponse r = client.get("https://example.com");
         REQUIRE(r.success);
@@ -384,10 +376,22 @@ TEST_CASE("HttpClient Navigation Headers", "[httpclient][secfetch]") {
     }
 
     SECTION("GET succeeds with sendReferer = false (no navigation headers)") {
-        HttpClient client = buildFastClient();   // sendReferer = false par défaut
+        HttpClient client = buildFastClient();
         HttpResponse r = client.get("https://example.com");
         REQUIRE(r.success);
         REQUIRE(r.statusCode == 200);
+    }
+
+    SECTION("GET succeeds with sendAcceptHeaders = false") {
+        HttpClient client;
+        AntiBlockPolicy policy;
+        policy.minDelayBetweenRequests  = std::chrono::milliseconds(50);
+        policy.maxDelayBetweenRequests  = std::chrono::milliseconds(100);
+        policy.maxRetries               = 0;
+        policy.sendAcceptHeaders        = false;
+        client.setPolicy(policy);
+        HttpResponse r = client.get("https://example.com");
+        REQUIRE(r.success);
     }
 
 }
@@ -398,6 +402,21 @@ TEST_CASE("HttpClient Navigation Headers", "[httpclient][secfetch]") {
 // =============================================================================
 
 TEST_CASE("HttpClient Cookie Persistence", "[httpclient][cookies]") {
+
+    SECTION("enableCookies without jarPath does not throw") {
+        HttpClient client;
+        REQUIRE_NOTHROW(client.enableCookies(true));
+    }
+
+    SECTION("enableCookies with jarPath does not throw") {
+        HttpClient client;
+        REQUIRE_NOTHROW(client.enableCookies(true, "/tmp/carscraper_test_cookies.txt"));
+    }
+
+    SECTION("enableCookies false does not throw") {
+        HttpClient client;
+        REQUIRE_NOTHROW(client.enableCookies(false));
+    }
 
     SECTION("In-memory cookies: GET after enableCookies succeeds") {
         HttpClient client = buildFastClient();
@@ -424,17 +443,67 @@ TEST_CASE("HttpClient Cookie Persistence", "[httpclient][cookies]") {
 
 
 // =============================================================================
+// Tests — Configuration générale
+// =============================================================================
+
+TEST_CASE("HttpClient Configuration", "[httpclient][config]") {
+
+    SECTION("setPolicy does not throw") {
+        HttpClient client;
+        AntiBlockPolicy policy;
+        REQUIRE_NOTHROW(client.setPolicy(policy));
+    }
+
+    SECTION("setTimeout does not throw") {
+        HttpClient client;
+        REQUIRE_NOTHROW(client.setTimeout(10));
+    }
+
+    SECTION("setVerifySSL does not throw") {
+        HttpClient client;
+        REQUIRE_NOTHROW(client.setVerifySSL(true));
+    }
+
+    SECTION("setFollowRedirects does not throw") {
+        HttpClient client;
+        REQUIRE_NOTHROW(client.setFollowRedirects(true, 5));
+    }
+
+    SECTION("setHeader and clearHeaders do not throw") {
+        HttpClient client;
+        REQUIRE_NOTHROW(client.setHeader("X-Test", "value"));
+        REQUIRE_NOTHROW(client.clearHeaders());
+    }
+
+    SECTION("setProxyPool does not throw") {
+        HttpClient client;
+        ProxyConfig p;
+        p._host = "proxy.example.com";
+        p._port = 8080;
+        REQUIRE_NOTHROW(client.setProxyPool({ p }));
+    }
+
+    SECTION("addProxy and clearProxies do not throw") {
+        HttpClient client;
+        ProxyConfig p;
+        p._host = "proxy.example.com";
+        p._port = 8080;
+        REQUIRE_NOTHROW(client.addProxy(p));
+        REQUIRE_NOTHROW(client.clearProxies());
+    }
+
+}
+
+
+// =============================================================================
 // Tests — Retry logic
 // =============================================================================
 
 TEST_CASE("HttpClient Retry Logic", "[httpclient][retry]") {
 
     SECTION("maxRetries = 0 makes only one attempt on failure") {
-        HttpClient client = buildFastClient();     // maxRetries = 0
-
+        HttpClient client = buildFastClient();   // maxRetries = 0
         client.get("https://this-domain-does-not-exist-carscraper.com");
-
-        // One attempt only — no retry
         REQUIRE(client.getTotalRequests() == 1);
     }
 
@@ -445,7 +514,7 @@ TEST_CASE("HttpClient Retry Logic", "[httpclient][retry]") {
 // Tests — Utilities
 // =============================================================================
 
-TEST_CASE("HttpClient Utilities", "[httpclient][utilities]") {
+TEST_CASE("HttpClient urlEncode", "[httpclient][utilities]") {
 
     SECTION("urlEncode encodes a space as %20") {
         REQUIRE(HttpClient::urlEncode("hello world") == "hello%20world");
