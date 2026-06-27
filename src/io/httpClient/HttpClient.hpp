@@ -153,6 +153,7 @@ namespace CarScraper {
             CURL*                               _curl;                  ///< libcurl easy handle for performing requests
             AntiBlockPolicy                     _policy;                ///< Anti-blocking policy configuration
             std::vector<std::string>            _userAgents;            ///< List of User-Agent strings to rotate for requests
+            std::string                         _sessionUserAgent;      ///< User Agent for the current session
             std::vector<ProxyConfig>            _proxyPool;             ///< List of proxies to rotate for requests (if rotation enabled)
             std::string                         _currentReferer;        ///< Referer header value sent with each request (empty = none)
             std::map<std::string, std::string>  _customHeaders;         ///< Custom headers to include in every request (header name -> header value)
@@ -251,13 +252,6 @@ namespace CarScraper {
                                      const std::string& body,
                                      const std::string& contentType);
 
-
-
-
-
-            // -------------------------------------------------------------------------
-            // Defaults
-            // -------------------------------------------------------------------------
 
             /**
              * @brief Returns the built-in list of realistic browser User-Agent strings.
@@ -390,6 +384,12 @@ namespace CarScraper {
              * @param agent The User-Agent string to use for all requests.
              */
             void setUserAgent(const std::string& agent);
+
+
+            /**
+             * @brief Pick a random User-Agent for the current session
+             */
+            void resetSessionUserAgent() { _sessionUserAgent = pickUserAgent(); }
 
 
 

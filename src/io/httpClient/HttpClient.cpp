@@ -135,8 +135,9 @@ namespace CarScraper {
     HttpClient::HttpClient() : Entity("HTTP-CLIENT") {
 
         // Initialize members
-        _curl       = nullptr;
-        _userAgents = defaultUserAgents();
+        _curl               = nullptr;
+        _userAgents         = defaultUserAgents();
+        _sessionUserAgent   = pickUserAgent();
 
 
         // Initialize RNG with a random seed
@@ -435,8 +436,7 @@ namespace CarScraper {
 
 
         // ---- User-Agent ----
-        const std::string& ua = pickUserAgent();
-        curl_easy_setopt(_curl, CURLOPT_USERAGENT, ua.c_str());
+        curl_easy_setopt(_curl, CURLOPT_USERAGENT, _sessionUserAgent.c_str());
 
         
 
