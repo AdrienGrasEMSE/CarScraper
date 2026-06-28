@@ -388,16 +388,20 @@ namespace CarScraper {
 
 
         // ----- Step 5 - Going through the year list ---------------------------------------------
+        int current_year    = 0;
+        int total_year      = dateInterval.size();
         for (int year : dateInterval) {
 
             // Constructing main link
             _client.setReferer(main_link);
-            std::string year_link = "https://www.largus.fr/fiche-technique/" + _carBrand + "/" + _carModel + "/" + std::to_string(year) + ".html";
+            std::string year_link = "https://www.largus.fr/fiche-technique/"
+                + _carBrand + "/" + _carModel + "/" + std::to_string(year) + ".html";
             response = _client.get(year_link);
             if (response.statusCode == 200) {
 
                 // Debug
-                Logger::debug("[{}].scrapModel : get ({}) code {} - accessing link", getFullId(), year_link, response.statusCode);
+                Logger::debug("[{}].scrapModel : ({}/{}) get ({}) code {} - accessing link",
+                    getFullId(), current_year, total_year, year_link, response.statusCode);
 
 
                 // Setting up counters and getting all link
@@ -406,6 +410,7 @@ namespace CarScraper {
                     "//div[contains(@class,'versions-table-wrapper')]//tbody//td//a",
                     "href"
                 );
+                _shuffle(hrefs);
                 int round           = 0;
                 int fetched_link    = 0;
                 int total_link      = hrefs.size();
@@ -417,34 +422,47 @@ namespace CarScraper {
                     // Constructing full link
                     _client.setReferer(year_link);
                     current_link = "https://www.largus.fr" + current_link;
-                    response = _client.get( current_link);
-                    if (response.statusCode != 200) {
-                        Logger::warn("[{}].scrapModel : ({}/{}) get ({}) code {} - ignoring link", getFullId(), round, total_link, current_link, response.statusCode);
+
+
+                    // Skip already saved links
+                    if (_saver.alreadySaved(current_link)) {
+                        Logger::trace("[{}].scrapModel : ({}/{}) ignoring already saved {}",
+                            getFullId(), round, total_link, current_link);
+                        round++;
                     } else {
-                        Logger::trace("[{}].scrapModel : ({}/{}) got {}", getFullId(), round, total_link, current_link);
 
-
-                        // Getting designation and replacing whitespaces
-                        CarScraper::HtmlParser sheetParser(response.body);
-                        auto title = sheetParser.getText("//h1[contains(@class,'ft-version-title')]");
-                        if (title.has_value()) {
-                            std::string name = title.value();
-                            std::replace(name.begin(), name.end(), ' ', '_');
-                            Logger::trace("[{}].scrapModel : ({}/{}) filename {}", getFullId(), round, total_link, name);
-                            _saver.setName(name);
+                        // Accessing link
+                        response = _client.get(current_link);
+                        if (response.statusCode != 200) {
+                            Logger::warn("[{}].scrapModel : ({}/{}) get ({}) code {} - ignoring link",
+                                getFullId(), round, total_link, current_link, response.statusCode);
                         } else {
-                            Logger::warn("[{}].scrapModel : ({}/{}) got no name", getFullId(), round, total_link);
-                            std::string name = _carBrand + "." + _carModel + "_" + std::to_string(round);
-                            std::replace(name.begin(), name.end(), ' ', '_');
-                            _saver.setName(name);
+                            Logger::trace("[{}].scrapModel : ({}/{}) got {}", getFullId(), round, total_link, current_link);
+
+
+                            // Getting designation and replacing whitespaces
+                            CarScraper::HtmlParser sheetParser(response.body);
+                            auto title = sheetParser.getText("//h1[contains(@class,'ft-version-title')]");
+                            if (title.has_value()) {
+                                std::string name = title.value();
+                                std::replace(name.begin(), name.end(), ' ', '_');
+                                Logger::trace("[{}].scrapModel : ({}/{}) filename {}", getFullId(), round, total_link, name);
+                                _saver.setName(name);
+                            } else {
+                                Logger::warn("[{}].scrapModel : ({}/{}) got no name", getFullId(), round, total_link);
+                                std::string name = _carBrand + "." + _carModel + "_" + std::to_string(round);
+                                std::replace(name.begin(), name.end(), ' ', '_');
+                                _saver.setName(name);
+                            }
+                            _saver.setLink(current_link);
+                            _saver.setContent(response.body);
+                            _saver.save();
+                            fetched_link++;
+
                         }
-                        _saver.setLink(current_link);
-                        _saver.setContent(response.body);
-                        _saver.save();
-                        fetched_link++;
+                        round++;
 
                     }
-                    round++;
 
                 }
 
@@ -452,15 +470,19 @@ namespace CarScraper {
                 // Debug
                 int missing_link = total_link - fetched_link;
                 if (missing_link == 0) {
-                    Logger::trace("[{}].scrapModel : got {} link out of {} from ({})", getFullId(), fetched_link, total_link, year_link);
+                    Logger::trace("[{}].scrapModel : got {} link out of {} from ({})",
+                        getFullId(), fetched_link, total_link, year_link);
                 } else {
-                    Logger::warn("[{}].scrapModel : missing {} link out of {} from ({})", getFullId(), missing_link, total_link, year_link);
+                    Logger::warn("[{}].scrapModel : missing {} link out of {} from ({})",
+                        getFullId(), missing_link, total_link, year_link);
                 }
 
 
             } else {
-                Logger::warn("[{}].scrapModel : get ({}) code {} - ignoring link", getFullId(), year_link, response.statusCode);
+                Logger::warn("[{}].scrapModel : ({}/{}) get ({}) code {} - ignoring link",
+                    getFullId(), current_year, total_year, year_link, response.statusCode);
             }
+            current_year++;
 
         }
 
