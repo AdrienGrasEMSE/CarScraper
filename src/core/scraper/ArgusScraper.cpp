@@ -323,9 +323,13 @@ namespace CarScraper {
         _shuffle(dateInterval);
 
 
+        // ----- Step 0 - New User-Agent ----------------------------------------------------------
+        _client.resetSessionUserAgent();
+
+
 
         // ----- Step 1 - Navigate to largus.fr ---------------------------------------------------
-        Logger::debug("[{}].scrapModel : starting to scrap {} {}", getFullId(), _extractedHtml.size(), _carBrand, _carModel);
+        Logger::debug("[{}].scrapModel : starting to scrap {} {}", getFullId(), _carBrand, _carModel);
         std::string main_link = "https://www.largus.fr/";
         CarScraper::HttpResponse response = _client.get(main_link);
         if (response.statusCode != 200) {
