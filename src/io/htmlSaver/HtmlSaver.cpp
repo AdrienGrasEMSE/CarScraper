@@ -229,7 +229,7 @@ namespace CarScraper {
         // File opening and error handling
         std::ifstream file(path);
         if (!file.is_open()) {
-            Logger::error("[{}].importSavedLink() unable to open file {}", this->getFullId(), path);
+            Logger::warn("[{}].importSavedLink() unable to open file {}", this->getFullId(), path);
             return ERROR_CODE;
         }
 
