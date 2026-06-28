@@ -99,6 +99,7 @@ set(CORE_SOURCES
     src/core/models/Car.cpp
 
     # Core — Scraper
+    src/core/scraper/GenericCarScraper.cpp
     src/core/scraper/ArgusScraper.cpp
 
     # IO — HttpClient
