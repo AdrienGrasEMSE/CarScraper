@@ -39,7 +39,6 @@ namespace CarScraper {
     
             // Scraping related data
             std::string                 _outputFolder;  ///< Path to the ouput folder which will contains all saved files
-            std::vector<std::string>    _linkList;      ///< Target link list
             std::string                 _carBrand;      ///< The car targeted car brand
             std::string                 _carModel;      ///< The car targeted car model
 
@@ -99,12 +98,6 @@ namespace CarScraper {
             const std::string& getOutputFolder() const { return _outputFolder; }
 
 
-            /** @brief Gets the link list
-             *  @return The link list
-             */
-            const std::vector<std::string>& getLinkList() const { return _linkList; }
-
-
             /** @brief Gets the car brand
              *  @return The car brand
              */
@@ -131,13 +124,6 @@ namespace CarScraper {
              * @note Checks if the directory exists
              */
             void setOutputFolder(const std::string& outputFolder);
-
-
-            /**
-             * @brief Set the link list
-             * @param linkList The link list
-             */
-            void setLinkList(const std::vector<std::string>& linkList);
 
 
             /**
