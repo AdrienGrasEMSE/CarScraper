@@ -146,7 +146,6 @@ namespace CarScraper {
     // Main logic
     // =========================================================================
 
-
     /**
      * @brief Scrap a car model on the Argus website
      * @param startDate The start date which the scraping start after
