@@ -378,7 +378,7 @@ namespace CarScraper {
             if (response.statusCode == 200) {
 
                 // Debug
-                Logger::trace("[{}].scrapModel : get ({}) code {} - accessing link", getFullId(), main_link, response.statusCode);
+                Logger::debug("[{}].scrapModel : get ({}) code {} - accessing link", getFullId(), main_link, response.statusCode);
 
 
                 // Setting up counters and getting all link
@@ -439,7 +439,7 @@ namespace CarScraper {
 
 
             } else {
-                Logger::error("[{}].scrapModel : get ({}) code {} - ignoring link", getFullId(), main_link, response.statusCode);
+                Logger::warn("[{}].scrapModel : get ({}) code {} - ignoring link", getFullId(), main_link, response.statusCode);
             }
 
         }
