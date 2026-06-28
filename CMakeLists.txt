@@ -221,6 +221,13 @@ carscraper_configure_target(TestHtmlParser)
 target_compile_definitions(TestHtmlParser PRIVATE TESTING)
 carscraper_configure_test(TestHtmlParser)
 
+# Test GenericCarScraper
+add_executable(TestGenericCarScraper      tests/mono/testGenericCarScraper.cpp)
+target_link_libraries(TestGenericCarScraper PRIVATE CarScraperLibTest)
+carscraper_configure_target(TestGenericCarScraper)
+target_compile_definitions(TestGenericCarScraper PRIVATE TESTING)
+carscraper_configure_test(TestGenericCarScraper)
+
 
 # ==============================================================================
 # Tests — all
