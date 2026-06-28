@@ -14,6 +14,7 @@
 #include <nlohmann/json.hpp>
 #include <fstream>
 #include <filesystem>
+#include <string>
 
 
 /**
@@ -180,12 +181,19 @@ namespace CarScraper {
         }
 
 
-        // Getting namespace
-        namespace fs = std::filesystem;
-        
-
-        // Getting file path
-        const std::string path = this->getFilePath();
+        // Gettign and checking file path
+        std::string effectiveName = _name;
+        std::string path          = _outputDir + effectiveName + ".txt";
+        int         nb_dp         = 1;
+        while (std::filesystem::exists(path)) {
+            effectiveName = "dp_" + _name + "_" + std::to_string(nb_dp);
+            path          = _outputDir + effectiveName + ".txt";
+            nb_dp++;
+        }
+        if (path != this->getFilePath()) {
+            Logger::warn("[{}].save() filename collision on {}, saving as {}",
+                this->getFullId(), this->getFilePath(), path);
+        }
 
 
         // File opening and error handling
