@@ -148,30 +148,6 @@ namespace CarScraper {
             // -------------------------------------------------------------------------
 
             /**
-             * @brief Extract a file list from the input folder
-             */
-            void getAllFile();
-
-
-            /**
-             * @brief Extract a link list from all Excel files available
-             */
-            void getAllLink();
-
-
-            /**
-             * @brief Scrap all HTML using the link list
-             */
-            void scrapAllLink();
-
-
-            /**
-             * @brief Save all HTML
-             */
-            //void saveAllHtml();
-
-
-            /**
              * @brief Scrap a car model on the Argus website
              * @param startDate The start date which the scraping start after
              * @param endDate The end date which the scraping start before
