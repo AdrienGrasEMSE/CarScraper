@@ -262,7 +262,7 @@ namespace CarScraper {
     HttpResponse HttpClient::get(const std::string& url) {
 
         // Debug
-        Logger::debug("[{}].get({})", getFullId(), url);
+        Logger::trace("[{}].get({})", getFullId(), url);
         return executeWithRetry(url, "GET", "", "");
 
     }
