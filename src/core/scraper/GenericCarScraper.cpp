@@ -30,9 +30,16 @@ namespace CarScraper {
     // =========================================================================
 
     /**
-     * @brief Default constructor
+     * @brief Default Constructor : define prefix as SCRAPER
      */
-    GenericCarScraper::GenericCarScraper() : Entity("SCRAPER") {
+    GenericCarScraper::GenericCarScraper() : GenericCarScraper("SCRAPER") {}
+
+
+    /**
+     * @brief Constructor which define the scraper prefix
+     * @param prefix The prefix for the full id
+     */
+    GenericCarScraper::GenericCarScraper(const std::string& prefix) : Entity(prefix) {
 
         // Default value
         _carBrand = DEFAULT_STR;
@@ -151,7 +158,7 @@ namespace CarScraper {
     int GenericCarScraper::scrapModel() {
 
         Logger::error("[{}].scrapModel : to implement", getFullId());
-        return ERROR_CODE;
+        return IGNORED_ACTION_CODE;
 
     }
 

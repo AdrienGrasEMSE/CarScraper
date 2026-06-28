@@ -75,9 +75,16 @@ namespace CarScraper {
             // -------------------------------------------------------------------------
 
             /**
-             * @brief Default Constructor.
+             * @brief Default Constructor : define prefix as SCRAPER
              */
             GenericCarScraper();
+
+
+            /**
+             * @brief Constructor which define the scraper PREFIX
+             * @param prefix The prefix for the full id
+             */
+            GenericCarScraper(const std::string& prefix);
 
 
             /**
@@ -152,7 +159,7 @@ namespace CarScraper {
              * @return ERROR_CODE / SUCCESS_CODE wheter the method is succesful or not
              * @note Generic method to implement
              */
-            int scrapModel();
+            virtual int scrapModel();
 
     };
 
