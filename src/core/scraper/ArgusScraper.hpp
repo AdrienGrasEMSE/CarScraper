@@ -14,7 +14,6 @@
 
 // Imports
 #include "core/models/Entity.hpp"
-#include "io/excelReader/ExcelReader.hpp"
 #include "io/httpClient/HttpClient.hpp"
 #include "io/htmlSaver/HtmlSaver.hpp"
 #include <string>
@@ -38,23 +37,16 @@ namespace CarScraper {
         // =========================================================================
         private:
     
-            // Excel entries related data
-            std::string                 _inputFolder;       ///< Path to the input folder which contains all files
-            std::string                 _outputFolder;      ///< Path to the ouput folder which will contains all saved files
-            std::vector<std::string>    _fileList;          ///< Target file list
-
-
             // Scraping related data
-            std::string                 _carBrand;          ///< The car targeted car brand
-            std::string                 _carModel;          ///< The car targeted car model
-            std::vector<std::string>    _linkList;          ///< Target link list
-            std::vector<std::string>    _extractedHtml;     ///< All HTML extracted
+            std::string                 _outputFolder;  ///< Path to the ouput folder which will contains all saved files
+            std::vector<std::string>    _linkList;      ///< Target link list
+            std::string                 _carBrand;      ///< The car targeted car brand
+            std::string                 _carModel;      ///< The car targeted car model
 
 
             // Internal object
-            CarScraper::ExcelReader     _xlsxReader;        ///< Excel Reader
-            CarScraper::HttpClient      _client;            ///< HTTP Client
-            CarScraper::HtmlSaver       _saver;             ///< HTML Saver
+            CarScraper::HttpClient      _client;        ///< HTTP Client
+            CarScraper::HtmlSaver       _saver;         ///< HTML Saver
 
 
 
@@ -101,22 +93,16 @@ namespace CarScraper {
             // Getters
             // -------------------------------------------------------------------------
 
-            /** @brief Gets the input folder path
-             *  @return The input folder path
-             */
-            const std::string& getInputFolder() const { return _inputFolder; }
-
-
             /** @brief Gets the output folder path
              *  @return The output folder path
              */
             const std::string& getOutputFolder() const { return _outputFolder; }
 
 
-            /** @brief Gets the file list
-             *  @return The file list
+            /** @brief Gets the link list
+             *  @return The link list
              */
-            const std::vector<std::string>& getFileList() const { return _fileList; }
+            const std::vector<std::string>& getLinkList() const { return _linkList; }
 
 
             /** @brief Gets the car brand
@@ -131,18 +117,6 @@ namespace CarScraper {
             const std::string& getCarModel() const { return _carModel; }
 
 
-            /** @brief Gets the link list
-             *  @return The link list
-             */
-            const std::vector<std::string>& getLinkList() const { return _linkList; }
-
-
-            /** @brief Gets the saved html list
-             *  @return The saved html list
-             */
-            const std::vector<std::string>& getSavedHtml() const { return _extractedHtml; }
-
-
 
 
 
@@ -152,26 +126,11 @@ namespace CarScraper {
 
 
             /**
-             * @brief Sets the input folder path
-             * @param inputFolder The input folder path
-             * @note Checks if the directory exists
-             */
-            void setInputFolder(const std::string& inputFolder);
-
-
-            /**
              * @brief Sets the output folder path
              * @param outputFolder The output folder path
              * @note Checks if the directory exists
              */
             void setOutputFolder(const std::string& outputFolder);
-
-
-            /**
-             * @brief Set the file list
-             * @param fileList The file list
-             */
-            void setFileList(const std::vector<std::string>& fileList);
 
 
             /**
