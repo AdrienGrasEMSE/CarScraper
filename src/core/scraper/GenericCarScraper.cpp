@@ -42,10 +42,12 @@ namespace CarScraper {
     GenericCarScraper::GenericCarScraper(const std::string& prefix) : Entity(prefix) {
 
         // Default value
-        _carBrand = DEFAULT_STR;
-        _carModel = DEFAULT_STR;
+        _carBrand       = DEFAULT_STR;
+        _carModel       = DEFAULT_STR;
+        _outputFolder   = HTML_DIR;
 
         // Importing the list of already saved link
+        _saver.setOutputLinkDir(_outputFolder);
         _saver.importSavedLink();
 
         // Anti-block policy tailored for discrete scraping
@@ -83,7 +85,6 @@ namespace CarScraper {
     // Setters
     // =========================================================================
 
-
     /**
      * @brief Sets the output folder path
      * @param outputFolder The output folder path
@@ -100,9 +101,10 @@ namespace CarScraper {
             _outputFolder = outputFolder;
             Logger::trace("[{}].setOutputFolder : {}", getFullId(), _outputFolder);
         } else {
-            _outputFolder = DEFAULT_STR;
+            _outputFolder = HTML_DIR;
             Logger::debug("[{}].setOutputFolder : Folder {} does not exists", getFullId(), outputFolder);
         }
+        _saver.setOutputLinkDir(_outputFolder);
 
     }
 
