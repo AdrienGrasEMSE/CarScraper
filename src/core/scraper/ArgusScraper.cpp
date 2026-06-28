@@ -44,6 +44,20 @@ namespace CarScraper {
         // Importing the list of already saved link
         _saver.importSavedLink();
 
+        // Anti-block policy tailored for discrete scraping
+        AntiBlockPolicy policy;
+        policy.minDelayBetweenRequests  = std::chrono::milliseconds(8000);
+        policy.maxDelayBetweenRequests  = std::chrono::milliseconds(30000);
+        policy.maxRetries               = 2;
+        policy.retryOn429               = true;
+        policy.retryOn503               = true;
+        policy.retryBaseDelay           = std::chrono::milliseconds(60000);
+        policy.rotateUserAgent          = true;
+        policy.rotateProxy              = false;
+        policy.sendAcceptHeaders        = true;
+        policy.sendReferer              = true;
+        _client.setPolicy(policy);
+
     }
 
 
@@ -329,6 +343,7 @@ namespace CarScraper {
 
 
         // ----- Step 1 - Navigate to largus.fr ---------------------------------------------------
+        _client.clearReferer();
         Logger::debug("[{}].scrapModel : starting to scrap {} {}", getFullId(), _carBrand, _carModel);
         std::string main_link = "https://www.largus.fr/";
         CarScraper::HttpResponse response = _client.get(main_link);
@@ -340,6 +355,7 @@ namespace CarScraper {
 
 
         // ----- Step 2 - Navigate to l'argus.fr/BRAND.html ---------------------------------------
+        _client.setReferer(main_link);
         main_link = "https://www.largus.fr/" + _carBrand + ".html";
         response = _client.get(main_link);
         if (response.statusCode != 200) {
@@ -350,6 +366,7 @@ namespace CarScraper {
 
 
         // ----- Step 3 - Navigate to l'argus.fr/fiche-technique/BRAND.html -----------------------
+        _client.setReferer(main_link);
         main_link = "https://www.largus.fr/fiche-technique/" + _carBrand + ".html";
         response = _client.get(main_link);
         if (response.statusCode != 200) {
@@ -360,6 +377,7 @@ namespace CarScraper {
 
 
         // ----- Step 4 - Navigate to l'argus.fr/fiche-technique/BRAND/MODEL.html -----------------
+        _client.setReferer(main_link);
         main_link = "https://www.largus.fr/fiche-technique/" + _carBrand + "/" + _carModel + ".html";
         response = _client.get(main_link);
         if (response.statusCode != 200) {
@@ -373,12 +391,13 @@ namespace CarScraper {
         for (int year : dateInterval) {
 
             // Constructing main link
-            main_link = "https://www.largus.fr/fiche-technique/" + _carBrand + "/" + _carModel + "/" + std::to_string(year) + ".html";
-            response = _client.get(main_link);
+            _client.setReferer(main_link);
+            std::string year_link = "https://www.largus.fr/fiche-technique/" + _carBrand + "/" + _carModel + "/" + std::to_string(year) + ".html";
+            response = _client.get(year_link);
             if (response.statusCode == 200) {
 
                 // Debug
-                Logger::debug("[{}].scrapModel : get ({}) code {} - accessing link", getFullId(), main_link, response.statusCode);
+                Logger::debug("[{}].scrapModel : get ({}) code {} - accessing link", getFullId(), year_link, response.statusCode);
 
 
                 // Setting up counters and getting all link
@@ -396,10 +415,11 @@ namespace CarScraper {
                 for (std::string current_link : hrefs) {
 
                     // Constructing full link
+                    _client.setReferer(year_link);
                     current_link = "https://www.largus.fr" + current_link;
                     response = _client.get( current_link);
                     if (response.statusCode != 200) {
-                        Logger::warn("[{}].scrapModel : ({}/{}) get ({}) code {} - ignoring link", getFullId(), round, total_link, main_link, response.statusCode);
+                        Logger::warn("[{}].scrapModel : ({}/{}) get ({}) code {} - ignoring link", getFullId(), round, total_link, current_link, response.statusCode);
                     } else {
                         Logger::trace("[{}].scrapModel : ({}/{}) got {}", getFullId(), round, total_link, current_link);
 
@@ -432,14 +452,14 @@ namespace CarScraper {
                 // Debug
                 int missing_link = total_link - fetched_link;
                 if (missing_link == 0) {
-                    Logger::trace("[{}].scrapModel : got {} link out of {} from ({})", getFullId(), fetched_link, total_link, main_link);
+                    Logger::trace("[{}].scrapModel : got {} link out of {} from ({})", getFullId(), fetched_link, total_link, year_link);
                 } else {
-                    Logger::warn("[{}].scrapModel : missing {} link out of {} from ({})", getFullId(), missing_link, total_link, main_link);
+                    Logger::warn("[{}].scrapModel : missing {} link out of {} from ({})", getFullId(), missing_link, total_link, year_link);
                 }
 
 
             } else {
-                Logger::warn("[{}].scrapModel : get ({}) code {} - ignoring link", getFullId(), main_link, response.statusCode);
+                Logger::warn("[{}].scrapModel : get ({}) code {} - ignoring link", getFullId(), year_link, response.statusCode);
             }
 
         }
