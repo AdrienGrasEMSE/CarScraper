@@ -17,8 +17,8 @@
 #include <fstream>
 #include <sstream>
 #include <nlohmann/json.hpp>
-#include "io/HtmlSaver/HtmlSaver.hpp"
-#include "io/HttpClient/HttpClient.hpp"
+#include "io/htmlSaver/HtmlSaver.hpp"
+#include "io/httpClient/HttpClient.hpp"
 #include "core/utils/Constant.hpp"
 
 using namespace CarScraper;
@@ -64,11 +64,11 @@ TEST_CASE("HtmlSaver Constructor", "[HtmlSaver][Constructor]") {
     SECTION("Default constructor") {
         HtmlSaver saver;
 
-        REQUIRE(saver.getName()         == DEFAULT_STR);
-        REQUIRE(saver.getContent()      == DEFAULT_STR);
-        REQUIRE(saver.getOutputDir()    == HTML_DIR);
-        REQUIRE(saver.getInputLinkDir() == LINK_DIR);
-        REQUIRE(saver.getOutputLinkDir()== LINK_DIR);
+        REQUIRE(saver.getName()          == DEFAULT_STR);
+        REQUIRE(saver.getContent()       == DEFAULT_STR);
+        REQUIRE(saver.getOutputDir()     == HTML_DIR);
+        REQUIRE(saver.getInputLinkDir()  == LINK_DIR);
+        REQUIRE(saver.getOutputLinkDir() == LINK_DIR);
     }
 
     SECTION("Parameterized constructor") {
@@ -118,19 +118,34 @@ TEST_CASE("HtmlSaver Setters", "[HtmlSaver][Setters]") {
         REQUIRE(saver.getLink() == "https://example.com");
     }
 
-    SECTION("setOutputDir") {
+    SECTION("setOutputDir — valid directory") {
         saver.setOutputDir(TEST_HTML_DIR);
         REQUIRE(saver.getOutputDir() == TEST_HTML_DIR);
     }
 
-    SECTION("setInputLinkDir") {
+    SECTION("setOutputDir — invalid directory falls back to HTML_DIR") {
+        saver.setOutputDir("nonexistent/path/");
+        REQUIRE(saver.getOutputDir() == HTML_DIR);
+    }
+
+    SECTION("setInputLinkDir — valid directory") {
         saver.setInputLinkDir(TEST_LINK_DIR);
         REQUIRE(saver.getInputLinkDir() == TEST_LINK_DIR);
     }
 
-    SECTION("setOutputLinkDir") {
+    SECTION("setInputLinkDir — invalid directory falls back to LINK_DIR") {
+        saver.setInputLinkDir("nonexistent/path/");
+        REQUIRE(saver.getInputLinkDir() == LINK_DIR);
+    }
+
+    SECTION("setOutputLinkDir — valid directory") {
         saver.setOutputLinkDir(TEST_LINK_DIR);
         REQUIRE(saver.getOutputLinkDir() == TEST_LINK_DIR);
+    }
+
+    SECTION("setOutputLinkDir — invalid directory falls back to LINK_DIR") {
+        saver.setOutputLinkDir("nonexistent/path/");
+        REQUIRE(saver.getOutputLinkDir() == LINK_DIR);
     }
 
     cleanDirectories();
@@ -206,6 +221,70 @@ TEST_CASE("HtmlSaver save()", "[HtmlSaver][Save]") {
 
         REQUIRE(saver.save() == SUCCESS_CODE);
         REQUIRE(saver.save() == IGNORED_ACTION_CODE);
+    }
+
+    SECTION("Filename collision — second file saved under dp_ name") {
+
+        // First save : crée page.txt
+        HtmlSaver saver1(
+            "page",
+            "<html>First</html>",
+            "https://example.com/first",
+            TEST_HTML_DIR,
+            TEST_LINK_DIR,
+            TEST_LINK_DIR
+        );
+        REQUIRE(saver1.save() == SUCCESS_CODE);
+        REQUIRE(fs::exists(TEST_HTML_DIR + "page.txt"));
+
+        // Second save : même _name "page", URL différente → collision
+        HtmlSaver saver2(
+            "page",
+            "<html>Second</html>",
+            "https://example.com/second",
+            TEST_HTML_DIR,
+            TEST_LINK_DIR,
+            TEST_LINK_DIR
+        );
+        REQUIRE(saver2.save() == SUCCESS_CODE);
+
+        // Le fichier original ne doit pas avoir été écrasé
+        REQUIRE(readFile(TEST_HTML_DIR + "page.txt") == "<html>First</html>");
+
+        // Le fichier de repli doit exister et contenir le bon contenu
+        REQUIRE(fs::exists(TEST_HTML_DIR + "dp_page_1.txt"));
+        REQUIRE(readFile(TEST_HTML_DIR + "dp_page_1.txt") == "<html>Second</html>");
+
+        // _name de saver2 ne doit pas avoir été muté
+        REQUIRE(saver2.getName() == "page");
+    }
+
+    SECTION("Filename collision — deux collisions successives") {
+
+        // Crée page.txt et dp_page_1.txt manuellement
+        { std::ofstream f(TEST_HTML_DIR + "page.txt");     f << "original"; }
+        { std::ofstream f(TEST_HTML_DIR + "dp_page_1.txt"); f << "first dp"; }
+
+        HtmlSaver saver(
+            "page",
+            "<html>Third</html>",
+            "https://example.com/third",
+            TEST_HTML_DIR,
+            TEST_LINK_DIR,
+            TEST_LINK_DIR
+        );
+        REQUIRE(saver.save() == SUCCESS_CODE);
+
+        // Les deux fichiers existants sont intacts
+        REQUIRE(readFile(TEST_HTML_DIR + "page.txt")      == "original");
+        REQUIRE(readFile(TEST_HTML_DIR + "dp_page_1.txt") == "first dp");
+
+        // Le troisième fichier atterrit en dp_page_2
+        REQUIRE(fs::exists(TEST_HTML_DIR + "dp_page_2.txt"));
+        REQUIRE(readFile(TEST_HTML_DIR + "dp_page_2.txt") == "<html>Third</html>");
+
+        // _name toujours intact
+        REQUIRE(saver.getName() == "page");
     }
 
     cleanDirectories();
