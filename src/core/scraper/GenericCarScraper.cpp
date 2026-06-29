@@ -42,12 +42,12 @@ namespace CarScraper {
     GenericCarScraper::GenericCarScraper(const std::string& prefix) : Entity(prefix) {
 
         // Default value
-        _carBrand       = DEFAULT_STR;
-        _carModel       = DEFAULT_STR;
-        _outputFolder   = HTML_DIR;
+        _carBrand           = DEFAULT_STR;
+        _carModel           = DEFAULT_STR;
+        _outputDirectory    = HTML_DIR;
 
         // Importing the list of already saved link
-        _saver.setOutputLinkDir(_outputFolder);
+        _saver.setOutputLinkDir(_outputDirectory);
         _saver.importSavedLink();
 
         // Anti-block policy tailored for discrete scraping
@@ -86,25 +86,25 @@ namespace CarScraper {
     // =========================================================================
 
     /**
-     * @brief Sets the output folder path
-     * @param outputFolder The output folder path
+     * @brief Sets the output directory path
+     * @param outputDirectory The output directory path
      * @note Checks if the directory exists
      */
-    void GenericCarScraper::setOutputFolder(const std::string& outputFolder) {
+    void GenericCarScraper::setOutputDirectory(const std::string& outputDirectory) {
         
         // Getting namespace
         namespace fs = std::filesystem;
 
 
-        // Checking if the folder exists
-        if (fs::exists(outputFolder)) {
-            _outputFolder = outputFolder;
-            Logger::trace("[{}].setOutputFolder : {}", getFullId(), _outputFolder);
+        // Checking if the directory exists
+        if (fs::exists(outputDirectory)) {
+            _outputDirectory = outputDirectory;
+            Logger::trace("[{}].setOutputDirectory : {}", getFullId(), _outputDirectory);
         } else {
-            _outputFolder = HTML_DIR;
-            Logger::debug("[{}].setOutputFolder : Folder {} does not exists", getFullId(), outputFolder);
+            _outputDirectory = HTML_DIR;
+            Logger::debug("[{}].setOutputDirectory : Directory {} does not exists", getFullId(), outputDirectory);
         }
-        _saver.setOutputLinkDir(_outputFolder);
+        _saver.setOutputLinkDir(_outputDirectory);
 
     }
 

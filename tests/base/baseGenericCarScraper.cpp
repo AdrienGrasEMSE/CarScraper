@@ -74,9 +74,9 @@ TEST_CASE("GenericCarScraper Construction", "[genericscraper][construction]") {
         REQUIRE(scraper.getCarModel() == DEFAULT_STR);
     }
 
-    SECTION("outputFolder is HTML_DIR after default construction") {
+    SECTION("outputDirectory is HTML_DIR after default construction") {
         GenericCarScraper scraper;
-        REQUIRE(scraper.getOutputFolder() == HTML_DIR);
+        REQUIRE(scraper.getOutputDirectory() == HTML_DIR);
     }
 
 }
@@ -162,31 +162,31 @@ TEST_CASE("GenericCarScraper setCarModel", "[genericscraper][setter][model]") {
 
 
 // =============================================================================
-// Tests — setOutputFolder
+// Tests — setOutputDirectory
 // =============================================================================
 
-TEST_CASE("GenericCarScraper setOutputFolder", "[genericscraper][setter][folder]") {
+TEST_CASE("GenericCarScraper setOutputDirectory", "[genericscraper][setter][folder]") {
 
     SECTION("Valid existing folder is stored") {
         GenericCarScraper scraper;
-        scraper.setOutputFolder("/tmp");
-        REQUIRE(scraper.getOutputFolder() == "/tmp");
+        scraper.setOutputDirectory("/tmp");
+        REQUIRE(scraper.getOutputDirectory() == "/tmp");
     }
 
     SECTION("Non-existing folder falls back to HTML_DIR") {
         GenericCarScraper scraper;
-        scraper.setOutputFolder("/this/path/does/not/exist/carscraper");
-        REQUIRE(scraper.getOutputFolder() == HTML_DIR);
+        scraper.setOutputDirectory("/this/path/does/not/exist/carscraper");
+        REQUIRE(scraper.getOutputDirectory() == HTML_DIR);
     }
 
-    SECTION("setOutputFolder does not throw on invalid path") {
+    SECTION("setOutputDirectory does not throw on invalid path") {
         GenericCarScraper scraper;
-        REQUIRE_NOTHROW(scraper.setOutputFolder("/invalid/path"));
+        REQUIRE_NOTHROW(scraper.setOutputDirectory("/invalid/path"));
     }
 
-    SECTION("setOutputFolder does not throw on valid path") {
+    SECTION("setOutputDirectory does not throw on valid path") {
         GenericCarScraper scraper;
-        REQUIRE_NOTHROW(scraper.setOutputFolder("/tmp"));
+        REQUIRE_NOTHROW(scraper.setOutputDirectory("/tmp"));
     }
 
 }

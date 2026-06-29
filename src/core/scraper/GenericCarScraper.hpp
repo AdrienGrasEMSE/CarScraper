@@ -38,14 +38,14 @@ namespace CarScraper {
         private:
     
             // Scraping related data
-            std::string                 _outputFolder;  ///< Path to the ouput folder which will contains all saved files
-            std::string                 _carBrand;      ///< The car targeted car brand
-            std::string                 _carModel;      ///< The car targeted car model
+            std::string                 _outputDirectory;   ///< Path to the ouput directory which will contains all saved files
+            std::string                 _carBrand;          ///< The car targeted car brand
+            std::string                 _carModel;          ///< The car targeted car model
 
 
             // Internal object
-            CarScraper::HttpClient      _client;        ///< HTTP Client
-            CarScraper::HtmlSaver       _saver;         ///< HTML Saver
+            CarScraper::HttpClient      _client;            ///< HTTP Client
+            CarScraper::HtmlSaver       _saver;             ///< HTML Saver
 
 
 
@@ -99,10 +99,10 @@ namespace CarScraper {
             // Getters
             // -------------------------------------------------------------------------
 
-            /** @brief Gets the output folder path
-             *  @return The output folder path
+            /** @brief Gets the output directory path
+             *  @return The output directory path
              */
-            const std::string& getOutputFolder() const { return _outputFolder; }
+            const std::string& getOutputDirectory() const { return _outputDirectory; }
 
 
             /** @brief Gets the car brand
@@ -126,11 +126,11 @@ namespace CarScraper {
 
 
             /**
-             * @brief Sets the output folder path
-             * @param outputFolder The output folder path
+             * @brief Sets the output directory path
+             * @param outputDirectory The output directory path
              * @note Checks if the directory exists
              */
-            void setOutputFolder(const std::string& outputFolder);
+            void setOutputDirectory(const std::string& outputDirectory);
 
 
             /**
