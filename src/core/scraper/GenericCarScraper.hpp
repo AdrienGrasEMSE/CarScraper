@@ -50,6 +50,26 @@ namespace CarScraper {
 
 
 
+            
+            // -------------------------------------------------------------------------
+            // Constructor
+            // -------------------------------------------------------------------------
+
+            /**
+             * @brief Default Constructor : define prefix as SCRAPER
+             */
+            GenericCarScraper();
+
+
+            /**
+             * @brief Constructor which define the scraper PREFIX
+             * @param prefix The prefix for the full id
+             */
+            GenericCarScraper(const std::string& prefix);
+
+
+
+
 
             // -------------------------------------------------------------------------
             // Internal Helpers
@@ -71,21 +91,8 @@ namespace CarScraper {
         public:
 
             // -------------------------------------------------------------------------
-            // Constructor / Destructor
+            // Destructor
             // -------------------------------------------------------------------------
-
-            /**
-             * @brief Default Constructor : define prefix as SCRAPER
-             */
-            GenericCarScraper();
-
-
-            /**
-             * @brief Constructor which define the scraper PREFIX
-             * @param prefix The prefix for the full id
-             */
-            GenericCarScraper(const std::string& prefix);
-
 
             /**
              * @brief Default Destructor.
