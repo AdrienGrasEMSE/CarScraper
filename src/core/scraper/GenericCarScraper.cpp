@@ -12,12 +12,10 @@
 #include "GenericCarScraper.hpp"
 #include "core/utils/Constant.hpp"
 #include "core/logger/Logger.hpp"
-#include <filesystem>
-#include <algorithm>
-#include <random>
-#include <string>
 #include <uni_algo/case.h>
 #include <uni_algo/norm.h>
+#include <filesystem>
+#include <string>
 
 
 /**
@@ -114,7 +112,7 @@ namespace CarScraper {
      * @param carBrand The car brand
      */
     void GenericCarScraper::setCarBrand(const std::string& carBrand) {
-        _carBrand = una::cases::to_titlecase_utf8(una::norm::to_nfc_utf8(carBrand));
+        _carBrand = una::cases::to_lowercase_utf8(una::norm::to_nfc_utf8(carBrand));
     }
 
 
@@ -123,25 +121,7 @@ namespace CarScraper {
      * @param carModel The car model
      */
     void GenericCarScraper::setCarModel(const std::string& carModel) {
-        _carModel = una::cases::to_titlecase_utf8(una::norm::to_nfc_utf8(carModel));
-    }
-
-
-
-
-
-    // =========================================================================
-    // Internal helpers
-    // =========================================================================
-
-    /**
-     * @brief Shuffler the link list to randomize acces
-     */
-    template<typename T>
-    void GenericCarScraper::_shuffle(std::vector<T>& vector) {
-        std::random_device  rd;
-        std::mt19937        rng = std::mt19937(rd());
-        std::ranges::shuffle(vector, rng);
+        _carModel = una::cases::to_lowercase_utf8(una::norm::to_nfc_utf8(carModel));
     }
 
 

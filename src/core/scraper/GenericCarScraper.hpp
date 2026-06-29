@@ -18,6 +18,8 @@
 #include "io/htmlSaver/HtmlSaver.hpp"
 #include <string>
 #include <vector>
+#include <algorithm>
+#include <random>
 
 
 /**
@@ -79,7 +81,11 @@ namespace CarScraper {
              * @brief Shuffle a vector
              */
             template<typename T>
-            void _shuffle(std::vector<T>& vector);
+            void _shuffle(std::vector<T>& vector) {
+                std::random_device  rd;
+                std::mt19937        rng = std::mt19937(rd());
+                std::ranges::shuffle(vector, rng);
+            }
 
 
 
