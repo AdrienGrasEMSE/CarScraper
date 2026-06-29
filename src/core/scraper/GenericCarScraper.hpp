@@ -33,9 +33,9 @@ namespace CarScraper {
     class GenericCarScraper : public Entity {
 
         // =========================================================================
-        // Private data and methods
+        // Protected data and methods
         // =========================================================================
-        private:
+        protected:
     
             // Scraping related data
             std::string                 _outputDirectory;   ///< Path to the ouput directory which will contains all saved files
