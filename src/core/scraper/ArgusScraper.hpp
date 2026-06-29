@@ -56,6 +56,7 @@ namespace CarScraper {
              * @return ERROR_CODE / SUCCESS_CODE wheter the method is succesful or not
              * @note The accepted date format is "AAAA"
              */
+            using GenericCarScraper::scrapModel;
             int scrapModel(const std::string& startDateStr, const std::string& endDateStr);
 
     };
