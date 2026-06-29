@@ -128,7 +128,7 @@ namespace CarScraper {
             if (response.statusCode == 200) {
 
                 // Debug
-                Logger::debug("[{}].scrapModel : ({}/{}) get ({}) code {} - accessing link",
+                Logger::debug("[{}].scrapModel : (Year {}/{}) get ({}) code {} - accessing link",
                     getFullId(), current_year, total_year, year_link, response.statusCode);
 
 
@@ -154,7 +154,7 @@ namespace CarScraper {
 
                     // Skip already saved links
                     if (_saver.alreadySaved(current_link)) {
-                        Logger::trace("[{}].scrapModel : ({}/{}) ignoring already saved {}",
+                        Logger::trace("[{}].scrapModel : (Link {}/{}) ignoring already saved {}",
                             getFullId(), round, total_link, current_link);
                         round++;
                     } else {
@@ -162,10 +162,10 @@ namespace CarScraper {
                         // Accessing link
                         response = _client.get(current_link);
                         if (response.statusCode != 200) {
-                            Logger::warn("[{}].scrapModel : ({}/{}) get ({}) code {} - ignoring link",
+                            Logger::warn("[{}].scrapModel : (Link {}/{}) get ({}) code {} - ignoring link",
                                 getFullId(), round, total_link, current_link, response.statusCode);
                         } else {
-                            Logger::trace("[{}].scrapModel : ({}/{}) got {}", getFullId(), round, total_link, current_link);
+                            Logger::trace("[{}].scrapModel : (Link {}/{}) got {}", getFullId(), round, total_link, current_link);
 
 
                             // Getting designation and replacing whitespaces
@@ -174,10 +174,10 @@ namespace CarScraper {
                             if (title.has_value()) {
                                 std::string name = title.value();
                                 std::replace(name.begin(), name.end(), ' ', '_');
-                                Logger::trace("[{}].scrapModel : ({}/{}) filename {}", getFullId(), round, total_link, name);
+                                Logger::trace("[{}].scrapModel : (Link {}/{}) filename {}", getFullId(), round, total_link, name);
                                 _saver.setName(name);
                             } else {
-                                Logger::warn("[{}].scrapModel : ({}/{}) got no name", getFullId(), round, total_link);
+                                Logger::warn("[{}].scrapModel : (Link {}/{}) got no name", getFullId(), round, total_link);
                                 std::string name = _carBrand + "." + _carModel + "_" + std::to_string(round);
                                 std::replace(name.begin(), name.end(), ' ', '_');
                                 _saver.setName(name);
@@ -207,7 +207,7 @@ namespace CarScraper {
 
 
             } else {
-                Logger::warn("[{}].scrapModel : ({}/{}) get ({}) code {} - ignoring link",
+                Logger::warn("[{}].scrapModel : (Year {}/{}) get ({}) code {} - ignoring link",
                     getFullId(), current_year, total_year, year_link, response.statusCode);
             }
             current_year++;
