@@ -172,13 +172,13 @@ namespace CarScraper {
                             CarScraper::HtmlParser sheetParser(response.body);
                             auto title = sheetParser.getText("//h1[contains(@class,'ft-version-title')]");
                             if (title.has_value()) {
-                                std::string name = title.value();
+                                std::string name = "ARGUS_" + title.value();
                                 std::replace(name.begin(), name.end(), ' ', '_');
                                 Logger::trace("[{}].scrapModel : (Link {}/{}) filename {}", getFullId(), round, total_link, name);
                                 _saver.setName(name);
                             } else {
                                 Logger::warn("[{}].scrapModel : (Link {}/{}) got no name", getFullId(), round, total_link);
-                                std::string name = _carBrand + "." + _carModel + "_" + std::to_string(round);
+                                std::string name = "ARGUS_" + _carBrand + "." + _carModel + "_" + std::to_string(round);
                                 std::replace(name.begin(), name.end(), ' ', '_');
                                 _saver.setName(name);
                             }
