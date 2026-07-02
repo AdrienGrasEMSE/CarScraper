@@ -101,6 +101,7 @@ set(CORE_SOURCES
     # Core — Scraper
     src/core/scraper/GenericCarScraper.cpp
     src/core/scraper/ArgusScraper.cpp
+    src/core/scraper/CaradisiacScraper.cpp
 
     # IO — HttpClient
     src/io/httpClient/HttpClient.cpp
