@@ -82,9 +82,10 @@ namespace CarScraper {
 
 
 
-        // ----- Step 2 - Navigate to l'argus.fr/BRAND.html ---------------------------------------
-        _client.setReferer(main_link);
-        main_link = "https://www.largus.fr/" + _carBrand + ".html";
+        // ----- Step 2 - Navigate to largus.fr/Toutes-Marques.html -------------------------------
+        _client.clearReferer();
+        Logger::debug("[{}].scrapModel : starting to scrap \"{}-{}\"", getFullId(), _carBrand, _carModel);
+        main_link = "https://www.largus.fr/Toutes-Marques.html";
         response = _client.get(main_link);
         if (response.statusCode != 200) {
             Logger::error("[{}].scrapModel : get ({}) code {}", getFullId(), main_link, response.statusCode);
@@ -93,10 +94,10 @@ namespace CarScraper {
 
 
 
-        // ----- Step 3 - Navigate to l'argus.fr/fiche-technique/BRAND.html -----------------------
+        // ----- Step 3 - Navigate to l'argus.fr/BRAND.html ---------------------------------------
         _client.setReferer(main_link);
-        main_link = "https://www.largus.fr/fiche-technique/" + _carBrand + ".html";
-        response = _client.get(main_link);
+        main_link   = "https://www.largus.fr/" + _carBrand + ".html";
+        response    = _client.get(main_link);
         if (response.statusCode != 200) {
             Logger::error("[{}].scrapModel : get ({}) code {}", getFullId(), main_link, response.statusCode);
             return ERROR_CODE;
@@ -104,10 +105,10 @@ namespace CarScraper {
 
 
 
-        // ----- Step 4 - Navigate to l'argus.fr/fiche-technique/BRAND/MODEL.html -----------------
+        // ----- Step 4 - Navigate to l'argus.fr/fiche-technique/BRAND.html -----------------------
         _client.setReferer(main_link);
-        main_link = "https://www.largus.fr/fiche-technique/" + _carBrand + "/" + _carModel + ".html";
-        response = _client.get(main_link);
+        main_link   = "https://www.largus.fr/fiche-technique/" + _carBrand + ".html";
+        response    = _client.get(main_link);
         if (response.statusCode != 200) {
             Logger::error("[{}].scrapModel : get ({}) code {}", getFullId(), main_link, response.statusCode);
             return ERROR_CODE;
@@ -115,7 +116,18 @@ namespace CarScraper {
 
 
 
-        // ----- Step 5 - Going through the year list ---------------------------------------------
+        // ----- Step 5 - Navigate to l'argus.fr/fiche-technique/BRAND/MODEL.html -----------------
+        _client.setReferer(main_link);
+        main_link   = "https://www.largus.fr/fiche-technique/" + _carBrand + "/" + _carModel + ".html";
+        response    = _client.get(main_link);
+        if (response.statusCode != 200) {
+            Logger::error("[{}].scrapModel : get ({}) code {}", getFullId(), main_link, response.statusCode);
+            return ERROR_CODE;
+        }
+
+
+
+        // ----- Step 6 - Going through the year list ---------------------------------------------
         int current_year    = 0;
         int total_year      = dateInterval.size();
         for (int year : dateInterval) {
