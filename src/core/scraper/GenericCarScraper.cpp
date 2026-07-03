@@ -49,7 +49,7 @@ namespace CarScraper {
         _outputDirectory    = HTML_DIR;
 
         // Importing the list of already saved link
-        _saver.setOutputLinkDir(_outputDirectory);
+        _saver.setOutputLinkDir(LINK_DIR);
         _saver.importSavedLink();
 
         // Anti-block policy tailored for discrete scraping
