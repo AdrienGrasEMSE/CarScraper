@@ -291,39 +291,51 @@ namespace CarScraper {
                     int total_link      = linkList.size();
                     for (std::string link : linkList) {
 
-                        // Accessing link
+                        // Constructing full link
                         _client.setReferer(yearLink);
                         link = "https://www.caradisiac.com" + link;
-                        response = _client.get(link);
-                        if (response.statusCode != 200) {
-                            Logger::warn("[{}].scrapModel : (Link {}/{}) get ({}) code {} - ignoring link",
-                                getFullId(), link_round, total_link, link, response.statusCode);
-                        } else {
-                            Logger::trace("[{}].scrapModel : (Link {}/{}) got ({})",
+
+
+                        // Skip already saved links
+                        if (_saver.alreadySaved(link)) {
+                            Logger::trace("[{}].scrapModel : (Link {}/{}) ignoring already saved {}",
                                 getFullId(), link_round, total_link, link);
-
-
-                            // Getting designation and replacing whitespaces
-                            CarScraper::HtmlParser sheetParser(response.body);
-                            auto title = sheetParser.getText("//h1[contains(@class,'h1 line margB_L')]");
-                            if (title.has_value()) {
-                                std::string name = "CARADISIAC_" + title.value();
-                                std::replace(name.begin(), name.end(), ' ', '_');
-                                Logger::trace("[{}].scrapModel : (Link {}/{}) filename {}", getFullId(), link_round, total_link, name);
-                                _saver.setName(name);
+                            link_round++;
+                        } else {
+                          
+                            // Accessing link
+                            response = _client.get(link);
+                            if (response.statusCode != 200) {
+                                Logger::warn("[{}].scrapModel : (Link {}/{}) get ({}) code {} - ignoring link",
+                                    getFullId(), link_round, total_link, link, response.statusCode);
                             } else {
-                                Logger::warn("[{}].scrapModel : (Link {}/{}) got no name", getFullId(), link_round, total_link);
-                                std::string name = "CARADISIAC_" + _carBrand + "." + _carModel + "_" + std::to_string(link_round);
-                                std::replace(name.begin(), name.end(), ' ', '_');
-                                _saver.setName(name);
+                                Logger::trace("[{}].scrapModel : (Link {}/{}) got ({})",
+                                    getFullId(), link_round, total_link, link);
+
+
+                                // Getting designation and replacing whitespaces
+                                CarScraper::HtmlParser sheetParser(response.body);
+                                auto title = sheetParser.getText("//h1[contains(@class,'h1 line margB_L')]");
+                                if (title.has_value()) {
+                                    std::string name = "CARADISIAC_" + title.value();
+                                    std::replace(name.begin(), name.end(), ' ', '_');
+                                    Logger::trace("[{}].scrapModel : (Link {}/{}) filename {}", getFullId(), link_round, total_link, name);
+                                    _saver.setName(name);
+                                } else {
+                                    Logger::warn("[{}].scrapModel : (Link {}/{}) got no name", getFullId(), link_round, total_link);
+                                    std::string name = "CARADISIAC_" + _carBrand + "." + _carModel + "_" + std::to_string(link_round);
+                                    std::replace(name.begin(), name.end(), ' ', '_');
+                                    _saver.setName(name);
+                                }
+                                _saver.setLink(link);
+                                _saver.setContent(response.body);
+                                _saver.save();
+                                fetched_link++;
+
                             }
-                            _saver.setLink(link);
-                            _saver.setContent(response.body);
-                            _saver.save();
-                            fetched_link++;
+                            link_round++;
 
                         }
-                        link_round++;
 
                     }
 
