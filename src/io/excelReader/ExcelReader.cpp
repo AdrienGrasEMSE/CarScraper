@@ -29,7 +29,6 @@
 #include <libxml/xpathInternals.h>
 #include <zip.h>
 #include <cctype>
-#include <stdexcept>
 #include <regex>
 #include <filesystem>
 
