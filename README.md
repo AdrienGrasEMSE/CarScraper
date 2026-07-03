@@ -27,13 +27,11 @@ Ce qui a été réalisé et testé :
 &#8303;
 
 Ce qui reste à faire :
-1. Mettre à jour la classe Car avec l'ajout de la donnée de la phase technique (exemple Clio 4 phase 1 ou 2).
-2. Mettre à jour la classe Car avec des données techniques sur la provenance des informations (fiche technique Argus ou Caradisiac).
-3. Créer les classe ArgusMapper et CaradisiacMapper capable de créer un objet Car à partir d'un HTML donné en entrée.
-6. Créer la classe CrossMapper capable de trouver et combiner deux fiches technique d'un même modèle pour obtenir une fiche technique plus complète.
-7. Créer la classe ExcelWritter capable de créer un fichier Excel contenant les infos comparatives d'un modèle.
-8. Créer le service d'extraction de fiches technique d'une voiture avec un système de filtrage, générant à la fin un fichier Excel. Peut nécessiter l'ajout d'une classe spécialisée dans le filtrage.
-9. Créer un service de mail automatique permettant d'informer l'utilisateur de la fin de l'exécution de l'application, avec en pièce jointe le fichier Excel généré.
+1. Créer les classe ArgusMapper et CaradisiacMapper capable de créer un objet Car à partir d'un HTML donné en entrée.
+2. Créer la classe CrossMapper capable de trouver et combiner deux fiches technique d'un même modèle pour obtenir une fiche technique plus complète.
+3. Créer la classe ExcelWritter capable de créer un fichier Excel contenant les infos comparatives d'un modèle.
+4. Créer le service d'extraction de fiches technique d'une voiture avec un système de filtrage, générant à la fin un fichier Excel. Peut nécessiter l'ajout d'une classe spécialisée dans le filtrage.
+5. Créer un service de mail automatique permettant d'informer l'utilisateur de la fin de l'exécution de l'application, avec en pièce jointe le fichier Excel généré.
 
 
 &#8303;
