@@ -39,6 +39,10 @@ namespace CarScraper {
      */
     GenericCarScraper::GenericCarScraper(const std::string& prefix) : Entity(prefix) {
 
+        // Default text case
+        _carBrandCase = CarScraper::TextCase::LOWER;
+        _carModelCase = CarScraper::TextCase::LOWER;
+
         // Default value
         _carBrand           = DEFAULT_STR;
         _carModel           = DEFAULT_STR;
@@ -103,6 +107,48 @@ namespace CarScraper {
             Logger::debug("[{}].setOutputDirectory : Directory {} does not exists", getFullId(), outputDirectory);
         }
         _saver.setOutputLinkDir(_outputDirectory);
+
+    }
+
+
+    /**
+     * @brief Sets the car brand case
+     * @param carBrandCase The car brand case
+     */
+    void GenericCarScraper::setCarBrandCase(CarScraper::TextCase carBrandCase) {
+
+       // Set value
+        _carBrandCase = carBrandCase;
+
+
+        // Log message
+        if (_carBrandCase == CarScraper::TextCase::NA) {
+            Logger::error("[{}].set{} got an invalid value", this->getFullId(), "CarBrandCase");
+        } else {
+            Logger::trace("[{}].set{} value: {}", this->getFullId(),
+                "CarBrandCase", CarScraper::textCaseToString(_carBrandCase));
+        }
+
+    }
+
+
+    /** 
+     * @brief Sets the car model case
+     * @param carModelCase The car model case
+     */
+    void GenericCarScraper::setCarModelCase(CarScraper::TextCase carModelCase) {
+
+       // Set value
+        _carModelCase = carModelCase;
+
+
+        // Log message
+        if (_carModelCase == CarScraper::TextCase::NA) {
+            Logger::error("[{}].set{} got an invalid value", this->getFullId(), "CarModelCase");
+        } else {
+            Logger::trace("[{}].set{} value: {}", this->getFullId(),
+                "CarModelCase", CarScraper::textCaseToString(_carModelCase));
+        }
 
     }
 
