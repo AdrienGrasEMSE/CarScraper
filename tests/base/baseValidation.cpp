@@ -12,7 +12,6 @@
 #include <catch2/catch.hpp>
 #include "core/utils/Validation.hpp"
 #include "core/utils/Constant.hpp"
-#include "core/logger/Logger.hpp"
 
 
 /**

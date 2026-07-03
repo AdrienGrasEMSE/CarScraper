@@ -19,7 +19,6 @@
 #include "core/enum/Co2Class.hpp"
 #include <string>
 #include <ostream>
-#include <iomanip>
 #include <uni_algo/case.h>
 #include <uni_algo/norm.h>
 #include <stduuid/uuid.h>

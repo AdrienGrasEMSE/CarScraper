@@ -12,7 +12,6 @@
 
 // Imports
 #include <catch2/catch.hpp>
-#include "core/logger/Logger.hpp"
 #include "core/enum/FuelType.hpp"
 #include "core/enum/GearboxType.hpp"
 #include "core/enum/Co2Class.hpp"
