@@ -182,7 +182,8 @@ namespace CarScraper {
                             Logger::warn("[{}].scrapModel : (Link {}/{}) get ({}) code {} - ignoring link",
                                 getFullId(), round, total_link, current_link, response.statusCode);
                         } else {
-                            Logger::trace("[{}].scrapModel : (Link {}/{}) got {}", getFullId(), round, total_link, current_link);
+                            Logger::trace("[{}].scrapModel : (Link {}/{}) got {}",
+                                getFullId(), round, total_link, current_link);
 
 
                             // Getting designation and replacing whitespaces
