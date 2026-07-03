@@ -140,6 +140,25 @@ namespace CarScraper {
 
 
     /**
+     * @brief Sets the phase value
+     * @details The phase value is normalized
+     * @param phase The phase value
+     * @note The maximum length accepted is 50 characters
+     */
+    void Car::setPhase(const std::string& phase) {
+        
+        // Validation
+        _phase = Validation::stringValidation(phase, this->getFullId(), "Phase", 50);
+
+        // Normalize UTF-8 (NFC) only — phase is a technical identifier
+        if (_phase != CarScraper::ERROR_STR) {
+            this->_phase = una::norm::to_nfc_utf8(_phase);
+        }
+
+    }
+
+
+    /**
      * @brief Sets the engine value
      * @details The engine value is normalized
      * @param engine The engine value
@@ -552,6 +571,7 @@ namespace CarScraper {
         if (_brand      == DEFAULT_STR)     return false;
         if (_model      == DEFAULT_STR)     return false;
         if (_generation == DEFAULT_STR)     return false;
+        if (_phase      == DEFAULT_STR)     return false;
         if (_engine     == DEFAULT_STR)     return false;
         if (_trim       == DEFAULT_STR)     return false;
         if (_price      == DEFAULT_INT)     return false;
@@ -604,6 +624,7 @@ namespace CarScraper {
         if (_brand      == ERROR_STR)       return false;
         if (_model      == ERROR_STR)       return false;
         if (_generation == ERROR_STR)       return false;
+        if (_phase      == ERROR_STR)       return false;
         if (_engine     == ERROR_STR)       return false;
         if (_trim       == ERROR_STR)       return false;
         if (_price      == ERROR_INT)       return false;
@@ -659,6 +680,7 @@ namespace CarScraper {
         oss << "    -> " << std::left << std::setw(17) << "Brand"          << ": \"" << _brand       << "\"\n";
         oss << "    -> " << std::left << std::setw(17) << "Model"          << ": \"" << _model       << "\"\n";
         oss << "    -> " << std::left << std::setw(17) << "Generation"     << ": \"" << _generation  << "\"\n";
+        oss << "    -> " << std::left << std::setw(17) << "Phase"          << ": \"" << _phase       << "\"\n";
         oss << "    -> " << std::left << std::setw(17) << "Engine"         << ": \"" << _engine      << "\"\n";
         oss << "    -> " << std::left << std::setw(17) << "Trim"           << ": \"" << _trim        << "\"\n";
         oss << "    -> " << std::left << std::setw(17) << "Price"          << ": "   << _price       << " €\n";

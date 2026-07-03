@@ -56,35 +56,36 @@ namespace CarScraper {
         private:
 
             // General
-            std::string     _brand;                     ///< Car brand                        | ex: "Renault"
-            std::string     _model;                     ///< Car model                        | ex: "Clio"
-            std::string     _generation;                ///< Car generation                   | ex: "4"
-            std::string     _engine;                    ///< Car engine                       | ex: "1.5 dCi 90hp"
-            std::string     _trim;                      ///< Car trim                         | ex: "Expression"
-            int             _price;                     ///< Car price (in €)                 | ex: 15000
+            std::string     _brand;                     ///< Car brand                          | ex: "Renault"
+            std::string     _model;                     ///< Car model                          | ex: "Clio"
+            std::string     _generation;                ///< Car generation                     | ex: "4"
+            std::string     _phase;                     ///< Car phase                          | ex: "2"
+            std::string     _engine;                    ///< Car engine                         | ex: "1.5 dCi 90hp"
+            std::string     _trim;                      ///< Car trim                           | ex: "Expression"
+            int             _price;                     ///< Car price (in €)                   | ex: 15000
 
             // Dimensions
-            double          _height;                    ///< Car height (in m)                | ex: 1.45
-            double          _length;                    ///< Car length (in m)                | ex: 4.05
-            double          _width;                     ///< Car width (in m)                 | ex: 1.75
-            int             _trunkVolume;               ///< Car trunk volume (in L)          | ex: 300
-            int             _weight;                    ///< Car weight (in kg)               | ex: 1200
-            int             _seatCount;                 ///< Car seat count                   | ex: 5
+            double          _height;                    ///< Car height (in m)                  | ex: 1.45
+            double          _length;                    ///< Car length (in m)                  | ex: 4.05
+            double          _width;                     ///< Car width (in m)                   | ex: 1.75
+            int             _trunkVolume;               ///< Car trunk volume (in L)            | ex: 300
+            int             _weight;                    ///< Car weight (in kg)                 | ex: 1200
+            int             _seatCount;                 ///< Car seat count                     | ex: 5
 
             // Transmission
-            CarScraper::GearboxType _gearboxType;       ///< Car gearbox type                 | AUTOMATIC / MANUAL
-            int                     _gearCount;         ///< Car gear count                   | ex: 5
+            CarScraper::GearboxType _gearboxType;       ///< Car gearbox type                   | AUTOMATIC / MANUAL
+            int                     _gearCount;         ///< Car gear count                     | ex: 5
 
             // Power
-            CarScraper::FuelType    _fuelType;          ///< Car fuel type                    | ex: EE / EL / ES / GL / GO / GP / H2
-            int                     _horsePower;        ///< Car horse power (in DIN hp)      | ex: 90
-            int                     _taxHorsePower;     ///< Car tax horse power              | ex: 5
+            CarScraper::FuelType    _fuelType;          ///< Car fuel type                      | ex: EE / EL / ES / GL / GO / GP / H2
+            int                     _horsePower;        ///< Car horse power (in DIN hp)        | ex: 90
+            int                     _taxHorsePower;     ///< Car tax horse power                | ex: 5
 
             // Consumption
-            int                     _tankCapacity;      ///< Car tank capacity (in L)         | ex: 50
-            double                  _fuelConsumption;   ///< Car fuel consumption (in L/100km)| ex: 4.5
-            int                     _co2Emissions;      ///< Car co2 emissions (in g/km)      | ex: 120
-            CarScraper::Co2Class    _co2Class;          ///< Car co2 class                    | A / B / C / D / E / F / G
+            int                     _tankCapacity;      ///< Car tank capacity (in L)           | ex: 50
+            double                  _fuelConsumption;   ///< Car fuel consumption (in L/100km)  | ex: 4.5
+            int                     _co2Emissions;      ///< Car co2 emissions (in g/km)        | ex: 120
+            CarScraper::Co2Class    _co2Class;          ///< Car co2 class                      | A / B / C / D / E / F / G
 
             // Commercialisation
             std::optional<std::chrono::year_month_day>  _commercialisationStart;    ///< Car commercialisation start year | ex: "01/01/2012"
@@ -134,6 +135,12 @@ namespace CarScraper {
              *  @return The generation of the car
              */
             const std::string& getGeneration() const { return _generation; }
+
+
+            /** @brief Gets the phase of the car
+             *  @return The phase of the car
+             */
+            const std::string& getPhase() const { return _phase; }
 
 
             /** @brief Gets the engine of the car
@@ -294,6 +301,16 @@ namespace CarScraper {
              * @note The maximum length accepted is 50 characters
              */
             void setGeneration(const std::string& generation);
+
+
+
+            /**
+             * @brief Sets the phase value
+             * @details The phase value is normalized
+             * @param phase The phase value
+             * @note The maximum length accepted is 50 characters
+             */
+            void setPhase(const std::string& phase);
 
 
             /**
