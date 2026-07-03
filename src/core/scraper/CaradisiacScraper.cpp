@@ -29,7 +29,13 @@ namespace CarScraper {
     /**
      * @brief Default constructor
      */
-    CaradisiacScraper::CaradisiacScraper() : GenericCarScraper("CARADISIAC_SCRAPER") {}
+    CaradisiacScraper::CaradisiacScraper() : GenericCarScraper("CARADISIAC_SCRAPER") {
+
+        // Setting up brand and model case
+        this->setCarBrandCase(CarScraper::TextCase::LOWER);
+        this->setCarModelCase(CarScraper::TextCase::LOWER);
+    
+    }
 
 
 

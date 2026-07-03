@@ -28,7 +28,13 @@ namespace CarScraper {
     /**
      * @brief Default constructor
      */
-    ArgusScraper::ArgusScraper() : GenericCarScraper("ARGUS_SCRAPER") {}
+    ArgusScraper::ArgusScraper() : GenericCarScraper("ARGUS_SCRAPER") {
+
+        // Setting up brand and model case
+        this->setCarBrandCase(CarScraper::TextCase::TITLE);
+        this->setCarModelCase(CarScraper::TextCase::TITLE);
+
+    }
 
 
 
