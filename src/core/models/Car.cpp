@@ -40,6 +40,7 @@ namespace CarScraper {
         _brand              = DEFAULT_STR;
         _model              = DEFAULT_STR;
         _generation         = DEFAULT_STR;
+        _phase              = DEFAULT_STR;
         _engine             = DEFAULT_STR;
         _trim               = DEFAULT_STR;
         _price              = DEFAULT_INT;
