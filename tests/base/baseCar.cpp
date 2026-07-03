@@ -34,6 +34,7 @@ static Car buildValidCar() {
     c.setBrand                  ("Toyota");
     c.setModel                  ("Corolla");
     c.setGeneration             ("E210");
+    c.setPhase                  ("2");
     c.setEngine                 ("1.8L Hybrid");
     c.setTrim                   ("Dynamic");
     c.setPrice                  (25000);
@@ -89,6 +90,7 @@ TEST_CASE("Car Default Construction", "[car][construction]") {
         REQUIRE(c.getBrand()      == DEFAULT_STR);
         REQUIRE(c.getModel()      == DEFAULT_STR);
         REQUIRE(c.getGeneration() == DEFAULT_STR);
+        REQUIRE(c.getPhase()      == DEFAULT_STR);
         REQUIRE(c.getEngine()     == DEFAULT_STR);
         REQUIRE(c.getTrim()       == DEFAULT_STR);
     }
@@ -157,6 +159,12 @@ TEST_CASE("Car Setters — Valid Values", "[car][setters][valid]") {
         Car c;
         c.setGeneration("IV");
         REQUIRE(c.getGeneration() == "IV");
+    }
+
+    SECTION("setPhase stores the value") {
+        Car c;
+        c.setPhase("2");
+        REQUIRE(c.getPhase() == "2");
     }
 
     SECTION("setEngine stores the value") {
@@ -328,6 +336,12 @@ TEST_CASE("Car Setters — String Formatting", "[car][setters][formatting]") {
         Car c;
         c.setGeneration("e210");
         REQUIRE(c.getGeneration() == "e210");
+    }
+    
+    SECTION("setPhase preserves the original case") {
+        Car c;
+        c.setPhase("phAse2");
+        REQUIRE(c.getPhase() == "phAse2");
     }
 
     SECTION("setEngine preserves the original case") {
