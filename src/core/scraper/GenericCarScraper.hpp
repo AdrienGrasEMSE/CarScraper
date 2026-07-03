@@ -14,6 +14,7 @@
 
 // Imports
 #include "core/models/Entity.hpp"
+#include "core/enum/TextCase.hpp"
 #include "io/httpClient/HttpClient.hpp"
 #include "io/htmlSaver/HtmlSaver.hpp"
 #include <string>
@@ -33,6 +34,19 @@ namespace CarScraper {
      * @brief Base for website-specific scrapers.
      */
     class GenericCarScraper : public Entity {
+
+        // =========================================================================
+        // Private data and methods
+        // =========================================================================
+        private:
+        
+            // Text case for the car brand and model
+            CarScraper::TextCase        _carBrandCase;      ///< The text case for the car brand
+            CarScraper::TextCase        _carModelCase;      ///< The text case for the car model
+
+
+
+
 
         // =========================================================================
         // Protected data and methods
@@ -136,6 +150,19 @@ namespace CarScraper {
             // -------------------------------------------------------------------------
             // Setters
             // -------------------------------------------------------------------------
+
+            /**
+             * @brief Sets the car brand case
+             * @param carBrandCase The car brand case
+             */
+            void setCarBrandCase(CarScraper::TextCase carBrandCase);
+
+
+            /** 
+             * @brief Sets the car model case
+             * @param carModelCase The car model case
+             */
+            void setCarModelCase(CarScraper::TextCase carModelCase);
 
 
             /**

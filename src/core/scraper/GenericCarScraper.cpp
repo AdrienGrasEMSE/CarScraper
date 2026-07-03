@@ -110,18 +110,42 @@ namespace CarScraper {
     /**
      * @brief Set the car brand
      * @param carBrand The car brand
+     * @note Applies the case defined by _carBrandCase
      */
     void GenericCarScraper::setCarBrand(const std::string& carBrand) {
-        _carBrand = una::cases::to_lowercase_utf8(una::norm::to_nfc_utf8(carBrand));
+
+        // Applying case
+        if (_carBrandCase == TextCase::TITLE) {
+            _carBrand = una::cases::to_titlecase_utf8(una::norm::to_nfc_utf8(carBrand));
+        }
+        else if (_carBrandCase == TextCase::UPPER) {
+            _carBrand = una::cases::to_uppercase_utf8(una::norm::to_nfc_utf8(carBrand));
+        }
+        else {
+            _carBrand = una::cases::to_lowercase_utf8(una::norm::to_nfc_utf8(carBrand));
+        }
+
     }
 
 
     /**
      * @brief Set the car model
      * @param carModel The car model
+     * @note Applies the case defined by _carModelCase
      */
     void GenericCarScraper::setCarModel(const std::string& carModel) {
-        _carModel = una::cases::to_lowercase_utf8(una::norm::to_nfc_utf8(carModel));
+
+        // Applying case
+        if (_carModelCase == TextCase::TITLE) {
+            _carModel = una::cases::to_titlecase_utf8(una::norm::to_nfc_utf8(carModel));
+        }
+        else if (_carModelCase == TextCase::UPPER) {
+            _carModel = una::cases::to_uppercase_utf8(una::norm::to_nfc_utf8(carModel));
+        }
+        else {
+            _carModel = una::cases::to_lowercase_utf8(una::norm::to_nfc_utf8(carModel));
+        }
+
     }
 
 
