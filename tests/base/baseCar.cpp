@@ -55,6 +55,7 @@ static Car buildValidCar() {
     c.setCo2Class               (Co2Class::A);
     c.setCommercialisationStart ("01/01/2019");
     c.setStillInSale            (true);
+    c.setDataSource             (DataSource::ARGUS);
     return c;
 }
 
@@ -118,9 +119,10 @@ TEST_CASE("Car Default Construction", "[car][construction]") {
 
     SECTION("All enum attributes are NA") {
         Car c;
+        REQUIRE(c.getCo2Class()    == Co2Class::NA);
         REQUIRE(c.getGearboxType() == GearboxType::NA);
         REQUIRE(c.getFuelType()    == FuelType::NA);
-        REQUIRE(c.getCo2Class()    == Co2Class::NA);
+        REQUIRE(c.getDataSource()  == DataSource::NA);
     }
 
     SECTION("Commercialisation dates are nullopt") {
@@ -299,6 +301,18 @@ TEST_CASE("Car Setters — Valid Values", "[car][setters][valid]") {
         REQUIRE(c.isStillInSale() == true);
     }
 
+    SECTION("setDataSource (string) stores the enum value") {
+        Car c;
+        c.setDataSource("Argus");
+        REQUIRE(c.getDataSource() == DataSource::ARGUS);
+    }
+
+    SECTION("setDataSource (enum) stores the value directly") {
+        Car c;
+        c.setDataSource(DataSource::ARGUS);
+        REQUIRE(c.getDataSource() == DataSource::ARGUS);
+    }
+
 }
 
 
@@ -368,6 +382,12 @@ TEST_CASE("Car Setters — String Formatting", "[car][setters][formatting]") {
         Car c;
         c.setCo2Class("a");
         REQUIRE(c.getCo2Class() == Co2Class::A);
+    }
+
+    SECTION("setDataSource (string) is case-insensitive") {
+        Car c;
+        c.setDataSource("ARguS");
+        REQUIRE(c.getDataSource() == DataSource::ARGUS);
     }
 
 }
@@ -551,6 +571,18 @@ TEST_CASE("Car Setters — Invalid Values", "[car][setters][invalid]") {
         REQUIRE(c.getCo2Class() == Co2Class::NA);
     }
 
+    SECTION("setDataSource (string) with unknown value stores NA") {
+        Car c;
+        c.setDataSource("InvalidSource");
+        REQUIRE(c.getDataSource() == DataSource::NA);
+    }
+
+    SECTION("setDataSource (string) with empty string stores NA") {
+        Car c;
+        c.setDataSource("");
+        REQUIRE(c.getDataSource() == DataSource::NA);
+    }
+
 }
 
 
@@ -671,6 +703,34 @@ TEST_CASE("Car Setters — Commercialisation Dates", "[car][setters][dates]") {
 
 
 // =============================================================================
+// Tests — Co2Class enum conversions
+// =============================================================================
+
+TEST_CASE("Car Co2Class Conversions", "[car][enum][co2class]") {
+
+    SECTION("setCo2Class A through G via string") {
+        Car c;
+        const std::vector<std::pair<std::string, Co2Class>> cases = {
+            {"A", Co2Class::A}, {"B", Co2Class::B}, {"C", Co2Class::C},
+            {"D", Co2Class::D}, {"E", Co2Class::E}, {"F", Co2Class::F},
+            {"G", Co2Class::G}
+        };
+        for (const auto& [str, expected] : cases) {
+            c.setCo2Class(str);
+            REQUIRE(c.getCo2Class() == expected);
+        }
+    }
+
+    SECTION("setCo2Class unknown string stores NA") {
+        Car c;
+        c.setCo2Class("H");
+        REQUIRE(c.getCo2Class() == Co2Class::NA);
+    }
+
+}
+
+
+// =============================================================================
 // Tests — FuelType enum conversions
 // =============================================================================
 
@@ -743,28 +803,27 @@ TEST_CASE("Car GearboxType Conversions", "[car][enum][gearbox]") {
 
 
 // =============================================================================
-// Tests — Co2Class enum conversions
+// Tests — DataSource enum conversions
 // =============================================================================
 
-TEST_CASE("Car Co2Class Conversions", "[car][enum][co2class]") {
+TEST_CASE("Car DataSource Conversions", "[car][enum][datasource]") {
 
-    SECTION("setCo2Class A through G via string") {
+    SECTION("setDataSource Argus") {
         Car c;
-        const std::vector<std::pair<std::string, Co2Class>> cases = {
-            {"A", Co2Class::A}, {"B", Co2Class::B}, {"C", Co2Class::C},
-            {"D", Co2Class::D}, {"E", Co2Class::E}, {"F", Co2Class::F},
-            {"G", Co2Class::G}
-        };
-        for (const auto& [str, expected] : cases) {
-            c.setCo2Class(str);
-            REQUIRE(c.getCo2Class() == expected);
-        }
+        c.setDataSource("Argus");
+        REQUIRE(c.getDataSource() == DataSource::ARGUS);
     }
 
-    SECTION("setCo2Class unknown string stores NA") {
+    SECTION("setDataSource Argus") {
         Car c;
-        c.setCo2Class("H");
-        REQUIRE(c.getCo2Class() == Co2Class::NA);
+        c.setDataSource("Argus");
+        REQUIRE(c.getDataSource() == DataSource::ARGUS);
+    }
+
+    SECTION("setDataSource unknown string stores NA") {
+        Car c;
+        c.setDataSource("robotisée");
+        REQUIRE(c.getDataSource() == DataSource::NA);
     }
 
 }
@@ -821,6 +880,12 @@ TEST_CASE("Car isComplete and isValid", "[car][utilities]") {
     SECTION("Car with Co2Class::NA is not complete") {
         Car c = buildValidCar();
         c.setCo2Class(Co2Class::NA);
+        REQUIRE_FALSE(c.isComplete());
+    }
+
+    SECTION("Car with DataSource::NA is not complete") {
+        Car c = buildValidCar();
+        c.setDataSource(DataSource::NA);
         REQUIRE_FALSE(c.isComplete());
     }
 
