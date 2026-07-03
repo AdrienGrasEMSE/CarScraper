@@ -106,22 +106,18 @@ TEST_CASE("GenericCarScraper Construction", "[genericscraper][construction]") {
 
 TEST_CASE("GenericCarScraper setCarBrand", "[genericscraper][setter][brand]") {
 
-    SECTION("Valid brand is stored") {
+    SECTION("Valid brand is stored in default case") {
         TestScraper scraper;
         scraper.setCarBrand("Renault");
-        REQUIRE(scraper.getCarBrand() == "Renault");
+        REQUIRE(scraper.getCarBrand() == "renault");
     }
 
-    SECTION("Brand is normalized to titlecase from lowercase") {
+    SECTION("Brand is normalized to default case") {
         TestScraper scraper;
         scraper.setCarBrand("renault");
-        REQUIRE(scraper.getCarBrand() == "Renault");
-    }
-
-    SECTION("Brand is normalized to titlecase from uppercase") {
-        TestScraper scraper;
+        REQUIRE(scraper.getCarBrand() == "renault");
         scraper.setCarBrand("RENAULT");
-        REQUIRE(scraper.getCarBrand() == "Renault");
+        REQUIRE(scraper.getCarBrand() == "renault");
     }
 
     SECTION("Brand with accented characters is NFC normalized and non-empty") {
@@ -140,7 +136,63 @@ TEST_CASE("GenericCarScraper setCarBrand", "[genericscraper][setter][brand]") {
         TestScraper scraper;
         scraper.setCarBrand("Renault");
         scraper.setCarBrand("Peugeot");
-        REQUIRE(scraper.getCarBrand() == "Peugeot");
+        REQUIRE(scraper.getCarBrand() == "peugeot");
+    }
+
+}
+
+
+// =============================================================================
+// Tests — setCarBrandCase
+// =============================================================================
+
+TEST_CASE("GenericCarScraper setCarBrandCase", "[genericscraper][setter][brandCase]") {
+
+    SECTION("Default case is LOWER") {
+        TestScraper scraper;
+        scraper.setCarBrand("RENAULT");
+        REQUIRE(scraper.getCarBrand() == "renault");
+    }
+
+    SECTION("Invalid case fallback to LOWER") {
+        TestScraper scraper;
+        scraper.setCarBrandCase(CarScraper::TextCase::NA);
+        scraper.setCarBrand("RENAULT");
+        REQUIRE(scraper.getCarBrand() == "renault");
+    }
+
+    SECTION("TITLE case is applied") {
+        TestScraper scraper;
+        scraper.setCarBrandCase(CarScraper::TextCase::TITLE);
+        scraper.setCarBrand("RENAULT");
+        REQUIRE(scraper.getCarBrand() == "Renault");
+    }
+
+    SECTION("UPPER case is applied") {
+        TestScraper scraper;
+        scraper.setCarBrandCase(CarScraper::TextCase::UPPER);
+        scraper.setCarBrand("renault");
+        REQUIRE(scraper.getCarBrand() == "RENAULT");
+    }
+
+    SECTION("LOWER case is applied") {
+        TestScraper scraper;
+        scraper.setCarBrandCase(CarScraper::TextCase::LOWER);
+        scraper.setCarBrand("RENAULT");
+        REQUIRE(scraper.getCarBrand() == "renault");
+    }
+
+    SECTION("setCarBrandCase does not throw") {
+        TestScraper scraper;
+        REQUIRE_NOTHROW(scraper.setCarBrandCase(CarScraper::TextCase::LOWER));
+    }
+
+    SECTION("setCarBrandCase can be called multiple times") {
+        TestScraper scraper;
+        scraper.setCarBrandCase(CarScraper::TextCase::UPPER);
+        scraper.setCarBrandCase(CarScraper::TextCase::LOWER);
+        scraper.setCarBrand("Renault");
+        REQUIRE(scraper.getCarBrand() == "renault");
     }
 
 }
@@ -152,22 +204,18 @@ TEST_CASE("GenericCarScraper setCarBrand", "[genericscraper][setter][brand]") {
 
 TEST_CASE("GenericCarScraper setCarModel", "[genericscraper][setter][model]") {
 
-    SECTION("Valid model is stored") {
+    SECTION("Valid model is stored in default case") {
         TestScraper scraper;
         scraper.setCarModel("Clio");
-        REQUIRE(scraper.getCarModel() == "Clio");
+        REQUIRE(scraper.getCarModel() == "clio");
     }
 
-    SECTION("Model is normalized to titlecase from lowercase") {
+    SECTION("Model is normalized to default case") {
         TestScraper scraper;
         scraper.setCarModel("clio");
-        REQUIRE(scraper.getCarModel() == "Clio");
-    }
-
-    SECTION("Model is normalized to titlecase from uppercase") {
-        TestScraper scraper;
+        REQUIRE(scraper.getCarModel() == "clio");
         scraper.setCarModel("CLIO");
-        REQUIRE(scraper.getCarModel() == "Clio");
+        REQUIRE(scraper.getCarModel() == "clio");
     }
 
     SECTION("setCarModel does not throw") {
@@ -179,15 +227,81 @@ TEST_CASE("GenericCarScraper setCarModel", "[genericscraper][setter][model]") {
         TestScraper scraper;
         scraper.setCarBrand("Renault");
         scraper.setCarModel("Clio");
-        REQUIRE(scraper.getCarBrand() == "Renault");
-        REQUIRE(scraper.getCarModel() == "Clio");
+        REQUIRE(scraper.getCarBrand() == "renault");
+        REQUIRE(scraper.getCarModel() == "clio");
     }
 
     SECTION("setCarModel can be called multiple times") {
         TestScraper scraper;
         scraper.setCarModel("Clio");
         scraper.setCarModel("Megane");
-        REQUIRE(scraper.getCarModel() == "Megane");
+        REQUIRE(scraper.getCarModel() == "megane");
+    }
+
+}
+
+
+// =============================================================================
+// Tests — setCarModelCase
+// =============================================================================
+
+TEST_CASE("GenericCarScraper setCarModelCase", "[genericscraper][setter][modelCase]") {
+
+    SECTION("Default case is LOWER") {
+        TestScraper scraper;
+        scraper.setCarModel("Clio");
+        REQUIRE(scraper.getCarModel() == "clio");
+    }
+
+    SECTION("Invalid case fallback to LOWER") {
+        TestScraper scraper;
+        scraper.setCarModelCase(CarScraper::TextCase::NA);
+        scraper.setCarModel("Clio");
+        REQUIRE(scraper.getCarModel() == "clio");
+    }
+
+    SECTION("TITLE case is applied") {
+        TestScraper scraper;
+        scraper.setCarModelCase(CarScraper::TextCase::TITLE);
+        scraper.setCarModel("cliO");
+        REQUIRE(scraper.getCarModel() == "Clio");
+    }
+
+    SECTION("UPPER case is applied") {
+        TestScraper scraper;
+        scraper.setCarModelCase(CarScraper::TextCase::UPPER);
+        scraper.setCarModel("clio");
+        REQUIRE(scraper.getCarModel() == "CLIO");
+    }
+
+    SECTION("LOWER case is applied") {
+        TestScraper scraper;
+        scraper.setCarModelCase(CarScraper::TextCase::LOWER);
+        scraper.setCarModel("Clio");
+        REQUIRE(scraper.getCarModel() == "clio");
+    }
+
+    SECTION("setCarModelCase does not throw") {
+        TestScraper scraper;
+        REQUIRE_NOTHROW(scraper.setCarModelCase(CarScraper::TextCase::LOWER));
+    }
+
+    SECTION("setCarModelCase can be called multiple times") {
+        TestScraper scraper;
+        scraper.setCarModelCase(CarScraper::TextCase::UPPER);
+        scraper.setCarModelCase(CarScraper::TextCase::LOWER);
+        scraper.setCarModel("Clio");
+        REQUIRE(scraper.getCarModel() == "clio");
+    }
+
+    SECTION("setCarModelCase and setCarBrandCase are independent") {
+        TestScraper scraper;
+        scraper.setCarBrandCase(CarScraper::TextCase::UPPER);
+        scraper.setCarModelCase(CarScraper::TextCase::TITLE);
+        scraper.setCarBrand("renault");
+        scraper.setCarModel("clIO");
+        REQUIRE(scraper.getCarBrand() == "RENAULT");
+        REQUIRE(scraper.getCarModel() == "Clio");
     }
 
 }
