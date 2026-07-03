@@ -90,7 +90,6 @@ namespace CarScraper {
 
         // ----- Step 2 - Navigate to largus.fr/Toutes-Marques.html -------------------------------
         _client.clearReferer();
-        Logger::debug("[{}].scrapModel : starting to scrap \"{}-{}\"", getFullId(), _carBrand, _carModel);
         main_link = "https://www.largus.fr/Toutes-Marques.html";
         response = _client.get(main_link);
         if (response.statusCode != 200) {
