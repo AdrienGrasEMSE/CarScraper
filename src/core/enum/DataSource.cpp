@@ -25,9 +25,9 @@ namespace CarScraper {
      */
     std::string dataSourceToString(DataSource value) {
         switch (value) {
-            case DataSource::ARGUS:      return "Argus";
-            case DataSource::CARADISIAC: return "Caradisiac";
-            case DataSource::NA:         return "Unknown";
+            case DataSource::ARGUS:         return "Argus";
+            case DataSource::CARADISIAC:    return "Caradisiac";
+            default:                        return "Unknown";
         }
     }
 
