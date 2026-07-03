@@ -270,7 +270,11 @@ namespace CarScraper {
      * @brief Save the _savedLink attributes in a JSON file
      * @return true or false wheter the link has been saved or not
      */
-    int HtmlSaver::exportSavedLink() const {
+    int HtmlSaver::exportSavedLink() {
+
+        // First getting the lastest version of the saved link file
+        this->importSavedLink();
+
 
         // Converting the saved link list into a JSON
         nlohmann::json savedLinkJSON =  nlohmann::json::array();

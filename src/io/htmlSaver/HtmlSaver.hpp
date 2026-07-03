@@ -215,7 +215,7 @@ namespace CarScraper {
              * @brief Save the _savedLink attributes in a JSON file
              * @return true or false wheter the link has been saved or not
              */
-            int exportSavedLink() const;
+            int exportSavedLink();
 
 
             /**
