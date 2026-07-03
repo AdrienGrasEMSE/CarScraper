@@ -39,7 +39,11 @@
 │   │   │   └── Entity.hpp
 │   │   ├── scraper
 │   │   │   ├── ArgusScraper.cpp
-│   │   │   └── ArgusScraper.hpp
+│   │   │   ├── ArgusScraper.hpp
+│   │   │   ├── CaradisiacScraper.cpp
+│   │   │   ├── CaradisiacScraper.hpp
+│   │   │   ├── GenericCarScraper.cpp
+│   │   │   └── GenericCarScraper.hpp
 │   │   └── utils
 │   │       ├── Constant.hpp
 │   │       ├── Validation.cpp
@@ -64,6 +68,7 @@
     │   ├── baseCar.cpp
     │   ├── baseEntity.cpp
     │   ├── baseExcelReader.cpp
+    │   ├── baseGenericCarScraper.cpp
     │   ├── baseHtmlParser.cpp
     │   ├── baseHtmlSaver.cpp
     │   ├── baseHttpClient.cpp
@@ -73,6 +78,7 @@
     │   ├── testCar.cpp
     │   ├── testEntity.cpp
     │   ├── testExcelReader.cpp
+    │   ├── testGenericCarScraper.cpp
     │   ├── testHtmlParser.cpp
     │   ├── testHtmlSaver.cpp
     │   ├── testHttpClient.cpp
@@ -80,4 +86,4 @@
     │   └── testValidation.cpp
     └── testAll.cpp
 
-27 directories, 54 files
+27 directories, 60 files
