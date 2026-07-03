@@ -73,6 +73,9 @@ namespace CarScraper {
         _commercialisationEnd    = std::nullopt;
         _stillInSale             = false;
 
+        // Technical Data
+        _dataSource         = CarScraper::DataSource::NA;
+
     }
 
 
@@ -554,6 +557,51 @@ namespace CarScraper {
     }
 
 
+    /**
+     * @brief Sets the data source using an enum value
+     * @param dataSource The data source
+     */
+    void Car::setDataSource(const CarScraper::DataSource dataSource) {
+
+       // Set value
+        _dataSource = dataSource;
+
+
+        // Log message
+        if (_dataSource == CarScraper::DataSource::NA) {
+            Logger::error("[{}].set{} got an invalid value", this->getFullId(), "DataSource");
+        } else {
+            Logger::trace("[{}].set{} value: {}", this->getFullId(),
+                "DataSource", CarScraper::dataSourceToString(_dataSource));
+        }
+
+    }
+
+
+    /**
+     * @brief Sets the data source using a string value
+     * @details The string value will be converted to the corresponding enum value
+     * using the CarScraper::dataSourceFromString() method. If the string value is invalid,
+     * the data source will be set to NA and an error message will be logged.
+     * @param dataSource The data source
+     */
+    void Car::setDataSource(const std::string& dataSource) {
+
+       // Set value
+        _dataSource = CarScraper::dataSourceFromString(dataSource);
+
+
+        // Log message
+        if (_dataSource == CarScraper::DataSource::NA) {
+            Logger::error("[{}].set{} got an invalid value", this->getFullId(), "DataSource");
+        } else {
+            Logger::trace("[{}].set{} value: {}", this->getFullId(),
+                "DataSource", CarScraper::dataSourceToString(_dataSource));
+        }
+
+    }
+
+
 
 
 
@@ -607,6 +655,10 @@ namespace CarScraper {
 
         // Commercialisation
         if (!_commercialisationStart.has_value()) return false;
+
+
+        // Technical Data
+        if (_dataSource     == DataSource::NA)  return false;
 
 
         // Car complete
@@ -743,6 +795,12 @@ namespace CarScraper {
                     : "still in sale")
             << "\"\n";
         oss << "    -> " << std::left << std::setw(17) << "Still in Sale"  << ": " << _stillInSale << "\n";
+
+
+        // -------------------------------------------------------------------------
+        // Technical Data
+        // -------------------------------------------------------------------------
+        oss << "    -> " << std::left << std::setw(17) << "Data source"     << ": \"" << dataSourceToString(_dataSource)  << "\"\n";
 
 
         return oss.str();

@@ -14,9 +14,10 @@
 
 // Imports
 #include "Entity.hpp"
+#include "core/enum/Co2Class.hpp"
 #include "core/enum/FuelType.hpp"
 #include "core/enum/GearboxType.hpp"
-#include "core/enum/Co2Class.hpp"
+#include "core/enum/DataSource.hpp"
 #include <string>
 #include <ostream>
 #include <uni_algo/case.h>
@@ -91,6 +92,10 @@ namespace CarScraper {
             std::optional<std::chrono::year_month_day>  _commercialisationStart;    ///< Car commercialisation start year | ex: "01/01/2012"
             std::optional<std::chrono::year_month_day>  _commercialisationEnd;      ///< Car commercialisation end year   | ex: "08/09/2019"
             bool                                        _stillInSale;               ///< Car still in sale                | ex: false
+
+            // Technical Data
+            CarScraper::DataSource  _dataSource;        ///< Car data source                    | ex: ARGUS / CARADISIAC
+
 
 
 
@@ -267,6 +272,12 @@ namespace CarScraper {
              *  @return Whether the car is still in sale
              */
             bool isStillInSale() const { return _stillInSale; }
+
+
+            /** @brief Gets the data source of the car
+             *  @return The data source of the car
+             */
+            CarScraper::DataSource getDataSource() const { return _dataSource; }
 
 
 
@@ -507,6 +518,23 @@ namespace CarScraper {
              * @param stillInSale The still in sale value
              */
             void setStillInSale(bool stillInSale);
+
+
+            /**
+             * @brief Sets the data source value using an enum value
+             * @param dataSource The data source value
+             */
+            void setDataSource(const CarScraper::DataSource dataSource);
+
+
+            /**
+             * @brief Sets the data source value using a string value
+             * @details The string value will be converted to the corresponding enum value
+             * using the CarScraper::dataSourceFromString() method. If the string value is invalid,
+             * the data source will be set to NA and an error message will be logged.
+             * @param dataSource The data source value
+             */
+            void setDataSource(const std::string& dataSource);
 
 
 
