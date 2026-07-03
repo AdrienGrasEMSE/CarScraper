@@ -1,10 +1,8 @@
 .
 ├── CMakeLists.txt
 ├── data
-│   ├── save_link
-│   │   └── saved_link.json
-│   └── test_html
-│       └── htmlparser_test.html
+│   └── save_link
+│       └── saved_link.json
 ├── docs
 ├── Doxyfile
 ├── generate_tree.sh
@@ -25,13 +23,20 @@
 │   │   ├── enum
 │   │   │   ├── Co2Class.cpp
 │   │   │   ├── Co2Class.hpp
+│   │   │   ├── DataSource.cpp
+│   │   │   ├── DataSource.hpp
 │   │   │   ├── FuelType.cpp
 │   │   │   ├── FuelType.hpp
 │   │   │   ├── GearboxType.cpp
-│   │   │   └── GearboxType.hpp
+│   │   │   ├── GearboxType.hpp
+│   │   │   ├── TextCase.cpp
+│   │   │   └── TextCase.hpp
 │   │   ├── logger
 │   │   │   ├── Logger.cpp
 │   │   │   └── Logger.hpp
+│   │   ├── mapper
+│   │   │   ├── GenericCarMapper.cpp
+│   │   │   └── GenericCarMapper.hpp
 │   │   ├── models
 │   │   │   ├── Car.cpp
 │   │   │   ├── Car.hpp
@@ -67,6 +72,7 @@
     ├── base
     │   ├── baseCar.cpp
     │   ├── baseEntity.cpp
+    │   ├── baseEnum.cpp
     │   ├── baseExcelReader.cpp
     │   ├── baseGenericCarScraper.cpp
     │   ├── baseHtmlParser.cpp
@@ -77,6 +83,7 @@
     ├── mono
     │   ├── testCar.cpp
     │   ├── testEntity.cpp
+    │   ├── testEnum.cpp
     │   ├── testExcelReader.cpp
     │   ├── testGenericCarScraper.cpp
     │   ├── testHtmlParser.cpp
@@ -86,4 +93,4 @@
     │   └── testValidation.cpp
     └── testAll.cpp
 
-27 directories, 60 files
+27 directories, 67 files
