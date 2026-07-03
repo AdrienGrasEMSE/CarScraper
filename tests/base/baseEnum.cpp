@@ -14,6 +14,7 @@
 #include "core/enum/DataSource.hpp"
 #include "core/enum/FuelType.hpp"
 #include "core/enum/GearboxType.hpp"
+#include "core/enum/TextCase.hpp"
 
 
 /**
@@ -280,5 +281,58 @@ TEST_CASE("gearBoxTypeIsValid", "[enum][gearboxtype]") {
 
     SECTION("Returns false for NA") {
         REQUIRE_FALSE(gearBoxTypeIsValid(GearboxType::NA));
+    }
+}
+
+
+// =============================================================================
+// Tests — TextCase
+// =============================================================================
+
+TEST_CASE("textCaseToString", "[enum][textcase]") {
+
+    SECTION("Converts each known value to its label") {
+        REQUIRE(textCaseToString(TextCase::LOWER) == "Lowercase");
+        REQUIRE(textCaseToString(TextCase::UPPER) == "Uppercase");
+        REQUIRE(textCaseToString(TextCase::TITLE) == "Title case");
+    }
+
+    SECTION("Returns Unknown for the unknown value") {
+        REQUIRE(textCaseToString(TextCase::NA) == "Unknown");
+    }
+}
+
+
+TEST_CASE("textCaseFromString", "[enum][textcase]") {
+
+    SECTION("Parses each known label") {
+        REQUIRE(textCaseFromString("Lowercase") == TextCase::LOWER);
+        REQUIRE(textCaseFromString("Uppercase") == TextCase::UPPER);
+        REQUIRE(textCaseFromString("Title case") == TextCase::TITLE);
+    }
+
+    SECTION("Is case-insensitive") {
+        REQUIRE(textCaseFromString("lowercase") == TextCase::LOWER);
+        REQUIRE(textCaseFromString("UPPERCASE") == TextCase::UPPER);
+        REQUIRE(textCaseFromString("title case") == TextCase::TITLE);
+    }
+
+    SECTION("Returns NA for an unrecognized value") {
+        REQUIRE(textCaseFromString("Invalid") == TextCase::NA);
+        REQUIRE(textCaseFromString("") == TextCase::NA);
+    }
+}
+
+
+TEST_CASE("textCaseIsValid", "[enum][textcase]") {
+
+    SECTION("Returns true for known values") {
+        REQUIRE(textCaseIsValid(TextCase::LOWER));
+        REQUIRE(textCaseIsValid(TextCase::UPPER));
+        REQUIRE(textCaseIsValid(TextCase::TITLE));
+    }
+
+    SECTION("Returns false for NA") {
+        REQUIRE_FALSE(textCaseIsValid(TextCase::NA));
     }
 }

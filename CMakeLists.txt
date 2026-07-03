@@ -94,6 +94,7 @@ set(CORE_SOURCES
     src/core/enum/DataSource.cpp
     src/core/enum/FuelType.cpp
     src/core/enum/GearboxType.cpp
+    src/core/enum/TextCase.cpp
 
     # Core — Models
     src/core/models/Entity.cpp
