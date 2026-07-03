@@ -90,9 +90,10 @@ set(CORE_SOURCES
     src/core/utils/Validation.cpp
 
     # Core - Enum
+    src/core/enum/Co2Class.cpp
+    src/core/enum/DataSource.cpp
     src/core/enum/FuelType.cpp
     src/core/enum/GearboxType.cpp
-    src/core/enum/Co2Class.cpp
 
     # Core — Models
     src/core/models/Entity.cpp
@@ -177,6 +178,13 @@ target_link_libraries(TestValidation    PRIVATE CarScraperLibTest)
 carscraper_configure_target(TestValidation)
 target_compile_definitions(TestValidation PRIVATE TESTING)
 carscraper_configure_test(TestValidation)
+
+# test Enum
+add_executable(TestEnum                 tests/mono/testEnum.cpp)
+target_link_libraries(TestEnum          PRIVATE CarScraperLibTest)
+carscraper_configure_target(TestEnum)
+target_compile_definitions(TestEnum     PRIVATE TESTING)
+carscraper_configure_test(TestEnum)
 
 # test Entity
 add_executable(TestEntity               tests/mono/testEntity.cpp)

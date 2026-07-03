@@ -1,7 +1,7 @@
 /**
- * @file testAll.cpp
+ * @file testEnum.cpp
  *
- * @brief Run all unit tests for CarScraper project.
+ * @brief Unit tests for all enums.
  *
  * @author Adrien GRAS
  * @date 2026-05-29
@@ -15,16 +15,7 @@
 // Imports
 #include <catch2/catch.hpp>
 #include "core/logger/Logger.hpp"
-#include "base/baseLogger.cpp"
-#include "base/baseValidation.cpp"
-#include "base/baseEnum.cpp"
-#include "base/baseEntity.cpp"
-#include "base/baseCar.cpp"
-#include "base/baseHttpClient.cpp"
-#include "base/baseHtmlSaver.cpp"
-#include "base/baseExcelReader.cpp"
-#include "base/baseHtmlParser.cpp"
-#include "base/baseGenericCarScraper.cpp"
+#include "../base/baseEnum.cpp"
 
 
 // =============================================================================
@@ -33,7 +24,7 @@
 int main(int argc, char* argv[]) {
 
     // Catch2 runner
-    CarScraper::Logger::init("logs/test_all.txt");
+    CarScraper::Logger::init("logs/test_enum.txt");
     return Catch::Session().run(argc, argv);
 
 }
