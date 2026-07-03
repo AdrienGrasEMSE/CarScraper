@@ -107,6 +107,8 @@ set(CORE_SOURCES
 
     # Core — Mapper
     src/core/mapper/GenericCarMapper.cpp
+    src/core/mapper/ArgusMapper.cpp
+    src/core/mapper/CaradisiacMapper.cpp
 
     # IO — HttpClient
     src/io/httpClient/HttpClient.cpp
