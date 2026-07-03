@@ -30,9 +30,9 @@ namespace CarScraper {
     class GenericCarMapper : public Entity {
 
         // =========================================================================
-        // Private data and methods
+        // Protected data and methods
         // =========================================================================
-        private:
+        protected:
 
             // Input file
             std::string _inputFile; ///< Input file path for the technical sheet
