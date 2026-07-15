@@ -17,12 +17,29 @@
 #include <thread>
 #include <iostream>
 #include <algorithm>
+#include <atomic>
 
 
 /**
  * Namespace CarScraper
  */
 namespace CarScraper {
+
+    // =========================================================================
+    // Process-wide libcurl global state (reference-counted)
+    // =========================================================================
+
+    /**
+     * @brief Number of live HttpClient instances in this process.
+     * @details curl_global_init()/curl_global_cleanup() are PROCESS-GLOBAL, not
+     *          per-handle: calling curl_global_cleanup() while other easy handles
+     *          are still alive tears down shared SSL state and causes intermittent
+     *          "SSL connect error" failures on those other handles. This counter
+     *          ensures the global environment is set up once, on the first
+     *          instance, and torn down once, on the last.
+     */
+    static std::atomic<int> s_curlLiveInstances{0};
+
 
     // =========================================================================
     // libcurl callbacks (file-local)
@@ -145,8 +162,11 @@ namespace CarScraper {
         _rng = std::mt19937(rd());
 
 
-        // Initialize libcurl globally and create the easy handle for this instance
-        curl_global_init(CURL_GLOBAL_ALL);
+        // Initialize libcurl globally (only on the first live instance) and
+        // create the easy handle for this instance
+        if (s_curlLiveInstances.fetch_add(1, std::memory_order_relaxed) == 0) {
+            curl_global_init(CURL_GLOBAL_ALL);
+        }
         _curl = curl_easy_init();
 
 
@@ -160,13 +180,19 @@ namespace CarScraper {
 
     /**
      * @brief Destructs the HttpClient instance.
-     * @details Cleans up the libcurl easy handle and releases global libcurl resources.
+     * @details Cleans up the libcurl easy handle and releases global libcurl resources
+     *          (only once the last live instance is destroyed).
      */
     HttpClient::~HttpClient() {
 
-        // Clean up the libcurl easy handle and global resources
+        // Clean up the libcurl easy handle
         if (_curl) { curl_easy_cleanup(_curl); }
-        curl_global_cleanup();
+
+
+        // Release global resources only when no HttpClient instance remains
+        if (s_curlLiveInstances.fetch_sub(1, std::memory_order_relaxed) == 1) {
+            curl_global_cleanup();
+        }
 
     }
 
@@ -240,9 +266,12 @@ namespace CarScraper {
      */
     void HttpClient::setUserAgent(const std::string& agent) {
 
-        // Set a single user agent (disables rotation)
+        // Set a single user agent (disables rotation) and apply it immediately
+        // to the current session — otherwise the previously picked/rotated
+        // _sessionUserAgent would keep being sent until the next resetSessionUserAgent().
         _userAgents             = { agent };
         _policy.rotateUserAgent = false;
+        _sessionUserAgent       = agent;
 
     }
 
@@ -405,6 +434,18 @@ namespace CarScraper {
         curl_easy_setopt(_curl, CURLOPT_HEADERFUNCTION, writeHeaderCallback);
         curl_easy_setopt(_curl, CURLOPT_HEADERDATA,     &responseHeaders);
         curl_easy_setopt(_curl, CURLOPT_TIMEOUT,        _timeoutSeconds);
+
+
+        // Force a brand-new connection for every request instead of letting libcurl
+        // reuse/coalesce a cached connection. This matters because HttpClient reuses
+        // a single easy handle across many different hosts (scraping different sites),
+        // and some hosts share edge infrastructure (e.g. Cloudflare-fronted domains
+        // resolving to the same anycast IPs). libcurl's HTTP/2 connection-coalescing
+        // can then try to send a request for host B over a connection whose TLS
+        // session/SNI was negotiated for host A, causing an "SSL connect error".
+        // It also happens to be good anti-detection practice: real scrapers should
+        // avoid leaving persistent, fingerprintable keep-alive connections open.
+        curl_easy_setopt(_curl, CURLOPT_FRESH_CONNECT,  1L);
 
 
 
