@@ -71,7 +71,7 @@ namespace CarScraper {
         // Getting the title
         auto title = parser.getText("//h1[contains(@class,'ft-version-title')]");
         if (title.has_value()) {
-            Logger::warn("{}", getFullId(), title);
+            Logger::warn("{}", title.value_or("<NONE>"));
         } else {
             Logger::warn("[{}].mapToCar : no title found in {}", getFullId(), _inputFile);
         }
