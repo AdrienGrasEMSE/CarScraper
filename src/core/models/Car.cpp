@@ -788,18 +788,21 @@ namespace CarScraper {
                     ? Validation::formatDate(_commercialisationStart.value())
                     : "N/A")
             << "\"\n";
-        oss << "    -> " << std::left << std::setw(17) << "End"
-            << ": \""
-            << (_commercialisationEnd.has_value()
-                    ? Validation::formatDate(_commercialisationEnd.value())
-                    : "still in sale")
-            << "\"\n";
-        oss << "    -> " << std::left << std::setw(17) << "Still in Sale"  << ": " << _stillInSale << "\n";
+        if (!_stillInSale) {
+            oss << "    -> " << std::left << std::setw(17) << "End"
+                << ": \""
+                << (_commercialisationEnd.has_value()
+                        ? Validation::formatDate(_commercialisationEnd.value())
+                        : "N/A")
+                << "\"\n";
+        }
+        oss << "    -> " << std::left << std::setw(17) << "Still in Sale"  << ": " << (_stillInSale ? "Yes" : "No") << "\n";
 
 
         // -------------------------------------------------------------------------
         // Technical Data
         // -------------------------------------------------------------------------
+        oss << "- Technical Data\n";
         oss << "    -> " << std::left << std::setw(17) << "Data source"     << ": \"" << dataSourceToString(_dataSource)  << "\"\n";
 
 
