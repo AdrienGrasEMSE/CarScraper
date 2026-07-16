@@ -68,11 +68,11 @@ namespace CarScraper {
         auto model      = parser.getText("//div[@class='breadCrumbList']//li[4]/a");
         auto engine     = parser.getText("//table[@class='versions-table']//tr[td[1]='Nom du moteur']/td[2]");
         auto title      = parser.getText("//h1[@class='ft-version-title']");
-        auto prix       = parser.getText("//div[@class='ft-version-price']/strong");
+        auto price      = parser.getText("//div[@class='ft-version-price']/strong");
         this->_car.setBrand(brand.value_or(ERROR_STR));
         this->_car.setModel(model.value_or(ERROR_STR));
         this->_car.setEngine(engine.value_or(ERROR_STR));
-        this->_car.setPrice(toInt(prix));
+        this->_car.setPrice(toInt(price));
 
 
         // Trim processing
