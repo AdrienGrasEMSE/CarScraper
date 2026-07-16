@@ -54,7 +54,7 @@ namespace CarScraper {
              * @return ERROR_CODE / SUCCESS_CODE whether the method is successful or not
              */
             using GenericCarMapper::mapToCar;
-            int mapToCar() const;
+            int mapToCar();
     };
 
 } // namespace CarScraper
