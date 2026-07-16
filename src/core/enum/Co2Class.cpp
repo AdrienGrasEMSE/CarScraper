@@ -120,6 +120,33 @@ namespace CarScraper {
 
 
     /**
+     * @brief Calculates the Co2Class based on the CO2 emission value.
+     *
+     * @param value The CO2 emission value in g/km.
+     * @return The corresponding Co2Class enum value.
+     */
+    Co2Class co2ClassCalculation(const double value) {
+        if (value < 0) {
+            return Co2Class::NA;
+        } else if (value <= 100) {
+            return Co2Class::A;
+        } else if (value <= 120) {
+            return Co2Class::B;
+        } else if (value <= 140) {
+            return Co2Class::C;
+        } else if (value <= 160) {
+            return Co2Class::D;
+        } else if (value <= 200) {
+            return Co2Class::E;
+        } else if (value <= 250) {
+            return Co2Class::F;
+        } else {
+            return Co2Class::G;
+        }
+    }
+
+
+    /**
      * @brief Returns whether a Co2Class value is valid (i.e. not NA).
      *
      * @param value The Co2Class value to check.

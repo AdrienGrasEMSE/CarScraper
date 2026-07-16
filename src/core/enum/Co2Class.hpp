@@ -73,6 +73,15 @@ namespace CarScraper {
 
 
     /**
+     * @brief Calculates the Co2Class based on the CO2 emission value.
+     *
+     * @param value The CO2 emission value in g/km.
+     * @return The corresponding Co2Class enum value.
+     */
+    Co2Class co2ClassCalculation(const double value);
+
+
+    /**
      * @brief Returns whether a Co2Class value is valid (i.e. not NA).
      *
      * @param value The Co2Class value to check.
