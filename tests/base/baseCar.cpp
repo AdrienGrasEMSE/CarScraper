@@ -3,7 +3,8 @@
  *
  * @brief Unit tests for CarScraper::Car class.
  *        Covers: construction, getters, setters (valid/invalid/boundary),
- *                string formatting, enum conversions, dates, isComplete, isValid.
+ *                string formatting, enum conversions, dates, isComplete, isValid
+ *                (every field branch), toString and operator<<.
  *
  * @author Adrien GRAS
  * @date 2026-05-30
@@ -18,6 +19,7 @@
 #include "core/utils/Constant.hpp"
 #include "core/utils/Validation.hpp"
 #include "core/models/Car.hpp"
+#include <sstream>
 
 using namespace CarScraper;
 
@@ -56,6 +58,46 @@ static Car buildValidCar() {
     c.setCommercialisationStart ("01/01/2019");
     c.setStillInSale            (true);
     c.setDataSource             (DataSource::ARGUS);
+    return c;
+}
+
+
+/**
+ * Builds a fully populated, valid Car, except for one numeric field which is
+ * left untouched (i.e. still at its constructor DEFAULT_INT/DEFAULT_DOUBLE sentinel).
+ * @details Needed because DEFAULT_INT (9999) is out of range for most numeric
+ * setters (e.g. height max 10, weight max 5000), so calling the setter with
+ * DEFAULT_INT/DEFAULT_DOUBLE would store ERROR_INT/ERROR_DOUBLE instead — the
+ * only way to reach the true "not yet set" state is to skip the setter entirely.
+ * @param fieldToSkip The name of the numeric field to leave at its default value.
+ */
+static Car buildValidCarSkipping(const std::string& fieldToSkip) {
+    Car c;
+    c.setBrand                  ("Toyota");
+    c.setModel                  ("Corolla");
+    c.setGeneration             ("E210");
+    c.setPhase                  ("2");
+    c.setEngine                 ("1.8L Hybrid");
+    c.setTrim                   ("Dynamic");
+    c.setPrice                  (25000);
+    if (fieldToSkip != "height")           c.setHeight            (1.43);
+    if (fieldToSkip != "length")           c.setLength             (4.37);
+    if (fieldToSkip != "width")            c.setWidth              (1.79);
+    if (fieldToSkip != "trunkVolume")      c.setTrunkVolume        (361);
+    if (fieldToSkip != "weight")           c.setWeight             (1375);
+    if (fieldToSkip != "seatCount")        c.setSeatCount          (5);
+    c.setGearboxType             (GearboxType::AUTOMATIC);
+    if (fieldToSkip != "gearCount")        c.setGearCount          (6);
+    c.setFuelType                (FuelType::EE);
+    if (fieldToSkip != "horsePower")       c.setHorsePower         (122);
+    if (fieldToSkip != "taxHorsePower")    c.setTaxHorsePower      (6);
+    if (fieldToSkip != "tankCapacity")     c.setTankCapacity       (43);
+    if (fieldToSkip != "fuelConsumption")  c.setFuelConsumption    (4.3);
+    if (fieldToSkip != "co2Emissions")     c.setCo2Emissions       (98);
+    c.setCo2Class                (Co2Class::A);
+    c.setCommercialisationStart  ("01/01/2019");
+    c.setStillInSale             (true);
+    c.setDataSource               (DataSource::ARGUS);
     return c;
 }
 
@@ -901,6 +943,107 @@ TEST_CASE("Car isComplete and isValid", "[car][utilities]") {
         REQUIRE(c.isComplete());
     }
 
+    SECTION("Car missing generation is not complete") {
+        Car c = buildValidCar();
+        c.setGeneration(DEFAULT_STR);
+        REQUIRE_FALSE(c.isComplete());
+    }
+
+    SECTION("Car missing phase is not complete") {
+        Car c = buildValidCar();
+        c.setPhase(DEFAULT_STR);
+        REQUIRE_FALSE(c.isComplete());
+    }
+
+    SECTION("Car missing engine is not complete") {
+        Car c = buildValidCar();
+        c.setEngine(DEFAULT_STR);
+        REQUIRE_FALSE(c.isComplete());
+    }
+
+    SECTION("Car missing trim is not complete") {
+        Car c = buildValidCar();
+        c.setTrim(DEFAULT_STR);
+        REQUIRE_FALSE(c.isComplete());
+    }
+
+    SECTION("Car missing height is not complete") {
+        Car c = buildValidCarSkipping("height");
+        REQUIRE(c.getHeight() == DEFAULT_DOUBLE);
+        REQUIRE_FALSE(c.isComplete());
+    }
+
+    SECTION("Car missing length is not complete") {
+        Car c = buildValidCarSkipping("length");
+        REQUIRE(c.getLength() == DEFAULT_DOUBLE);
+        REQUIRE_FALSE(c.isComplete());
+    }
+
+    SECTION("Car missing width is not complete") {
+        Car c = buildValidCarSkipping("width");
+        REQUIRE(c.getWidth() == DEFAULT_DOUBLE);
+        REQUIRE_FALSE(c.isComplete());
+    }
+
+    SECTION("Car missing trunkVolume is not complete") {
+        Car c = buildValidCarSkipping("trunkVolume");
+        REQUIRE(c.getTrunkVolume() == DEFAULT_INT);
+        REQUIRE_FALSE(c.isComplete());
+    }
+
+    SECTION("Car missing weight is not complete") {
+        Car c = buildValidCarSkipping("weight");
+        REQUIRE(c.getWeight() == DEFAULT_INT);
+        REQUIRE_FALSE(c.isComplete());
+    }
+
+    SECTION("Car missing seatCount is not complete") {
+        Car c = buildValidCarSkipping("seatCount");
+        REQUIRE(c.getSeatCount() == DEFAULT_INT);
+        REQUIRE_FALSE(c.isComplete());
+    }
+
+    SECTION("Car missing gearCount is not complete") {
+        Car c = buildValidCarSkipping("gearCount");
+        REQUIRE(c.getGearCount() == DEFAULT_INT);
+        REQUIRE_FALSE(c.isComplete());
+    }
+
+    SECTION("Car missing horsePower is not complete") {
+        Car c = buildValidCarSkipping("horsePower");
+        REQUIRE(c.getHorsePower() == DEFAULT_INT);
+        REQUIRE_FALSE(c.isComplete());
+    }
+
+    SECTION("Car missing taxHorsePower is not complete") {
+        Car c = buildValidCarSkipping("taxHorsePower");
+        REQUIRE(c.getTaxHorsePower() == DEFAULT_INT);
+        REQUIRE_FALSE(c.isComplete());
+    }
+
+    SECTION("Car missing tankCapacity is not complete") {
+        Car c = buildValidCarSkipping("tankCapacity");
+        REQUIRE(c.getTankCapacity() == DEFAULT_INT);
+        REQUIRE_FALSE(c.isComplete());
+    }
+
+    SECTION("Car missing fuelConsumption is not complete") {
+        Car c = buildValidCarSkipping("fuelConsumption");
+        REQUIRE(c.getFuelConsumption() == DEFAULT_DOUBLE);
+        REQUIRE_FALSE(c.isComplete());
+    }
+
+    SECTION("Car missing co2Emissions is not complete") {
+        Car c = buildValidCarSkipping("co2Emissions");
+        REQUIRE(c.getCo2Emissions() == DEFAULT_INT);
+        REQUIRE_FALSE(c.isComplete());
+    }
+
+    SECTION("buildValidCarSkipping still yields a complete car when nothing is skipped") {
+        Car c = buildValidCarSkipping("none");
+        REQUIRE(c.isComplete());
+    }
+
 
     // --- isValid ---
 
@@ -944,6 +1087,90 @@ TEST_CASE("Car isComplete and isValid", "[car][utilities]") {
         REQUIRE_FALSE(c.isValid());
     }
 
+    SECTION("Car with ERROR_STR model is not valid") {
+        Car c;
+        c.setModel("");
+        REQUIRE_FALSE(c.isValid());
+    }
+
+    SECTION("Car with ERROR_STR generation is not valid") {
+        Car c;
+        c.setGeneration("");
+        REQUIRE_FALSE(c.isValid());
+    }
+
+    SECTION("Car with ERROR_STR phase is not valid") {
+        Car c;
+        c.setPhase("");
+        REQUIRE_FALSE(c.isValid());
+    }
+
+    SECTION("Car with ERROR_STR engine is not valid") {
+        Car c;
+        c.setEngine("");
+        REQUIRE_FALSE(c.isValid());
+    }
+
+    SECTION("Car with ERROR_STR trim is not valid") {
+        Car c;
+        c.setTrim("");
+        REQUIRE_FALSE(c.isValid());
+    }
+
+    SECTION("Car with ERROR_DOUBLE length is not valid") {
+        Car c;
+        c.setLength(-1.0);
+        REQUIRE_FALSE(c.isValid());
+    }
+
+    SECTION("Car with ERROR_DOUBLE width is not valid") {
+        Car c;
+        c.setWidth(-1.0);
+        REQUIRE_FALSE(c.isValid());
+    }
+
+    SECTION("Car with ERROR_INT trunkVolume is not valid") {
+        Car c;
+        c.setTrunkVolume(-1);
+        REQUIRE_FALSE(c.isValid());
+    }
+
+    SECTION("Car with ERROR_INT weight is not valid") {
+        Car c;
+        c.setWeight(-1);
+        REQUIRE_FALSE(c.isValid());
+    }
+
+    SECTION("Car with ERROR_INT seatCount is not valid") {
+        Car c;
+        c.setSeatCount(-1);
+        REQUIRE_FALSE(c.isValid());
+    }
+
+    SECTION("Car with ERROR_INT gearCount is not valid") {
+        Car c;
+        c.setGearCount(-1);
+        REQUIRE_FALSE(c.isValid());
+    }
+
+    SECTION("Car with ERROR_INT taxHorsePower is not valid") {
+        Car c;
+        c.setTaxHorsePower(-1);
+        REQUIRE_FALSE(c.isValid());
+    }
+
+    SECTION("Car with ERROR_INT tankCapacity is not valid") {
+        Car c;
+        c.setTankCapacity(-1);
+        REQUIRE_FALSE(c.isValid());
+    }
+
+    SECTION("Car with ERROR_INT co2Emissions is not valid") {
+        Car c;
+        c.setCo2Emissions(-1);
+        REQUIRE_FALSE(c.isValid());
+    }
+
     SECTION("GearboxType::NA alone does not make car invalid") {
         Car c;
         REQUIRE(c.isValid());
@@ -954,4 +1181,116 @@ TEST_CASE("Car isComplete and isValid", "[car][utilities]") {
         REQUIRE(c.isValid());
     }
 
+}
+
+
+
+
+// =============================================================================
+// Tests — toString / operator<<
+// =============================================================================
+
+TEST_CASE("Car toString", "[car][tostring]") {
+
+    SECTION("Contains the FullId as a header") {
+        Car c = buildValidCar();
+        REQUIRE(c.toString().find(c.getFullId()) != std::string::npos);
+    }
+
+    SECTION("Contains all section headers") {
+        Car c = buildValidCar();
+        const std::string s = c.toString();
+        REQUIRE(s.find("- General")           != std::string::npos);
+        REQUIRE(s.find("- Dimensions")         != std::string::npos);
+        REQUIRE(s.find("- Transmission")       != std::string::npos);
+        REQUIRE(s.find("- Power")              != std::string::npos);
+        REQUIRE(s.find("- Consumption")        != std::string::npos);
+        REQUIRE(s.find("- Commercialisation")  != std::string::npos);
+    }
+
+    SECTION("Contains the brand normalized value") {
+        Car c = buildValidCar();
+        // setBrand uppercases the value
+        REQUIRE(c.toString().find("\"TOYOTA\"") != std::string::npos);
+    }
+
+    SECTION("Contains the model normalized value") {
+        Car c = buildValidCar();
+        // setModel capitalizes the first letter only
+        REQUIRE(c.toString().find("\"Corolla\"") != std::string::npos);
+    }
+
+    SECTION("Contains the price with the euro sign") {
+        Car c = buildValidCar();
+        REQUIRE(c.toString().find("25000 \u20ac") != std::string::npos);
+    }
+
+    SECTION("Contains the gearbox type as a string label") {
+        Car c = buildValidCar();
+        REQUIRE(c.toString().find(gearBoxTypeToString(c.getGearboxType())) != std::string::npos);
+    }
+
+    SECTION("Contains the fuel type as a string label") {
+        Car c = buildValidCar();
+        REQUIRE(c.toString().find(fuelTypeToString(c.getFuelType())) != std::string::npos);
+    }
+
+    SECTION("Contains the co2 class as a string label") {
+        Car c = buildValidCar();
+        REQUIRE(c.toString().find(co2ClassToString(c.getCo2Class())) != std::string::npos);
+    }
+
+    SECTION("Contains the data source as a string label") {
+        Car c = buildValidCar();
+        REQUIRE(c.toString().find(dataSourceToString(c.getDataSource())) != std::string::npos);
+    }
+
+    SECTION("Contains the formatted commercialisation start date") {
+        Car c = buildValidCar();
+        REQUIRE(c.toString().find("\"01/01/2019\"") != std::string::npos);
+    }
+
+    SECTION("Shows 'still in sale' when no end date is set") {
+        Car c = buildValidCar();
+        // buildValidCar() never sets commercialisationEnd
+        REQUIRE(c.toString().find("still in sale") != std::string::npos);
+    }
+
+    SECTION("Default (unset) car shows the sentinel start date as N/A") {
+        Car c;
+        REQUIRE(c.toString().find("\"N/A\"") != std::string::npos);
+    }
+
+    SECTION("Default (unset) car shows DEFAULT_STR sentinel values") {
+        Car c;
+        REQUIRE(c.toString().find("\"" + DEFAULT_STR + "\"") != std::string::npos);
+    }
+}
+
+
+TEST_CASE("Car operator<<", "[car][tostring][operator]") {
+
+    SECTION("Stream insertion produces the same output as toString()") {
+        Car c = buildValidCar();
+        std::ostringstream oss;
+        oss << c;
+        REQUIRE(oss.str() == c.toString());
+    }
+
+    SECTION("Stream insertion works for a default (unset) car") {
+        Car c;
+        std::ostringstream oss;
+        oss << c;
+        REQUIRE(oss.str() == c.toString());
+    }
+
+    SECTION("Stream insertion can be chained like a regular ostream") {
+        Car c = buildValidCar();
+        std::ostringstream oss;
+        oss << "Car dump:\n" << c << "--- end ---";
+        const std::string s = oss.str();
+        REQUIRE(s.find("Car dump:") != std::string::npos);
+        REQUIRE(s.find("--- end ---") != std::string::npos);
+        REQUIRE(s.find(c.getFullId()) != std::string::npos);
+    }
 }
