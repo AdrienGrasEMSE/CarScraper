@@ -45,6 +45,27 @@ TEST_CASE("co2ClassToString", "[enum][co2class]") {
 }
 
 
+TEST_CASE("co2ClassCalculation", "[enum][co2class]") {
+
+    SECTION("Calculates the correct Co2Class for each emission value") {
+        REQUIRE(co2ClassCalculation(-1.0) == Co2Class::NA);
+        REQUIRE(co2ClassCalculation(0.0) == Co2Class::A);
+        REQUIRE(co2ClassCalculation(100.0) == Co2Class::A);
+        REQUIRE(co2ClassCalculation(101.0) == Co2Class::B);
+        REQUIRE(co2ClassCalculation(120.0) == Co2Class::B);
+        REQUIRE(co2ClassCalculation(121.0) == Co2Class::C);
+        REQUIRE(co2ClassCalculation(140.0) == Co2Class::C);
+        REQUIRE(co2ClassCalculation(141.0) == Co2Class::D);
+        REQUIRE(co2ClassCalculation(160.0) == Co2Class::D);
+        REQUIRE(co2ClassCalculation(161.0) == Co2Class::E);
+        REQUIRE(co2ClassCalculation(200.0) == Co2Class::E);
+        REQUIRE(co2ClassCalculation(201.0) == Co2Class::F);
+        REQUIRE(co2ClassCalculation(250.0) == Co2Class::F);
+        REQUIRE(co2ClassCalculation(251.0) == Co2Class::G);
+    }
+}
+
+
 TEST_CASE("co2ClassExplained", "[enum][co2class]") {
 
     SECTION("Converts each known value to its emission range") {
