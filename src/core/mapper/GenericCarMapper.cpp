@@ -16,6 +16,8 @@
 #include <uni_algo/norm.h>
 #include <filesystem>
 #include <string>
+#include <fstream>
+#include <sstream>
 
 
 /**
@@ -81,6 +83,103 @@ namespace CarScraper {
 
 
     // =========================================================================
+    // Internal helpers
+    // =========================================================================
+
+
+    /**
+     * @brief Trims a string into a cleaner version to be cast into Int or Double
+     * @param value The string to trim
+     * @return The trimmed string
+     */
+    std::string& GenericCarMapper::cleanNumber(std::string &value) {
+
+        // Coma replacing
+        std::replace(value.begin(), value.end(), ',', '.');
+
+
+        // Triming
+        value.erase(
+            std::remove(value.begin(), value.end(), ' '),
+            value.end()
+        );
+        return value;
+
+    }
+
+
+    /**
+     * @brief extracts an int from a optional string from a HTML
+     * @param str the extracted string
+     * @return the int value extracted or ERROR_INT
+     */
+    int GenericCarMapper::toInt(std::optional<std::string>& str) {
+
+        // Checking if the string is empty
+        if (!str) {
+            return ERROR_INT;
+        }
+        
+
+        // Trying the conversion
+        try {
+            return std::stoi(cleanNumber(str.value()));
+        } catch (...) {
+            return ERROR_INT;
+        }
+        
+    }
+
+
+    /**
+     * @brief Extracts a double from an optional string extracted from HTML.
+     * @param str the extracted string
+     * @return the double value extracted or ERROR_DOUBLE.
+     */
+    double GenericCarMapper::toDouble(std::optional<std::string>& str) {
+
+        // Checking if the string is empty
+        if (!str) {
+            return ERROR_DOUBLE;
+        }
+
+
+        // Trying the conversion
+        try {
+            return std::stod(cleanNumber(str.value()));
+        } catch (...) {
+            return ERROR_DOUBLE;
+        }
+
+    }
+
+    
+    /**
+     * @brief Extract the content of a file
+     * @param path the file path
+     * @return The content of the file
+     */
+    std::string GenericCarMapper::readFile(const std::string& path) {
+
+        // File opening
+        std::ifstream file(path);
+        if (!file.is_open()) {
+            return ERROR_STR;
+        }
+
+        
+        // Content extraction
+        std::stringstream buffer;
+        buffer << file.rdbuf();
+        return buffer.str();
+
+    }
+
+
+
+
+
+    // =========================================================================
     // Main logic
     // =========================================================================
 
@@ -89,7 +188,7 @@ namespace CarScraper {
      * @return ERROR_CODE / SUCCESS_CODE wheter the method is succesful or not
      * @note Generic method to implement
      */
-    int GenericCarMapper::mapToCar() const {
+    int GenericCarMapper::mapToCar() {
 
         Logger::error("[{}].mapToCar : to implement", getFullId());
         return IGNORED_ACTION_CODE;

@@ -44,6 +44,45 @@ namespace CarScraper {
 
 
 
+            // -------------------------------------------------------------------------
+            // Internal Helpers
+            // -------------------------------------------------------------------------
+
+            /**
+             * @brief Trims a string into a cleaner version to be cast into Int or Double
+             * @param value The string to trim
+             * @return The trimmed string
+             */
+            std::string& cleanNumber(std::string& value);
+
+
+            /**
+             * @brief extracts an int from a optional string from a HTML
+             * @param str the extracted string
+             * @return the int value extracted or ERROR_INT
+             */
+            int toInt(std::optional<std::string>& str);
+
+
+            /**
+             * @brief Extracts a double from an optional string from HTML.
+             * @param str the extracted string
+             * @return the double value extracted or ERROR_DOUBLE.
+             */
+            double toDouble(std::optional<std::string>& str);
+
+
+            /**
+             * @brief Extract the content of a file
+             * @param path the file path
+             * @return The content of the file
+             */
+            std::string readFile(const std::string& path);
+
+
+
+
+
         // =========================================================================
         // Public data and methods
         // =========================================================================
@@ -114,7 +153,7 @@ namespace CarScraper {
              * @return ERROR_CODE / SUCCESS_CODE wheter the method is succesful or not
              * @note Generic method to implement
              */
-            virtual int mapToCar() const;
+            virtual int mapToCar();
 
     };
 
