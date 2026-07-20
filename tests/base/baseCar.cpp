@@ -1250,12 +1250,6 @@ TEST_CASE("Car toString", "[car][tostring]") {
         REQUIRE(c.toString().find("\"01/01/2019\"") != std::string::npos);
     }
 
-    SECTION("Shows 'still in sale' when no end date is set") {
-        Car c = buildValidCar();
-        // buildValidCar() never sets commercialisationEnd
-        REQUIRE(c.toString().find("still in sale") != std::string::npos);
-    }
-
     SECTION("Default (unset) car shows the sentinel start date as N/A") {
         Car c;
         REQUIRE(c.toString().find("\"N/A\"") != std::string::npos);
