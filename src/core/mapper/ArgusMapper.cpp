@@ -117,7 +117,6 @@ namespace CarScraper {
         auto capacity           = parser.getText("//table[@class='versions-table']//tr[td[1]='Réservoir']/td[2]");
         auto fuelConsumption    = parser.getText("//table[@class='versions-table']//tr[td[1]='Mixte']/td[2]");
         auto co2emissions       = parser.getText("//table[@class='versions-table']//tr[td[1]='Émission de CO2']/td[2]");
-        auto co2Class           = parser.getText("//table[@class='versions-table']//tr[td[1]='Réservoir']/td[2]");
         this->_car.setTankCapacity(toInt(capacity));
         this->_car.setFuelConsumption(toDouble(fuelConsumption));
         this->_car.setCo2Emissions(toDouble(co2emissions));
