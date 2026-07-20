@@ -137,7 +137,6 @@ namespace CarScraper {
 
 
         // End date processing
-        Logger::info("{}", endDate.value_or(ERROR_STR));
         if (endDate == "En cours") {
             this->_car.setStillInSale(true);
         } else {
