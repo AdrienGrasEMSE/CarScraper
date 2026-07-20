@@ -172,76 +172,83 @@ function(carscraper_configure_test TARGET)
 endfunction()
 
 # test Logger
-add_executable(TestLogger               tests/mono/testLogger.cpp)
-target_link_libraries(TestLogger        PRIVATE CarScraperLibTest)
+add_executable(TestLogger                   tests/mono/testLogger.cpp)
+target_link_libraries(TestLogger            PRIVATE CarScraperLibTest)
 carscraper_configure_target(TestLogger)
-target_compile_definitions(TestLogger   PRIVATE TESTING)
+target_compile_definitions(TestLogger       PRIVATE TESTING)
 carscraper_configure_test(TestLogger)
 
 # test Validation
-add_executable(TestValidation           tests/mono/testValidation.cpp)
-target_link_libraries(TestValidation    PRIVATE CarScraperLibTest)
+add_executable(TestValidation               tests/mono/testValidation.cpp)
+target_link_libraries(TestValidation        PRIVATE CarScraperLibTest)
 carscraper_configure_target(TestValidation)
-target_compile_definitions(TestValidation PRIVATE TESTING)
+target_compile_definitions(TestValidation   PRIVATE TESTING)
 carscraper_configure_test(TestValidation)
 
 # test Enum
-add_executable(TestEnum                 tests/mono/testEnum.cpp)
-target_link_libraries(TestEnum          PRIVATE CarScraperLibTest)
+add_executable(TestEnum                     tests/mono/testEnum.cpp)
+target_link_libraries(TestEnum              PRIVATE CarScraperLibTest)
 carscraper_configure_target(TestEnum)
-target_compile_definitions(TestEnum     PRIVATE TESTING)
+target_compile_definitions(TestEnum         PRIVATE TESTING)
 carscraper_configure_test(TestEnum)
 
 # test Entity
-add_executable(TestEntity               tests/mono/testEntity.cpp)
-target_link_libraries(TestEntity        PRIVATE CarScraperLibTest)
+add_executable(TestEntity                   tests/mono/testEntity.cpp)
+target_link_libraries(TestEntity            PRIVATE CarScraperLibTest)
 carscraper_configure_target(TestEntity)
-target_compile_definitions(TestEntity   PRIVATE TESTING)
+target_compile_definitions(TestEntity       PRIVATE TESTING)
 carscraper_configure_test(TestEntity)
 
 # test Car
-add_executable(TestCar                  tests/mono/testCar.cpp)
-target_link_libraries(TestCar           PRIVATE CarScraperLibTest)
+add_executable(TestCar                      tests/mono/testCar.cpp)
+target_link_libraries(TestCar               PRIVATE CarScraperLibTest)
 carscraper_configure_target(TestCar)
-target_compile_definitions(TestCar      PRIVATE TESTING)
+target_compile_definitions(TestCar          PRIVATE TESTING)
 carscraper_configure_test(TestCar)
 
 # test HttpClient
-add_executable(TestHttpClient             tests/mono/testHttpClient.cpp)
-target_link_libraries(TestHttpClient      PRIVATE CarScraperLibTest)
+add_executable(TestHttpClient               tests/mono/testHttpClient.cpp)
+target_link_libraries(TestHttpClient        PRIVATE CarScraperLibTest)
 carscraper_configure_target(TestHttpClient)
-target_compile_definitions(TestHttpClient PRIVATE TESTING)
+target_compile_definitions(TestHttpClient   PRIVATE TESTING)
 carscraper_configure_test(TestHttpClient)
 # ./testHttpClient "[httpclient]" "~[network]"      -> to disable network tests (e.g., in CI)
 
 # test HtmlSaver
-add_executable(TestHtmlSaver              tests/mono/testHtmlSaver.cpp)
-target_link_libraries(TestHtmlSaver       PRIVATE CarScraperLibTest)
+add_executable(TestHtmlSaver                tests/mono/testHtmlSaver.cpp)
+target_link_libraries(TestHtmlSaver         PRIVATE CarScraperLibTest)
 carscraper_configure_target(TestHtmlSaver)
-target_compile_definitions(TestHtmlSaver  PRIVATE TESTING)
+target_compile_definitions(TestHtmlSaver    PRIVATE TESTING)
 carscraper_configure_test(TestHtmlSaver)
 # ./TestHtmlSaver "[HtmlSaver]" "~[network]"        -> to disable network tests (e.g., in CI)
 
 # test ExcelReader
-add_executable(TestExcelReader            tests/mono/testExcelReader.cpp)
-target_link_libraries(TestExcelReader     PRIVATE CarScraperLibTest)
+add_executable(TestExcelReader              tests/mono/testExcelReader.cpp)
+target_link_libraries(TestExcelReader       PRIVATE CarScraperLibTest)
 carscraper_configure_target(TestExcelReader)
 target_compile_definitions(TestExcelReader  PRIVATE TESTING)
 carscraper_configure_test(TestExcelReader)
 
 # Test HtmlParser
-add_executable(TestHtmlParser             tests/mono/testHtmlParser.cpp)
-target_link_libraries(TestHtmlParser      PRIVATE CarScraperLibTest)
+add_executable(TestHtmlParser               tests/mono/testHtmlParser.cpp)
+target_link_libraries(TestHtmlParser        PRIVATE CarScraperLibTest)
 carscraper_configure_target(TestHtmlParser)
-target_compile_definitions(TestHtmlParser PRIVATE TESTING)
+target_compile_definitions(TestHtmlParser   PRIVATE TESTING)
 carscraper_configure_test(TestHtmlParser)
 
 # Test GenericCarScraper
-add_executable(TestGenericCarScraper      tests/mono/testGenericCarScraper.cpp)
+add_executable(TestGenericCarScraper        tests/mono/testGenericCarScraper.cpp)
 target_link_libraries(TestGenericCarScraper PRIVATE CarScraperLibTest)
 carscraper_configure_target(TestGenericCarScraper)
 target_compile_definitions(TestGenericCarScraper PRIVATE TESTING)
 carscraper_configure_test(TestGenericCarScraper)
+
+# Test GenericCarMapper
+add_executable(TestGenericCarMapper         tests/mono/testGenericCarMapper.cpp)
+target_link_libraries(TestGenericCarMapper  PRIVATE CarScraperLibTest)
+carscraper_configure_target(TestGenericCarMapper)
+target_compile_definitions(TestGenericCarMapper PRIVATE TESTING)
+carscraper_configure_test(TestGenericCarMapper)
 
 
 # ==============================================================================

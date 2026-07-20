@@ -25,6 +25,7 @@
 #include "base/baseExcelReader.cpp"
 #include "base/baseHtmlParser.cpp"
 #include "base/baseGenericCarScraper.cpp"
+#include "base/baseGenericCarMapper.cpp"
 
 
 // =============================================================================
