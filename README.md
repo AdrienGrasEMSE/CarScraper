@@ -23,6 +23,7 @@ Ce qui a été réalisé et testé :
 8. Classe HtmlParser représentant un parser HTML.
 9. Classe GenericCarScraper représentant la base d'un Scraper pour des données de voitures.
 10. Classe ArgusScraper et CaradisiacScraper représentant des scraper spécifique pour les site de largus.fr et caradisiac.com. Il sont capables d'extraire et sauvegarder des fiches technique de voitures d'une marque donnée en entrée, d'un modèle, et d'un interval de dates.
+11. Class GenericCarMapper représentant la base d'un Mapper pour des données de voitures.
 
 &#8303;
 
