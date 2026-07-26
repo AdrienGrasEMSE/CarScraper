@@ -80,14 +80,6 @@ namespace CarScraper {
             std::string readFile(const std::string& path);
 
 
-            /**
-             * @brief Converts a string to lowercase
-             * @param str The string to convert
-             * @return The lowercase string
-             */
-            std::string toLowerCase(const std::string& str);
-
-
 
 
 

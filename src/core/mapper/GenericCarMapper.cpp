@@ -176,22 +176,6 @@ namespace CarScraper {
     }
 
 
-    /**
-     * @brief Converts a string to lowercase
-     * @param str The string to convert
-     * @return The lowercase string
-     */
-    std::string GenericCarMapper::toLowerCase(const std::string& str) {
-        std::string lowerStr = str;
-        std::transform(
-            lowerStr.begin(), 
-            lowerStr.end(), 
-            lowerStr.begin(), 
-            ::tolower);
-        return lowerStr;
-    }
-
-
 
 
 
