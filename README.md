@@ -24,15 +24,15 @@ Ce qui a été réalisé et testé :
 9. Classe GenericCarScraper représentant la base d'un Scraper pour des données de voitures.
 10. Classe ArgusScraper et CaradisiacScraper représentant des scraper spécifique pour les site de largus.fr et caradisiac.com. Il sont capables d'extraire et sauvegarder des fiches technique de voitures d'une marque donnée en entrée, d'un modèle, et d'un interval de dates.
 11. Class GenericCarMapper représentant la base d'un Mapper pour des données de voitures.
+12. Class ArgusMapper et CaradisiacMapper capable de créer un objet Car à partir d'un HTML donné en entrée.
 
 &#8303;
 
 Ce qui reste à faire :
-1. Créer les classe ArgusMapper et CaradisiacMapper capable de créer un objet Car à partir d'un HTML donné en entrée.
-2. Créer la classe CrossMapper capable de trouver et combiner deux fiches technique d'un même modèle pour obtenir une fiche technique plus complète.
-3. Créer la classe ExcelWritter capable de créer un fichier Excel contenant les infos comparatives d'un modèle.
-4. Créer le service d'extraction de fiches technique d'une voiture avec un système de filtrage, générant à la fin un fichier Excel. Peut nécessiter l'ajout d'une classe spécialisée dans le filtrage.
-5. Créer un service de mail automatique permettant d'informer l'utilisateur de la fin de l'exécution de l'application, avec en pièce jointe le fichier Excel généré.
+1. Créer la classe CrossMapper capable de trouver et combiner deux fiches technique d'un même modèle pour obtenir une fiche technique plus complète.
+2. Créer la classe ExcelWritter capable de créer un fichier Excel contenant les infos comparatives d'un modèle.
+3. Créer le service d'extraction de fiches technique d'une voiture avec un système de filtrage, générant à la fin un fichier Excel. Peut nécessiter l'ajout d'une classe spécialisée dans le filtrage.
+4. Créer un service de mail automatique permettant d'informer l'utilisateur de la fin de l'exécution de l'application, avec en pièce jointe le fichier Excel généré.
 
 
 &#8303;
