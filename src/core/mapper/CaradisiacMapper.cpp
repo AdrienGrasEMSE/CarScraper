@@ -329,14 +329,19 @@ namespace CarScraper {
         auto height             = parser.getText("//tbody[@class='JScaracCarac2']//tr[td[1]='Hauteur']/td[2]");
         auto width              = parser.getText("//tbody[@class='JScaracCarac2']//tr[td[1]='Largeur sans rétros']/td[2]");
         auto length             = parser.getText("//tbody[@class='JScaracCarac2']//tr[td[1]='Longueur']/td[2]");
-        auto trunk              = parser.getText("//tbody[@class='JScaracCarac2']//tr[td[1]='Volume de coffre mini/maxi']/td[2]");
         auto weight             = parser.getText("//tbody[@class='JScaracCarac2']//tr[td[1]='Poids à vide']/td[2]");
-        auto seatCount          = parser.getText("//tbody[@class='JScaracCarac2']//tr[td[1]='Nombre de places assises']/td[2]");
         this->_car.setHeight(toDouble(height));
         this->_car.setWidth(toDouble(width));
         this->_car.setLength(toDouble(length));
-        this->_car.setTrunkVolume(toInt(trunk));
         this->_car.setWeight(toInt(weight));
+
+
+        // ------- Liveability --------------------------------------------------------------------
+        auto trunk              = parser.getText("//tbody[@class='JScaracCarac2']//tr[td[1]='Volume de coffre mini/maxi']/td[2]");
+        auto doorCount          = parser.getText("//tbody[@class='JScaracCarac2']//tr[td[1]='Nombre de portes']/td[2]");
+        auto seatCount          = parser.getText("//tbody[@class='JScaracCarac2']//tr[td[1]='Nombre de places assises']/td[2]");
+        this->_car.setTrunkVolume(toInt(trunk));
+        this->_car.setDoorCount(toInt(doorCount));
         this->_car.setSeatCount(toInt(seatCount));
 
 
