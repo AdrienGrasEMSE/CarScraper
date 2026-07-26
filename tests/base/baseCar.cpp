@@ -43,8 +43,9 @@ static Car buildValidCar() {
     c.setHeight                 (1.43);
     c.setLength                 (4.37);
     c.setWidth                  (1.79);
-    c.setTrunkVolume            (361);
     c.setWeight                 (1375);
+    c.setTrunkVolume            (361);
+    c.setDoorCount              (5);
     c.setSeatCount              (5);
     c.setGearboxType            (GearboxType::AUTOMATIC);
     c.setGearCount              (6);
@@ -83,8 +84,9 @@ static Car buildValidCarSkipping(const std::string& fieldToSkip) {
     if (fieldToSkip != "height")           c.setHeight            (1.43);
     if (fieldToSkip != "length")           c.setLength             (4.37);
     if (fieldToSkip != "width")            c.setWidth              (1.79);
-    if (fieldToSkip != "trunkVolume")      c.setTrunkVolume        (361);
     if (fieldToSkip != "weight")           c.setWeight             (1375);
+    if (fieldToSkip != "trunkVolume")      c.setTrunkVolume        (361);
+    if (fieldToSkip != "doorCount")        c.setDoorCount          (5);
     if (fieldToSkip != "seatCount")        c.setSeatCount          (5);
     c.setGearboxType             (GearboxType::AUTOMATIC);
     if (fieldToSkip != "gearCount")        c.setGearCount          (6);
@@ -141,8 +143,9 @@ TEST_CASE("Car Default Construction", "[car][construction]") {
     SECTION("All int attributes are DEFAULT_INT") {
         Car c;
         REQUIRE(c.getPrice()         == DEFAULT_INT);
-        REQUIRE(c.getTrunkVolume()   == DEFAULT_INT);
         REQUIRE(c.getWeight()        == DEFAULT_INT);
+        REQUIRE(c.getTrunkVolume()   == DEFAULT_INT);
+        REQUIRE(c.getDoorCount()     == DEFAULT_INT);
         REQUIRE(c.getSeatCount()     == DEFAULT_INT);
         REQUIRE(c.getGearCount()     == DEFAULT_INT);
         REQUIRE(c.getHorsePower()    == DEFAULT_INT);
@@ -247,16 +250,22 @@ TEST_CASE("Car Setters — Valid Values", "[car][setters][valid]") {
         REQUIRE(c.getWidth() == Approx(1.75));
     }
 
+    SECTION("setWeight stores the value") {
+        Car c;
+        c.setWeight(1200);
+        REQUIRE(c.getWeight() == 1200);
+    }
+
     SECTION("setTrunkVolume stores the value") {
         Car c;
         c.setTrunkVolume(300);
         REQUIRE(c.getTrunkVolume() == 300);
     }
 
-    SECTION("setWeight stores the value") {
+    SECTION("setDoorCount stores the value") {
         Car c;
-        c.setWeight(1200);
-        REQUIRE(c.getWeight() == 1200);
+        c.setDoorCount(5);
+        REQUIRE(c.getDoorCount() == 5);
     }
 
     SECTION("setSeatCount stores the value") {
@@ -505,22 +514,22 @@ TEST_CASE("Car Setters — Invalid Values", "[car][setters][invalid]") {
         REQUIRE(c.getWidth() == ERROR_DOUBLE);
     }
 
-    SECTION("setTrunkVolume with negative value stores ERROR_INT") {
-        Car c;
-        c.setTrunkVolume(-1);
-        REQUIRE(c.getTrunkVolume() == ERROR_INT);
-    }
-
     SECTION("setWeight with negative value stores ERROR_INT") {
         Car c;
         c.setWeight(-1);
         REQUIRE(c.getWeight() == ERROR_INT);
     }
 
-    SECTION("setSeatCount with negative value stores ERROR_INT") {
+    SECTION("setTrunkVolume with negative value stores ERROR_INT") {
         Car c;
-        c.setSeatCount(-1);
-        REQUIRE(c.getSeatCount() == ERROR_INT);
+        c.setTrunkVolume(-1);
+        REQUIRE(c.getTrunkVolume() == ERROR_INT);
+    }
+
+    SECTION("setDoorCount with negative value stores ERROR_INT") {
+        Car c;
+        c.setDoorCount(-1);
+        REQUIRE(c.getDoorCount() == ERROR_INT);
     }
 
     SECTION("setSeatCount above max (10) stores ERROR_INT") {
@@ -656,6 +665,18 @@ TEST_CASE("Car Setters — Boundary Values", "[car][setters][boundary]") {
         Car c;
         c.setSeatCount(10);
         REQUIRE(c.getSeatCount() == 10);
+    }
+
+    SECTION("setDoorCount at min boundary (0) is valid") {
+        Car c;
+        c.setDoorCount(0);
+        REQUIRE(c.getDoorCount() == 0);
+    }
+
+    SECTION("setDoorCount at max boundary (10) is valid") {
+        Car c;
+        c.setDoorCount(10);
+        REQUIRE(c.getDoorCount() == 10);
     }
 
     SECTION("setHorsePower at min boundary (0) is valid") {
@@ -997,6 +1018,12 @@ TEST_CASE("Car isComplete and isValid", "[car][utilities]") {
         REQUIRE_FALSE(c.isComplete());
     }
 
+    SECTION("Car missing doorCount is not complete") {
+        Car c = buildValidCarSkipping("doorCount");
+        REQUIRE(c.getDoorCount() == DEFAULT_INT);
+        REQUIRE_FALSE(c.isComplete());
+    }
+
     SECTION("Car missing seatCount is not complete") {
         Car c = buildValidCarSkipping("seatCount");
         REQUIRE(c.getSeatCount() == DEFAULT_INT);
@@ -1141,6 +1168,12 @@ TEST_CASE("Car isComplete and isValid", "[car][utilities]") {
         REQUIRE_FALSE(c.isValid());
     }
 
+    SECTION("Car with ERROR_INT doorCount is not valid") {
+        Car c;
+        c.setDoorCount(-1);
+        REQUIRE_FALSE(c.isValid());
+    }
+
     SECTION("Car with ERROR_INT seatCount is not valid") {
         Car c;
         c.setSeatCount(-1);
@@ -1200,12 +1233,13 @@ TEST_CASE("Car toString", "[car][tostring]") {
     SECTION("Contains all section headers") {
         Car c = buildValidCar();
         const std::string s = c.toString();
-        REQUIRE(s.find("- General")           != std::string::npos);
-        REQUIRE(s.find("- Dimensions")         != std::string::npos);
-        REQUIRE(s.find("- Transmission")       != std::string::npos);
-        REQUIRE(s.find("- Power")              != std::string::npos);
-        REQUIRE(s.find("- Consumption")        != std::string::npos);
-        REQUIRE(s.find("- Commercialisation")  != std::string::npos);
+        REQUIRE(s.find("- General")             != std::string::npos);
+        REQUIRE(s.find("- Dimensions")          != std::string::npos);
+        REQUIRE(s.find("- Liveability")         != std::string::npos);
+        REQUIRE(s.find("- Transmission")        != std::string::npos);
+        REQUIRE(s.find("- Power")               != std::string::npos);
+        REQUIRE(s.find("- Consumption")         != std::string::npos);
+        REQUIRE(s.find("- Commercialisation")   != std::string::npos);
     }
 
     SECTION("Contains the brand normalized value") {
