@@ -69,8 +69,11 @@ namespace CarScraper {
             double          _height;                    ///< Car height (in m)                  | ex: 1.45
             double          _length;                    ///< Car length (in m)                  | ex: 4.05
             double          _width;                     ///< Car width (in m)                   | ex: 1.75
-            int             _trunkVolume;               ///< Car trunk volume (in L)            | ex: 300
             int             _weight;                    ///< Car weight (in kg)                 | ex: 1200
+
+            // Liveability
+            int             _trunkVolume;               ///< Car trunk volume (in L)            | ex: 300
+            int             _doorCount;                 ///< Car door count                     | ex: 3
             int             _seatCount;                 ///< Car seat count                     | ex: 5
 
             // Transmission
@@ -183,17 +186,23 @@ namespace CarScraper {
              */
             double getWidth() const { return _width; }
 
+            
+            /** @brief Gets the weight of the car
+             *  @return The weight of the car
+             */
+            int getWeight() const { return _weight; }
+
 
             /** @brief Gets the trunk volume of the car
              *  @return The trunk volume of the car
              */
             int getTrunkVolume() const { return _trunkVolume; }
 
-            
-            /** @brief Gets the weight of the car
-             *  @return The weight of the car
+
+            /** @brief Gets the door count of the car
+             *  @return The door count of the car
              */
-            int getWeight() const { return _weight; }
+            int getDoorCount() const { return _doorCount; }
 
 
             /** @brief Gets the seat count of the car
@@ -375,6 +384,14 @@ namespace CarScraper {
 
 
             /**
+             * @brief Sets the weight value
+             * @param weight The weight value
+             * @note The weight value must be between 0 and 5000 kg (inclusive)
+             */
+            void setWeight(int weight);
+
+
+            /**
              * @brief Sets the trunk volume value
              * @param trunkVolume The trunk volume value
              * @note The trunk volume value must be between 0 and 1000 liters (inclusive)
@@ -383,11 +400,11 @@ namespace CarScraper {
 
 
             /**
-             * @brief Sets the weight value
-             * @param weight The weight value
-             * @note The weight value must be between 0 and 5000 kg (inclusive)
+             * @brief Sets the door count value
+             * @param doorCount The door count value
+             * @note The door count value must be between 0 and 10 (inclusive)
              */
-            void setWeight(int weight);
+            void setDoorCount(int doorCount);
 
 
             /**

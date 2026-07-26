@@ -49,8 +49,11 @@ namespace CarScraper {
         _height             = DEFAULT_DOUBLE;
         _length             = DEFAULT_DOUBLE;
         _width              = DEFAULT_DOUBLE;
-        _trunkVolume        = DEFAULT_INT;
         _weight             = DEFAULT_INT;
+
+        // Liveability
+        _trunkVolume        = DEFAULT_INT;
+        _doorCount          = DEFAULT_INT;
         _seatCount          = DEFAULT_INT;
 
         // Transmission
@@ -253,6 +256,19 @@ namespace CarScraper {
 
 
     /**
+     * @brief Sets the weight value
+     * @param weight The weight value
+     * @note The weight value must be between 0 and 5000 kg (inclusive)
+     */
+    void Car::setWeight(int weight) {
+
+        // Verification
+        this->_weight = Validation::intValidation(weight, this->getFullId(), "Weight", 0, 5000);
+
+    }
+
+
+    /**
      * @brief Sets the trunk volume value
      * @param trunkVolume The trunk volume value
      * @note The trunk volume value must be between 0 and 1000 liters (inclusive)
@@ -266,14 +282,14 @@ namespace CarScraper {
 
 
     /**
-     * @brief Sets the weight value
-     * @param weight The weight value
-     * @note The weight value must be between 0 and 5000 kg (inclusive)
+     * @brief Sets the door count value
+     * @param doorCount The door count value
+     * @note The door count value must be between 0 and 10 (inclusive)
      */
-    void Car::setWeight(int weight) {
+    void Car::setDoorCount(int doorCount) {
 
         // Verification
-        this->_weight = Validation::intValidation(weight, this->getFullId(), "Weight", 0, 5000);
+        this->_doorCount = Validation::intValidation(doorCount, this->getFullId(), "DoorCount", 0, 10);
 
     }
 
@@ -630,8 +646,12 @@ namespace CarScraper {
         if (_height     == DEFAULT_DOUBLE)  return false;
         if (_length     == DEFAULT_DOUBLE)  return false;
         if (_width      == DEFAULT_DOUBLE)  return false;
-        if (_trunkVolume== DEFAULT_INT)     return false;
         if (_weight     == DEFAULT_INT)     return false;
+
+
+        // Liveability
+        if (_trunkVolume== DEFAULT_INT)     return false;
+        if (_doorCount  == DEFAULT_INT)     return false;
         if (_seatCount  == DEFAULT_INT)     return false;
 
 
@@ -687,8 +707,12 @@ namespace CarScraper {
         if (_height     == ERROR_DOUBLE)    return false;
         if (_length     == ERROR_DOUBLE)    return false;
         if (_width      == ERROR_DOUBLE)    return false;
-        if (_trunkVolume== ERROR_INT)       return false;
         if (_weight     == ERROR_INT)       return false;
+
+
+        // Liveability
+        if (_trunkVolume== ERROR_INT)       return false;
+        if (_doorCount  == ERROR_INT)       return false;
         if (_seatCount  == ERROR_INT)       return false;
 
 
@@ -746,8 +770,15 @@ namespace CarScraper {
         oss << "    -> " << std::left << std::setw(17) << "Height"         << ": " << _height      << " m\n";
         oss << "    -> " << std::left << std::setw(17) << "Length"         << ": " << _length      << " m\n";
         oss << "    -> " << std::left << std::setw(17) << "Width"          << ": " << _width       << " m\n";
-        oss << "    -> " << std::left << std::setw(17) << "TrunkVolume"    << ": " << _trunkVolume << " L\n";
         oss << "    -> " << std::left << std::setw(17) << "Weight"         << ": " << _weight      << " kg\n";
+
+
+        // -------------------------------------------------------------------------
+        // Liveability
+        // -------------------------------------------------------------------------
+        oss << "- Liveability\n";
+        oss << "    -> " << std::left << std::setw(17) << "TrunkVolume"    << ": " << _trunkVolume << " L\n";
+        oss << "    -> " << std::left << std::setw(17) << "DoorCount"      << ": " << _doorCount   << "\n";
         oss << "    -> " << std::left << std::setw(17) << "SeatCount"      << ": " << _seatCount   << "\n";
 
 
