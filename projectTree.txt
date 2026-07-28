@@ -35,6 +35,10 @@
 │   │   │   ├── Logger.cpp
 │   │   │   └── Logger.hpp
 │   │   ├── mapper
+│   │   │   ├── ArgusMapper.cpp
+│   │   │   ├── ArgusMapper.hpp
+│   │   │   ├── CaradisiacMapper.cpp
+│   │   │   ├── CaradisiacMapper.hpp
 │   │   │   ├── GenericCarMapper.cpp
 │   │   │   └── GenericCarMapper.hpp
 │   │   ├── models
@@ -74,6 +78,7 @@
     │   ├── baseEntity.cpp
     │   ├── baseEnum.cpp
     │   ├── baseExcelReader.cpp
+    │   ├── baseGenericCarMapper.cpp
     │   ├── baseGenericCarScraper.cpp
     │   ├── baseHtmlParser.cpp
     │   ├── baseHtmlSaver.cpp
@@ -85,6 +90,7 @@
     │   ├── testEntity.cpp
     │   ├── testEnum.cpp
     │   ├── testExcelReader.cpp
+    │   ├── testGenericCarMapper.cpp
     │   ├── testGenericCarScraper.cpp
     │   ├── testHtmlParser.cpp
     │   ├── testHtmlSaver.cpp
@@ -93,4 +99,4 @@
     │   └── testValidation.cpp
     └── testAll.cpp
 
-27 directories, 67 files
+27 directories, 73 files
