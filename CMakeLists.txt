@@ -106,9 +106,10 @@ set(CORE_SOURCES
     src/core/scraper/CaradisiacScraper.cpp
 
     # Core — Mapper
-    src/core/mapper/GenericCarMapper.cpp
     src/core/mapper/ArgusMapper.cpp
     src/core/mapper/CaradisiacMapper.cpp
+    src/core/mapper/CrossMapper.cpp
+    src/core/mapper/GenericCarMapper.cpp
 
     # IO — HttpClient
     src/io/httpClient/HttpClient.cpp
