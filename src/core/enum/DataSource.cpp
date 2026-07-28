@@ -27,6 +27,7 @@ namespace CarScraper {
         switch (value) {
             case DataSource::ARGUS:         return "Argus";
             case DataSource::CARADISIAC:    return "Caradisiac";
+            case DataSource::MIXED:         return "Mixed";
             default:                        return "Unknown";
         }
     }
@@ -53,6 +54,11 @@ namespace CarScraper {
         // CARADISIAC : Caradisiac
         if (lower == "caradisiac") {
             return DataSource::CARADISIAC;
+        }
+
+        // MIXED : Miwed
+        if (lower == "mixed") {
+            return DataSource::MIXED;
         }
 
         // Unknown

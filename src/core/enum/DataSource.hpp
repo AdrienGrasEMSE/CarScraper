@@ -31,6 +31,7 @@ namespace CarScraper {
     enum class DataSource {
         ARGUS,      ///< Data from largus.fr
         CARADISIAC, ///< Data from caradisiac.com
+        MIXED,      ///< Data from largus.fr and caradisiac.com
         NA          ///< Unknown
     };
 
