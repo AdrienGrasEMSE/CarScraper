@@ -129,8 +129,9 @@ TEST_CASE("co2ClassIsValid", "[enum][co2class]") {
 TEST_CASE("dataSourceToString", "[enum][datasource]") {
 
     SECTION("Converts each known value to its label") {
-        REQUIRE(dataSourceToString(DataSource::ARGUS)      == "Argus");
-        REQUIRE(dataSourceToString(DataSource::CARADISIAC) == "Caradisiac");
+        REQUIRE(dataSourceToString(DataSource::ARGUS)       == "Argus");
+        REQUIRE(dataSourceToString(DataSource::CARADISIAC)  == "Caradisiac");
+        REQUIRE(dataSourceToString(DataSource::MIXED)       == "Mixed");
     }
 
     SECTION("Returns Unknown for the unknown value") {
@@ -142,13 +143,15 @@ TEST_CASE("dataSourceToString", "[enum][datasource]") {
 TEST_CASE("dataSourceFromString", "[enum][datasource]") {
 
     SECTION("Parses each known label") {
-        REQUIRE(dataSourceFromString("Argus")      == DataSource::ARGUS);
-        REQUIRE(dataSourceFromString("Caradisiac") == DataSource::CARADISIAC);
+        REQUIRE(dataSourceFromString("Argus")       == DataSource::ARGUS);
+        REQUIRE(dataSourceFromString("Caradisiac")  == DataSource::CARADISIAC);
+        REQUIRE(dataSourceFromString("Mixed")       == DataSource::MIXED);
     }
 
     SECTION("Is case-insensitive") {
-        REQUIRE(dataSourceFromString("argus")      == DataSource::ARGUS);
-        REQUIRE(dataSourceFromString("CARADISIAC") == DataSource::CARADISIAC);
+        REQUIRE(dataSourceFromString("argus")       == DataSource::ARGUS);
+        REQUIRE(dataSourceFromString("CARADISIAC")  == DataSource::CARADISIAC);
+        REQUIRE(dataSourceFromString("MiXEd")       == DataSource::MIXED);
     }
 
     SECTION("Returns NA for an unrecognized value") {
@@ -163,6 +166,7 @@ TEST_CASE("dataSourceIsValid", "[enum][datasource]") {
     SECTION("Returns true for known values") {
         REQUIRE(dataSourceIsValid(DataSource::ARGUS));
         REQUIRE(dataSourceIsValid(DataSource::CARADISIAC));
+        REQUIRE(dataSourceIsValid(DataSource::MIXED));
     }
 
     SECTION("Returns false for NA") {
