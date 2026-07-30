@@ -2,8 +2,9 @@
 #
 # - From root directory, go to the folder build
 # - Reset : rm -rf CMakeFiles/ && rm CMakeCache.txt
-# - Setup : cmake .. -DCMAKE_BUILD_TYPE=Release
-# - Build : cmake --build . -j2
+# - Setup : cmake .. -DCMAKE_BUILD_TYPE=Release     For full realease
+# - Setup : cmake .. -DCMAKE_BUILD_TYPE=Debug       For lighter process
+# - Build : cmake --build . -j$(nproc)
 # The last command compile everything with 2 parrallel process (fatser)
 
 
