@@ -131,8 +131,8 @@ namespace CarScraper {
         /** ----- Commercialisation ---------------------------------------------------------------
          *  -> Everything from Caradisiac
          */
-        //newCar.setCommercialisationStart(caradisiac.getCommercialisationStart());
-        //newCar.setCommercialisationEnd(caradisiac.getCommercialisationEnd());
+        newCar.setCommercialisationStart(caradisiac.getCommercialisationStart());
+        newCar.setCommercialisationEnd(caradisiac.getCommercialisationEnd());
         newCar.setStillInSale(caradisiac.isStillInSale());
 
 
