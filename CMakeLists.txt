@@ -251,6 +251,21 @@ carscraper_configure_target(TestGenericCarMapper)
 target_compile_definitions(TestGenericCarMapper PRIVATE TESTING)
 carscraper_configure_test(TestGenericCarMapper)
 
+# Test ArgusMapper
+add_executable(TestArgusMapper              tests/mono/testArgusMapper.cpp)
+target_link_libraries(TestArgusMapper       PRIVATE CarScraperLibTest)
+carscraper_configure_target(TestArgusMapper)
+target_compile_definitions(TestArgusMapper  PRIVATE TESTING)
+carscraper_configure_test(TestArgusMapper)
+ 
+# Test CaradisiacMapper
+add_executable(TestCaradisiacMapper         tests/mono/testCaradisiacMapper.cpp)
+target_link_libraries(TestCaradisiacMapper  PRIVATE CarScraperLibTest)
+carscraper_configure_target(TestCaradisiacMapper)
+target_compile_definitions(TestCaradisiacMapper PRIVATE TESTING)
+carscraper_configure_test(TestCaradisiacMapper)
+
+
 
 # ==============================================================================
 # Tests — all

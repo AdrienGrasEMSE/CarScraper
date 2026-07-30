@@ -26,6 +26,8 @@
 #include "base/baseHtmlParser.cpp"
 #include "base/baseGenericCarScraper.cpp"
 #include "base/baseGenericCarMapper.cpp"
+#include "base/baseArgusMapper.cpp"
+#include "base/baseCaradisiacMapper.cpp"
 
 
 // =============================================================================

@@ -48,19 +48,19 @@ public:
 // Fixture helpers
 // =============================================================================
 
-static const std::string TEST_DIR = "data/test_mapper/";
+static const std::string TEST_DIR_GENERIC = "data/test_mapper/";
 
 static void prepareDirectory() {
-    fs::create_directories(TEST_DIR);
+    fs::create_directories(TEST_DIR_GENERIC);
 }
 
-static void cleanDirectory() {
-    fs::remove_all(TEST_DIR);
+static void cleanDirectoryGeneric() {
+    fs::remove_all(TEST_DIR_GENERIC);
 }
 
-static std::string writeFixtureFile(const std::string& name, const std::string& content) {
+static std::string writeFixtureFileGeneric(const std::string& name, const std::string& content) {
     prepareDirectory();
-    const std::string path = TEST_DIR + name;
+    const std::string path = TEST_DIR_GENERIC + name;
     std::ofstream file(path);
     file << content;
     file.close();
@@ -152,11 +152,11 @@ TEST_CASE("GenericCarMapper Construction", "[genericmapper][construction]") {
 TEST_CASE("GenericCarMapper setInputFile", "[genericmapper][setter][inputfile]") {
 
     SECTION("Valid existing path is accepted and returns true") {
-        const std::string path = writeFixtureFile("sheet.html", "<html></html>");
+        const std::string path = writeFixtureFileGeneric("sheet.html", "<html></html>");
         TestMapper mapper;
         REQUIRE(mapper.setInputFile(path));
         REQUIRE(mapper.getInputFile() == path);
-        cleanDirectory();
+        cleanDirectoryGeneric();
     }
 
     SECTION("Non-existent path is rejected and returns false") {
@@ -172,14 +172,14 @@ TEST_CASE("GenericCarMapper setInputFile", "[genericmapper][setter][inputfile]")
     }
 
     SECTION("Setting an invalid path after a valid one resets to DEFAULT_STR") {
-        const std::string path = writeFixtureFile("sheet.html", "<html></html>");
+        const std::string path = writeFixtureFileGeneric("sheet.html", "<html></html>");
         TestMapper mapper;
         REQUIRE(mapper.setInputFile(path));
         REQUIRE(mapper.getInputFile() == path);
 
         REQUIRE_FALSE(mapper.setInputFile("data/test_mapper/ghost.html"));
         REQUIRE(mapper.getInputFile() == DEFAULT_STR);
-        cleanDirectory();
+        cleanDirectoryGeneric();
     }
 
     SECTION("setInputFile does not throw") {
@@ -347,24 +347,24 @@ TEST_CASE("GenericCarMapper toDouble", "[genericmapper][helper][toDouble]") {
 TEST_CASE("GenericCarMapper readFile", "[genericmapper][helper][readFile]") {
 
     SECTION("Returns the exact content of an existing file") {
-        const std::string path = writeFixtureFile("content.txt", "Hello, CarScraper!");
+        const std::string path = writeFixtureFileGeneric("content.txt", "Hello, CarScraper!");
         TestMapper mapper;
         REQUIRE(mapper.readFilePublic(path) == "Hello, CarScraper!");
-        cleanDirectory();
+        cleanDirectoryGeneric();
     }
 
     SECTION("Preserves multi-line content") {
-        const std::string path = writeFixtureFile("multiline.txt", "line1\nline2\nline3");
+        const std::string path = writeFixtureFileGeneric("multiline.txt", "line1\nline2\nline3");
         TestMapper mapper;
         REQUIRE(mapper.readFilePublic(path) == "line1\nline2\nline3");
-        cleanDirectory();
+        cleanDirectoryGeneric();
     }
 
     SECTION("Returns an empty string for an empty file") {
-        const std::string path = writeFixtureFile("empty.txt", "");
+        const std::string path = writeFixtureFileGeneric("empty.txt", "");
         TestMapper mapper;
         REQUIRE(mapper.readFilePublic(path).empty());
-        cleanDirectory();
+        cleanDirectoryGeneric();
     }
 
     SECTION("Returns ERROR_STR for a non-existent file") {
