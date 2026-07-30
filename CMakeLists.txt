@@ -1,5 +1,36 @@
+# Usage :
+#
+# - From root directory, go to the folder build
+# - Reset : rm -rf CMakeFiles/ && rm CMakeCache.txt
+# - Setup : cmake .. -DCMAKE_BUILD_TYPE=Release
+# - Build : cmake --build . -j2
+# The last command compile everything with 2 parrallel process (fatser)
+
+
 cmake_minimum_required(VERSION 3.20)
 project(CarScraper VERSION 0.1.0 LANGUAGES CXX)
+
+
+# ==============================================================================
+# Build type — default to Release if not specified
+# ==============================================================================
+
+if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+    set(CMAKE_BUILD_TYPE Release CACHE STRING "Build type" FORCE)
+    set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "RelWithDebInfo" "MinSizeRel")
+endif()
+message(STATUS "CarScraper build type: ${CMAKE_BUILD_TYPE}")
+
+
+# ==============================================================================
+# Compiler cache — speeds up repeated builds if ccache/sccache is installed
+# ==============================================================================
+
+find_program(CCACHE_PROGRAM ccache)
+if(CCACHE_PROGRAM)
+    message(STATUS "ccache found — enabling compiler launcher")
+    set(CMAKE_CXX_COMPILER_LAUNCHER ${CCACHE_PROGRAM})
+endif()
 
 
 # ==============================================================================
@@ -11,6 +42,19 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS        OFF)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+
+# --- Link-Time Optimization — Release builds only ---
+include(CheckIPOSupported)
+check_ipo_supported(RESULT IPO_SUPPORTED OUTPUT IPO_ERROR)
+if(IPO_SUPPORTED AND CMAKE_BUILD_TYPE STREQUAL "Release")
+    message(STATUS "LTO enabled for Release build")
+    set(CMAKE_INTERPROCEDURAL_OPTIMIZATION ON)
+else()
+    if(NOT IPO_SUPPORTED)
+        message(STATUS "LTO not supported: ${IPO_ERROR}")
+    endif()
+endif()
 
 
 # ==============================================================================
@@ -45,7 +89,7 @@ target_include_directories(stduuid INTERFACE ${CMAKE_SOURCE_DIR}/libs)
 add_library(catch2 INTERFACE)
 target_include_directories(catch2 INTERFACE ${CMAKE_SOURCE_DIR}/libs)
 
-# --- Catch2 v2 (header-only) : libs/nlohmann/json.hpp ---
+# --- nlohmann (header-only) : libs/nlohmann/json.hpp ---
 add_library(nlohmann INTERFACE)
 target_include_directories(nlohmann INTERFACE ${CMAKE_SOURCE_DIR}/libs)
 
@@ -73,13 +117,14 @@ function(carscraper_configure_target TARGET)
     )
     target_compile_options(${TARGET} PRIVATE
         $<$<CXX_COMPILER_ID:GNU,Clang>: -Wall -Wextra -Wpedantic>
+        $<$<CXX_COMPILER_ID:GNU,Clang>: $<$<CONFIG:Release>: -O3>>
         $<$<CXX_COMPILER_ID:MSVC>:      /W4>
     )
 endfunction()
 
 
 # ==============================================================================
-# Core sources (shared between lib and test lib)
+# Core sources (compiled ONCE into CarScraperLib / CarScraperLibTest)
 # ==============================================================================
 
 set(CORE_SOURCES
@@ -127,15 +172,22 @@ set(CORE_SOURCES
 
 
 # ==============================================================================
+# CarScraperLib — production lib (no TESTING flag)
+# ==============================================================================
+# NOTE: this is now the ONLY target that compiles CORE_SOURCES for production.
+# The main executable links against it instead of recompiling the same .cpp
+# files a second time.
+
+add_library(CarScraperLib STATIC ${CORE_SOURCES})
+carscraper_configure_target(CarScraperLib)
+
+
+# ==============================================================================
 # Main executable
 # ==============================================================================
 
-add_executable(${PROJECT_NAME}
-    src/main.cpp
-    ${CORE_SOURCES}
-)
-#target_link_libraries(${PROJECT_NAME} PRIVATE OpenXLSX::OpenXLSX)
-target_link_libraries(${PROJECT_NAME} PRIVATE ${LIBZIP_LIBRARIES})
+add_executable(${PROJECT_NAME} src/main.cpp)
+target_link_libraries(${PROJECT_NAME} PRIVATE CarScraperLib ${LIBZIP_LIBRARIES})
 carscraper_configure_target(${PROJECT_NAME})
 set_target_properties(${PROJECT_NAME} PROPERTIES
     VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
@@ -144,16 +196,12 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
 
 
 # ==============================================================================
-# CarScraperLib — production lib (no TESTING flag)
-# ==============================================================================
-
-add_library(CarScraperLib STATIC ${CORE_SOURCES})
-carscraper_configure_target(CarScraperLib)
-
-
-# ==============================================================================
 # CarScraperLibTest — test lib (compiled with TESTING flag)
 # ==============================================================================
+# This is the one unavoidable duplicate compilation of CORE_SOURCES: it needs
+# the TESTING preprocessor flag, so it can't reuse the CarScraperLib object
+# files. Every test target below links against this single lib instead of
+# rebuilding CORE_SOURCES itself.
 
 add_library(CarScraperLibTest STATIC ${CORE_SOURCES})
 carscraper_configure_target(CarScraperLibTest)
@@ -164,8 +212,11 @@ target_compile_definitions(CarScraperLibTest PRIVATE TESTING)
 # Tests — mono
 # ==============================================================================
 
-# Helper — apply working directory to any test target
+# Helper — apply working directory + link CarScraperLibTest to any test target
 function(carscraper_configure_test TARGET)
+    target_link_libraries(${TARGET} PRIVATE CarScraperLibTest)
+    carscraper_configure_target(${TARGET})
+    target_compile_definitions(${TARGET} PRIVATE TESTING)
     set_target_properties(${TARGET} PROPERTIES
         VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
         RUNTIME_OUTPUT_DIRECTORY      "${CMAKE_SOURCE_DIR}/build/tests"
@@ -173,96 +224,57 @@ function(carscraper_configure_test TARGET)
 endfunction()
 
 # test Logger
-add_executable(TestLogger                   tests/mono/testLogger.cpp)
-target_link_libraries(TestLogger            PRIVATE CarScraperLibTest)
-carscraper_configure_target(TestLogger)
-target_compile_definitions(TestLogger       PRIVATE TESTING)
+add_executable(TestLogger tests/mono/testLogger.cpp)
 carscraper_configure_test(TestLogger)
 
 # test Validation
-add_executable(TestValidation               tests/mono/testValidation.cpp)
-target_link_libraries(TestValidation        PRIVATE CarScraperLibTest)
-carscraper_configure_target(TestValidation)
-target_compile_definitions(TestValidation   PRIVATE TESTING)
+add_executable(TestValidation tests/mono/testValidation.cpp)
 carscraper_configure_test(TestValidation)
 
 # test Enum
-add_executable(TestEnum                     tests/mono/testEnum.cpp)
-target_link_libraries(TestEnum              PRIVATE CarScraperLibTest)
-carscraper_configure_target(TestEnum)
-target_compile_definitions(TestEnum         PRIVATE TESTING)
+add_executable(TestEnum tests/mono/testEnum.cpp)
 carscraper_configure_test(TestEnum)
 
 # test Entity
-add_executable(TestEntity                   tests/mono/testEntity.cpp)
-target_link_libraries(TestEntity            PRIVATE CarScraperLibTest)
-carscraper_configure_target(TestEntity)
-target_compile_definitions(TestEntity       PRIVATE TESTING)
+add_executable(TestEntity tests/mono/testEntity.cpp)
 carscraper_configure_test(TestEntity)
 
 # test Car
-add_executable(TestCar                      tests/mono/testCar.cpp)
-target_link_libraries(TestCar               PRIVATE CarScraperLibTest)
-carscraper_configure_target(TestCar)
-target_compile_definitions(TestCar          PRIVATE TESTING)
+add_executable(TestCar tests/mono/testCar.cpp)
 carscraper_configure_test(TestCar)
 
 # test HttpClient
-add_executable(TestHttpClient               tests/mono/testHttpClient.cpp)
-target_link_libraries(TestHttpClient        PRIVATE CarScraperLibTest)
-carscraper_configure_target(TestHttpClient)
-target_compile_definitions(TestHttpClient   PRIVATE TESTING)
+add_executable(TestHttpClient tests/mono/testHttpClient.cpp)
 carscraper_configure_test(TestHttpClient)
-# ./testHttpClient "[httpclient]" "~[network]"      -> to disable network tests (e.g., in CI)
+# ./TestHttpClient "[httpclient]" "~[network]"      -> to disable network tests (e.g., in CI)
 
 # test HtmlSaver
-add_executable(TestHtmlSaver                tests/mono/testHtmlSaver.cpp)
-target_link_libraries(TestHtmlSaver         PRIVATE CarScraperLibTest)
-carscraper_configure_target(TestHtmlSaver)
-target_compile_definitions(TestHtmlSaver    PRIVATE TESTING)
+add_executable(TestHtmlSaver tests/mono/testHtmlSaver.cpp)
 carscraper_configure_test(TestHtmlSaver)
 # ./TestHtmlSaver "[HtmlSaver]" "~[network]"        -> to disable network tests (e.g., in CI)
 
 # test ExcelReader
-add_executable(TestExcelReader              tests/mono/testExcelReader.cpp)
-target_link_libraries(TestExcelReader       PRIVATE CarScraperLibTest)
-carscraper_configure_target(TestExcelReader)
-target_compile_definitions(TestExcelReader  PRIVATE TESTING)
+add_executable(TestExcelReader tests/mono/testExcelReader.cpp)
 carscraper_configure_test(TestExcelReader)
 
-# Test HtmlParser
-add_executable(TestHtmlParser               tests/mono/testHtmlParser.cpp)
-target_link_libraries(TestHtmlParser        PRIVATE CarScraperLibTest)
-carscraper_configure_target(TestHtmlParser)
-target_compile_definitions(TestHtmlParser   PRIVATE TESTING)
+# test HtmlParser
+add_executable(TestHtmlParser tests/mono/testHtmlParser.cpp)
 carscraper_configure_test(TestHtmlParser)
 
-# Test GenericCarScraper
-add_executable(TestGenericCarScraper        tests/mono/testGenericCarScraper.cpp)
-target_link_libraries(TestGenericCarScraper PRIVATE CarScraperLibTest)
-carscraper_configure_target(TestGenericCarScraper)
-target_compile_definitions(TestGenericCarScraper PRIVATE TESTING)
+# test GenericCarScraper
+add_executable(TestGenericCarScraper tests/mono/testGenericCarScraper.cpp)
 carscraper_configure_test(TestGenericCarScraper)
 
-# Test GenericCarMapper
-add_executable(TestGenericCarMapper         tests/mono/testGenericCarMapper.cpp)
-target_link_libraries(TestGenericCarMapper  PRIVATE CarScraperLibTest)
-carscraper_configure_target(TestGenericCarMapper)
-target_compile_definitions(TestGenericCarMapper PRIVATE TESTING)
+# test GenericCarMapper
+add_executable(TestGenericCarMapper tests/mono/testGenericCarMapper.cpp)
 carscraper_configure_test(TestGenericCarMapper)
 
 # Test ArgusMapper
-add_executable(TestArgusMapper              tests/mono/testArgusMapper.cpp)
-target_link_libraries(TestArgusMapper       PRIVATE CarScraperLibTest)
-carscraper_configure_target(TestArgusMapper)
-target_compile_definitions(TestArgusMapper  PRIVATE TESTING)
+add_executable(TestArgusMapper tests/mono/testArgusMapper.cpp)
 carscraper_configure_test(TestArgusMapper)
  
 # Test CaradisiacMapper
-add_executable(TestCaradisiacMapper         tests/mono/testCaradisiacMapper.cpp)
-target_link_libraries(TestCaradisiacMapper  PRIVATE CarScraperLibTest)
-carscraper_configure_target(TestCaradisiacMapper)
-target_compile_definitions(TestCaradisiacMapper PRIVATE TESTING)
+add_executable(TestCaradisiacMapper tests/mono/testCaradisiacMapper.cpp)
 carscraper_configure_test(TestCaradisiacMapper)
 
 
@@ -271,10 +283,7 @@ carscraper_configure_test(TestCaradisiacMapper)
 # Tests — all
 # ==============================================================================
 
-add_executable(TestAll                  tests/testAll.cpp)
-target_link_libraries(TestAll           PRIVATE CarScraperLibTest)
-carscraper_configure_target(TestAll)
-target_compile_definitions(TestAll      PRIVATE TESTING)
+add_executable(TestAll tests/testAll.cpp)
 carscraper_configure_test(TestAll)
 
 
