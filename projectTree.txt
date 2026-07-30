@@ -39,6 +39,8 @@
 │   │   │   ├── ArgusMapper.hpp
 │   │   │   ├── CaradisiacMapper.cpp
 │   │   │   ├── CaradisiacMapper.hpp
+│   │   │   ├── CrossMapper.cpp
+│   │   │   ├── CrossMapper.hpp
 │   │   │   ├── GenericCarMapper.cpp
 │   │   │   └── GenericCarMapper.hpp
 │   │   ├── models
@@ -99,4 +101,4 @@
     │   └── testValidation.cpp
     └── testAll.cpp
 
-27 directories, 73 files
+27 directories, 75 files

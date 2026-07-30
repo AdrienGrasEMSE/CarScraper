@@ -25,14 +25,17 @@ Ce qui a été réalisé et testé :
 10. Classe ArgusScraper et CaradisiacScraper représentant des scraper spécifique pour les site de largus.fr et caradisiac.com. Il sont capables d'extraire et sauvegarder des fiches technique de voitures d'une marque donnée en entrée, d'un modèle, et d'un interval de dates.
 11. Class GenericCarMapper représentant la base d'un Mapper pour des données de voitures.
 12. Class ArgusMapper et CaradisiacMapper capable de créer un objet Car à partir d'un HTML donné en entrée.
+13. Class CrossMapper capable de compléter un objet Car partiel en utilisant deux objets des deux sources largus.fr et caradisiac.com.
 
 &#8303;
 
 Ce qui reste à faire :
-1. Créer la classe CrossMapper capable de trouver et combiner deux fiches technique d'un même modèle pour obtenir une fiche technique plus complète.
-2. Créer la classe ExcelWritter capable de créer un fichier Excel contenant les infos comparatives d'un modèle.
-3. Créer le service d'extraction de fiches technique d'une voiture avec un système de filtrage, générant à la fin un fichier Excel. Peut nécessiter l'ajout d'une classe spécialisée dans le filtrage.
-4. Créer un service de mail automatique permettant d'informer l'utilisateur de la fin de l'exécution de l'application, avec en pièce jointe le fichier Excel généré.
+1. Créer un tag technique pour Car, permettant de savoir de quel fichier les données proviennent. Créer un setter pour les dates utilisant des date en paramètres. Compléter la méthode Car.saveJSON
+2. Créer le service de scraping complet, qui télécharge les fiches technique depuis largus.fr et caradisiac.com en parrallèle, créer des objets Car et les combines.
+3. Créer la classe ExcelWritter capable de créer un fichier Excel affichant les infos d'une liste d'objet Car.
+4. Vérification d'objet Car sauvegardé, demande à l'utilisateur de retélécharger ou non.
+5. Créer le système de filtrage.
+6. Créer un service de mail automatique permettant d'informer l'utilisateur de la fin de l'exécution de l'application, avec en pièce jointe le fichier Excel généré.
 
 
 &#8303;
