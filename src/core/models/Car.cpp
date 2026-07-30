@@ -18,6 +18,7 @@
 #include <uni_algo/case.h>
 #include <uni_algo/norm.h>
 #include <stduuid/uuid.h>
+#include <filesystem>
 
 
 /**
@@ -523,6 +524,27 @@ namespace CarScraper {
     /**
      * @brief Sets the commercialisation start date
      * @param commercialisationStart The commercialisation start date
+     */
+    void Car::setCommercialisationStart(const std::optional<std::chrono::year_month_day>& commercialisationStart) {
+
+        // Set value
+        _commercialisationStart = commercialisationStart;
+
+
+        // Log message
+        if (_commercialisationStart.has_value()) {
+            Logger::trace("[{}].set{} value: \"{}\"", this->getFullId(),
+                "CommercialisationStart", Validation::formatDate(_commercialisationStart.value()));
+        } else {
+            Logger::error("[{}].set{} got an invalid value", this->getFullId(), "CommercialisationStart");
+        }
+
+    }
+
+
+    /**
+     * @brief Sets the commercialisation start date
+     * @param commercialisationStart The commercialisation start date in string format
      * @note The commercialisation start date must be in the format "DD/MM/YYYY" and must be a valid date
      */
     void Car::setCommercialisationStart(const std::string& commercialisationStart) {
@@ -545,6 +567,27 @@ namespace CarScraper {
     /**
      * @brief Sets the commercialisation end date
      * @param commercialisationEnd The commercialisation end date
+     */
+    void Car::setCommercialisationEnd(const std::optional<std::chrono::year_month_day>& commercialisationEnd) {
+
+        // Set value
+        _commercialisationEnd = commercialisationEnd;
+
+
+        // Log message
+        if (_commercialisationEnd.has_value()) {
+            Logger::trace("[{}].set{} value: \"{}\"", this->getFullId(),
+                "CommercialisationEnd", Validation::formatDate(_commercialisationEnd.value()));
+        } else {
+            Logger::error("[{}].set{} got an invalid value", this->getFullId(), "CommercialisationEnd");
+        }
+
+    }
+
+
+    /**
+     * @brief Sets the commercialisation end date
+     * @param commercialisationEnd The commercialisation end date in string format
      * @note The commercialisation end date must be in the format "DD/MM/YYYY" and must be a valid date
      */
     void Car::setCommercialisationEnd(const std::string& commercialisationEnd) {

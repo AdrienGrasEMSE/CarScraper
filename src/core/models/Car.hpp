@@ -517,6 +517,13 @@ namespace CarScraper {
             /**
              * @brief Sets the commercialisation start date
              * @param commercialisationStart The commercialisation start date
+             */
+            void setCommercialisationStart(const std::optional<std::chrono::year_month_day>& commercialisationStart);
+
+
+            /**
+             * @brief Sets the commercialisation start date
+             * @param commercialisationStart The commercialisation start date in string format
              * @note The commercialisation start date must be in the format "DD/MM/YYYY" and must be a valid date
              */
             void setCommercialisationStart(const std::string& commercialisationStart);
@@ -525,6 +532,13 @@ namespace CarScraper {
             /**
              * @brief Sets the commercialisation end date
              * @param commercialisationEnd The commercialisation end date
+             */
+            void setCommercialisationEnd(const std::optional<std::chrono::year_month_day>& commercialisationEnd);
+
+
+            /**
+             * @brief Sets the commercialisation end date
+             * @param commercialisationEnd The commercialisation end date in string format
              * @note The commercialisation end date must be in the format "DD/MM/YYYY" and must be a valid date
              */
             void setCommercialisationEnd(const std::string& commercialisationEnd);
