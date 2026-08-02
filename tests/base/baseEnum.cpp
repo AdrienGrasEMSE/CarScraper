@@ -132,6 +132,7 @@ TEST_CASE("dataSourceToString", "[enum][datasource]") {
         REQUIRE(dataSourceToString(DataSource::ARGUS)       == "Argus");
         REQUIRE(dataSourceToString(DataSource::CARADISIAC)  == "Caradisiac");
         REQUIRE(dataSourceToString(DataSource::MIXED)       == "Mixed");
+        REQUIRE(dataSourceToString(DataSource::FILE)        == "File");
     }
 
     SECTION("Returns Unknown for the unknown value") {
@@ -146,12 +147,14 @@ TEST_CASE("dataSourceFromString", "[enum][datasource]") {
         REQUIRE(dataSourceFromString("Argus")       == DataSource::ARGUS);
         REQUIRE(dataSourceFromString("Caradisiac")  == DataSource::CARADISIAC);
         REQUIRE(dataSourceFromString("Mixed")       == DataSource::MIXED);
+        REQUIRE(dataSourceFromString("File")        == DataSource::FILE);
     }
 
     SECTION("Is case-insensitive") {
         REQUIRE(dataSourceFromString("argus")       == DataSource::ARGUS);
         REQUIRE(dataSourceFromString("CARADISIAC")  == DataSource::CARADISIAC);
         REQUIRE(dataSourceFromString("MiXEd")       == DataSource::MIXED);
+        REQUIRE(dataSourceFromString("fiLe")        == DataSource::FILE);
     }
 
     SECTION("Returns NA for an unrecognized value") {
@@ -167,6 +170,7 @@ TEST_CASE("dataSourceIsValid", "[enum][datasource]") {
         REQUIRE(dataSourceIsValid(DataSource::ARGUS));
         REQUIRE(dataSourceIsValid(DataSource::CARADISIAC));
         REQUIRE(dataSourceIsValid(DataSource::MIXED));
+        REQUIRE(dataSourceIsValid(DataSource::FILE));
     }
 
     SECTION("Returns false for NA") {
