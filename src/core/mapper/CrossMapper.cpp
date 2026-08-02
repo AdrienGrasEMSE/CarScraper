@@ -136,6 +136,11 @@ namespace CarScraper {
         newCar.setStillInSale(caradisiac.isStillInSale());
 
 
+        /** ----- Technical Data ------------------------------------------------------------------
+         */
+        newCar.setDataSource(CarScraper::DataSource::MIXED);
+
+
         // Returning the generated car
         return newCar;
 
