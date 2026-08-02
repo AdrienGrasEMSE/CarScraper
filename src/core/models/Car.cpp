@@ -923,6 +923,7 @@ namespace CarScraper {
         // -------------------------------------------------------------------------
         oss << "- Technical Data\n";
         oss << "    -> " << std::left << std::setw(17) << "Data source"     << ": \"" << dataSourceToString(_dataSource)  << "\"\n";
+        oss << "    -> " << std::left << std::setw(17) << "Source file"     << ": \"" << _sourceFile  << "\"\n";
 
 
         return oss.str();
@@ -1133,7 +1134,8 @@ namespace CarScraper {
         _stillInSale = carJSON.value("stillInSale", false);
 
         // Technical Data
-        _sourceFile = filePath;
+        _dataSource         = CarScraper::DataSource::FILE;
+        _sourceFile         = filePath;
         
 
         // Debug
