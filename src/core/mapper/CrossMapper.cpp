@@ -11,6 +11,7 @@
 
 // Imports
 #include "CrossMapper.hpp"
+#include "core/utils/Constant.hpp"
 #include "core/models/Entity.hpp"
 
 
@@ -136,9 +137,12 @@ namespace CarScraper {
         newCar.setStillInSale(caradisiac.isStillInSale());
 
 
+
         /** ----- Technical Data ------------------------------------------------------------------
          */
         newCar.setDataSource(CarScraper::DataSource::MIXED);
+        newCar.setSourceFile(NONE_STR);
+
 
 
         // Returning the generated car

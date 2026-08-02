@@ -421,6 +421,7 @@ namespace CarScraper {
 
         // ------- Technical Data -----------------------------------------------------------------
         this->_car.setDataSource(CarScraper::DataSource::CARADISIAC);
+        this->_car.setSourceFile(_inputFile);
 
 
         // Debug

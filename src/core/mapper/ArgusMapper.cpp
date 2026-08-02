@@ -147,6 +147,7 @@ namespace CarScraper {
 
         // ------- Technical Data -----------------------------------------------------------------
         this->_car.setDataSource(CarScraper::DataSource::ARGUS);
+        this->_car.setSourceFile(_inputFile);
 
 
         // Debug
