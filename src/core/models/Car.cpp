@@ -1031,6 +1031,82 @@ namespace CarScraper {
     }
 
 
+    /**
+     * @brief Loads the car data from a file in JSON format
+     * @param filePath The path of the file to load
+     * @return SUCCESS_CODE or ERROR_CODE wheter the load is successful or not
+     */
+    int Car::load(const std::string& filePath) {
+
+        // Debug
+        Logger::debug("[{}].load({})", this->getFullId(), filePath);
+
+
+        // File opening and error handling
+        std::ifstream file(filePath);
+        if (!file.is_open()) {
+            Logger::error("[{}].load({}) unable to open file", this->getFullId(), filePath);
+            return ERROR_CODE;
+        }
+
+
+        // Reading the JSON object from the file
+        nlohmann::json carJSON;
+        file >> carJSON;
+        file.close();
+
+
+        
+        // --- Parsing the JSON object and setting the car data -----------------------------------
+
+        // General
+        _brand              = carJSON.value("brand", NONE_STR);
+        _model              = carJSON.value("model", NONE_STR);
+        _generation         = carJSON.value("generation", NONE_STR);
+        _phase              = carJSON.value("phase", NONE_STR);
+        _engine             = carJSON.value("engine", NONE_STR);
+        _trim               = carJSON.value("trim", NONE_STR);
+        _price              = carJSON.value("price", 0);
+
+        // Dimensions
+        _height             = carJSON.value("height", DEFAULT_DOUBLE);
+        _length             = carJSON.value("length", DEFAULT_DOUBLE);
+        _width              = carJSON.value("width", DEFAULT_DOUBLE);
+        _weight             = carJSON.value("weight", DEFAULT_INT);
+
+        // Liveability
+        _trunkVolume        = carJSON.value("trunkVolume", DEFAULT_INT);
+        _doorCount          = carJSON.value("doorCount", DEFAULT_INT);
+        _seatCount          = carJSON.value("seatCount", DEFAULT_INT);
+
+        // Transmission
+        _gearboxType        = CarScraper::gearBoxTypeFromString(carJSON.value("gearboxType", NONE_STR));
+        _gearCount          = carJSON.value("gearCount", DEFAULT_INT);
+
+        // Power
+        _fuelType           = CarScraper::fuelTypeFromString(carJSON.value("fuelType", NONE_STR));
+        _horsePower         = carJSON.value("horsePower", DEFAULT_INT);
+        _taxHorsePower      = carJSON.value("taxHorsePower", DEFAULT_INT);
+
+        // Consumption
+        _tankCapacity       = carJSON.value("tankCapacity", DEFAULT_INT);
+        _fuelConsumption    = carJSON.value("fuelConsumption", DEFAULT_DOUBLE);
+        _co2Emissions       = carJSON.value("co2Emissions", DEFAULT_INT);
+        _co2Class           = CarScraper::co2ClassFromString(carJSON.value("co2Class", NONE_STR));
+
+        // Commercialisation
+        std::string commercialisationStartStr = carJSON.value("commercialisationStart", NONE_STR);
+        _commercialisationStart = Validation::parseDateDMY(commercialisationStartStr);
+        std::string commercialisationEndStr = carJSON.value("commercialisationEnd", NONE_STR);
+        _commercialisationEnd = Validation::parseDateDMY(commercialisationEndStr);
+        _stillInSale = carJSON.value("stillInSale", false);
+        
+
+        // Debug
+        Logger::debug("[{}].load({}) successful", this->getFullId(), filePath);
+        return SUCCESS_CODE;
+
+    }
 
 
     // =========================================================================

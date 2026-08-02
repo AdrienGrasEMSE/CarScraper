@@ -604,6 +604,14 @@ namespace CarScraper {
              */
             int save() const;
 
+
+            /**
+             * @brief Loads the car data from a file in JSON format
+             * @param filePath The path of the file to load
+             * @return SUCCESS_CODE or ERROR_CODE wheter the load is successful or not
+             */
+            int load(const std::string& filePath);
+
     };
 
 
