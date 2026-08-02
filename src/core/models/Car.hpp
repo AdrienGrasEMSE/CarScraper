@@ -598,11 +598,11 @@ namespace CarScraper {
 
             /**
              * @brief Saves the car data to a file in JSON format
-             * @param filename The file path (without the filename). If empty, the file will saved at data/car
              * @return The path of the saved file
-             * @note The file will be named with the car full ID (ex: "CAR-123e45...json")
+             * @note This method will create a folder BRAND in the CAR_SAVE directory. Then a model folder and a generation folder.
+             * The file will be named with the car full name : YEAR-BRAND-MODEL-GENERATION-PHASE-ENGINE-TRIM (+ a number in case)
              */
-            std::string save(const std::string& filename = "") const;
+            int save() const;
 
     };
 

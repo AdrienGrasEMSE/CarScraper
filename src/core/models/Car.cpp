@@ -14,10 +14,12 @@
 #include "core/utils/Constant.hpp"
 #include "core/utils/Validation.hpp"
 #include "core/logger/Logger.hpp"
-#include <sstream>
+#include <nlohmann/json.hpp>
+#include <stduuid/uuid.h>
 #include <uni_algo/case.h>
 #include <uni_algo/norm.h>
-#include <stduuid/uuid.h>
+#include <fstream>
+#include <sstream>
 #include <filesystem>
 
 
@@ -898,14 +900,134 @@ namespace CarScraper {
 
     /**
      * @brief Saves the car data to a file in JSON format
-     * @param filename The file path (without the filename). If empty, the file will saved at data/car
      * @return The path of the saved file
-     * @note The file will be named with the car full ID (ex: "CAR-123e45...json")
-     * @todo Implement the save() method
+     * @note This method will create a folder BRAND in the CAR_SAVE directory. Then a model folder, a generation folder (named MODEL-GENERATION) and finnaly a year folder.
+     * The file will be named with the car full name : BRAND-MODEL-GENERATION-PHASE-ENGINE-TRIM (+ a number in case)
      */
-    std::string Car::save(const std::string& filepath) const {
-        Logger::info("[{}].save()", this->getFullId());
-        return filepath;
+    int Car::save() const {
+
+        // Debug
+        Logger::debug("[{}].save()", this->getFullId());
+
+
+        // ----- Ensuring the directory exists ----------------------------------------------------
+        // Checking the commercialisation start date
+        if (!_commercialisationStart) {
+            Logger::error("[{}].save() : no commercialisation start date", this->getFullId());
+            return ERROR_CODE;
+        }
+
+
+        // Getting the year
+        std::string yearStr = _commercialisationStart ? std::to_string(static_cast<int>(_commercialisationStart->year())) : "";
+        if (yearStr.empty()) {
+            Logger::error("[{}].save() : unable to convert commercialisation start date into string", this->getFullId());
+            return ERROR_CODE;
+        }
+
+
+        // Creating the directory path
+        namespace fs = std::filesystem;
+        fs::path directory;
+        if (_generation == NONE_STR || _generation == DEFAULT_STR || _generation == ERROR_STR) {
+            directory = CAR_SAVE + _brand + "/" + _model + "/" + yearStr;
+        } else {
+            directory = CAR_SAVE + _brand + "/" + _model + "/" + _model + "-" + _generation + "/" + yearStr;
+        }
+
+
+        // Checking if the directory exist or create it
+        if (!fs::exists(directory)) {
+            if (fs::create_directories(directory)) {
+                Logger::info("[{}].save() : {} directory created", this->getFullId(), directory.string());
+            } else {
+                Logger::error("[{}].save() : unable to creat {} directory", this->getFullId(), directory.string());
+            }
+        }
+
+
+
+        // ----- Creating the JSON Object ---------------------------------------------------------
+        using json = nlohmann::json;
+        json carJSON;
+
+        // General
+        carJSON["brand"]                = _brand;
+        carJSON["model"]                = _model;
+        carJSON["generation"]           = _generation;
+        carJSON["phase"]                = _phase;
+        carJSON["engine"]               = _engine;
+        carJSON["trim"]                 = _trim;
+        carJSON["price"]                = _price;
+
+        // Dimensions
+        carJSON["height"]               = _height;
+        carJSON["length"]               = _length;
+        carJSON["width"]                = _width;
+        carJSON["weight"]               = _weight;
+
+        // Liveability
+        carJSON["trunkVolume"]          = _trunkVolume;
+        carJSON["doorCount"]            = _doorCount;
+        carJSON["seatCount"]            = _seatCount;
+
+        // Transmission
+        carJSON["gearboxType"]          = CarScraper::gearBoxTypeToString(_gearboxType);
+        carJSON["gearCount"]            = _gearCount;
+
+        // Power
+        carJSON["fuelType"]             = CarScraper::fuelTypeToString(_fuelType);
+        carJSON["horsePower"]           = _horsePower;
+        carJSON["taxHorsePower"]        = _taxHorsePower;
+
+        // Consumption
+        carJSON["tankCapacity"]         = _tankCapacity;
+        carJSON["fuelConsumption"]      = _fuelConsumption;
+        carJSON["co2Emissions"]         = _co2Emissions;
+        carJSON["co2Class"]             = CarScraper::co2ClassToString(_co2Class);
+
+        // Commercialisation
+        carJSON["commercialisationStart"]   = _commercialisationStart.has_value()   ? CarScraper::Validation::formatDate(*_commercialisationStart)  : nullptr;
+        carJSON["commercialisationEnd"]     = _commercialisationEnd.has_value()     ? CarScraper::Validation::formatDate(*_commercialisationEnd)    : nullptr;
+        carJSON["stillInSale"]              = _stillInSale;
+
+        // Technical Data
+        carJSON["dataSource"]           = CarScraper::dataSourceToString(_dataSource);
+
+
+
+        // ----- Saving into a JSON File ----------------------------------------------------------
+        fs::path filePath = directory.string() + "/" + _brand + "-" + _model;
+        if (_generation != NONE_STR && _generation != DEFAULT_STR && _generation != ERROR_STR) {
+            filePath += "-" + _generation;
+        }
+        if (_phase != NONE_STR && _phase != DEFAULT_STR && _phase != ERROR_STR) {
+            filePath += "-" + _phase;
+        }
+        filePath += "-" + _engine + "-" + _trim;
+
+
+        // Checking if the file already exists and adding a number to the file name if it does
+        if (fs::exists(filePath.string() + ".json")) {
+            Logger::warn("[{}].save() : file already exists, adding a number to the file name", this->getFullId());
+            int fileIndex = 1;
+            while (fs::exists(filePath.string() + "-" + std::to_string(fileIndex) + ".json")) {
+                fileIndex++;
+            }
+            filePath += "-" + std::to_string(fileIndex);
+        }
+        filePath += ".json";
+
+
+        // Writing the JSON object to the file
+        std::ofstream file(filePath);
+        file << carJSON.dump(4);
+
+
+        // Debug
+        Logger::debug("[{}].save() : file written {}", this->getFullId(), filePath.string());
+        return SUCCESS_CODE;
+
     }
 
 
