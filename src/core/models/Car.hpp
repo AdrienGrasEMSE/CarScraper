@@ -98,6 +98,7 @@ namespace CarScraper {
 
             // Technical Data
             CarScraper::DataSource  _dataSource;        ///< Car data source                    | ex: ARGUS / CARADISIAC
+            std::string             _sourceFile;        ///< Car source file                    | ex: "data/save_car/RENAULT/Fluence/2009/RENAULT-Fluence-1.5 dCi85-Expression.json"
 
 
 
@@ -287,6 +288,13 @@ namespace CarScraper {
              *  @return The data source of the car
              */
             CarScraper::DataSource getDataSource() const { return _dataSource; }
+
+
+            /**
+             * @brief Gets the source file of the car
+             *  @return The source file of the car
+             */
+            const std::string& getSourceFile() const { return _sourceFile; }
 
 
 
@@ -566,6 +574,15 @@ namespace CarScraper {
              * @param dataSource The data source value
              */
             void setDataSource(const std::string& dataSource);
+
+
+            /**
+             * @brief Sets the source file of the car
+             * @param sourceFile The source file of the car
+             * @note The source file path is checked before setting the value. If the file does not
+             * exist, an error message is logged and the value is not set.
+             */
+            void setSourceFile(const std::string& sourceFile);
 
 
 

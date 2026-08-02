@@ -675,6 +675,37 @@ namespace CarScraper {
     }
 
 
+    /**
+     * @brief Sets the source file of the car
+     * @param sourceFile The source file of the car
+     * @note The source file path is checked before setting the value. If the file does not
+     * exist, an error message is logged and the value is not set.
+     */
+    void Car::setSourceFile(const std::string& sourceFile) {
+
+        // By pass check in case of sentiennel values
+        if (sourceFile == CarScraper::DEFAULT_STR ||
+            sourceFile == CarScraper::NONE_STR ||
+            sourceFile == CarScraper::ERROR_STR) {
+            _sourceFile = sourceFile;
+            Logger::trace("[{}].set{} value: {}", this->getFullId(), "SourceFile", _sourceFile);
+            return;
+        }
+        
+
+        // Checking if the file exists
+        namespace fs = std::filesystem;
+        if (!fs::exists(sourceFile)) {
+            Logger::error("[{}].setSourceFile() : file \"{}\" does not exist", this->getFullId(), sourceFile);
+            _sourceFile = ERROR_STR;
+        } else {
+            _sourceFile = sourceFile;
+            Logger::trace("[{}].set{} value: {}", this->getFullId(), "SourceFile", _sourceFile);
+        }
+
+    }
+
+
 
 
 
@@ -1056,7 +1087,7 @@ namespace CarScraper {
         file.close();
 
 
-        
+
         // --- Parsing the JSON object and setting the car data -----------------------------------
 
         // General
