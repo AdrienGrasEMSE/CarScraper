@@ -250,27 +250,27 @@ namespace CarScraper {
                                 } else {
                                     Logger::warn("[{}].titleProcessing : no generation extracted from the title \"{}\"",
                                         getFullId(), titleStd);
-                                    this->_car.setGeneration("1");
+                                    this->_car.setGeneration(NONE_STR);
                                 }
 
                             } else {
                                 Logger::warn("[{}].titleProcessing : no generation extracted from the title \"{}\"",
                                     getFullId(), titleStd);
-                                this->_car.setGeneration("1");
+                                this->_car.setGeneration(NONE_STR);
                             }
 
 
                         } else {
                             Logger::warn("[{}].titleProcessing : no phase extracted from the title \"{}\"",
                                 getFullId(), titleStd);
-                            this->_car.setPhase("1");
+                            this->_car.setPhase(NONE_STR);
                         }
 
                     } else {
                         Logger::warn("[{}].titleProcessing : no generation and phase extracted from the title \"{}\"",
                             getFullId(), titleStd);
-                        this->_car.setGeneration("1");
-                        this->_car.setPhase("1");
+                        this->_car.setGeneration(NONE_STR);
+                        this->_car.setPhase(NONE_STR);
                     }
 
 

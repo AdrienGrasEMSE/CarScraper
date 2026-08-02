@@ -36,14 +36,15 @@ namespace CarScraper {
     // =========================================================================
     // String and numeric validation constants
     // =========================================================================
-    constexpr       int         DEFAULT_INT    = 9999;          ///< Sentinel default value for int
-    constexpr       int         ERROR_INT      = -1;            ///< Sentinel error value for int
+    constexpr       int         DEFAULT_INT     = 9999;         ///< Sentinel default value for int
+    constexpr       int         ERROR_INT       = -1;           ///< Sentinel error value for int
 
-    constexpr       double      DEFAULT_DOUBLE = 9999.0;        ///< Sentinel default value for double
-    constexpr       double      ERROR_DOUBLE   = -1.0;          ///< Sentinel error value for double
+    constexpr       double      DEFAULT_DOUBLE  = 9999.0;       ///< Sentinel default value for double
+    constexpr       double      ERROR_DOUBLE    = -1.0;         ///< Sentinel error value for double
 
-    inline const    std::string DEFAULT_STR    = "#";           ///< Sentinel default value for string
-    inline const    std::string ERROR_STR      = "error";       ///< Sentinel error value for string
+    inline const    std::string DEFAULT_STR     = "#";          ///< Sentinel default value for string
+    inline const    std::string ERROR_STR       = "error";      ///< Sentinel error value for string
+    inline const    std::string NONE_STR        = "empty";      ///< Sentinel none value for string
 
 
 
