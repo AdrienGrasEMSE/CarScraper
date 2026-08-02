@@ -48,6 +48,13 @@ namespace CarScraper::Validation {
                                     const std::string&      attributeName,
                                     const long unsigned int maxLength) {
 
+        // Check if the string is a sentinnel value
+        if (strVal == DEFAULT_STR || strVal == ERROR_STR || strVal == NONE_STR) {
+            Logger::trace("[{}].set{} value: \"{}\"", objectID, attributeName, strVal);
+            return strVal;
+        }
+
+
         // Check if the string is empty
         if (strVal.empty()) {
             Logger::error("[{}].set{} got an empty value", objectID, attributeName);
@@ -88,6 +95,13 @@ namespace CarScraper::Validation {
                         const std::string&  attributeName,
                         const int           minValue,
                         const int           maxValue) {
+
+        // Check if the integer is a sentinnel value
+        if (intVal == DEFAULT_INT || intVal == ERROR_INT) {
+            Logger::trace("[{}].set{} value: {}", objectID, attributeName, intVal);
+            return intVal;
+        }
+
 
         // Check if the integer is below the minimum value
         if (intVal < minValue) {
@@ -131,6 +145,13 @@ namespace CarScraper::Validation {
                             const double        minValue,
                             const double        maxValue) {
 
+        // Check if the double is a sentinnel value
+        if (doubleVal == DEFAULT_DOUBLE || doubleVal == ERROR_DOUBLE) {
+            Logger::trace("[{}].set{} value: {}", objectID, attributeName, doubleVal);
+            return doubleVal;
+        }
+
+        
         // Check if the double is below the minimum value
         if (doubleVal < minValue) {
             Logger::error(  "[{}].set{} got a value out of bounds: {} < {}",

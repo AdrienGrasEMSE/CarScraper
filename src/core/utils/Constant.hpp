@@ -22,12 +22,30 @@
  */
 namespace CarScraper {
 
+    /**
+     * @brief Constant values used in the CarScraper project
+     * @details This namespace contains constant values for default and error sentinel values,
+     *          as well as default directory paths for saving data.
+     * @note The sentinel values uses prime number to avoid collision with actual calculated values.
+     * Here is a list of prime numbers used :
+     * 1000003
+     * 1705141
+     * 2432597
+     * 3174553
+     * 3928669
+     * 4692953
+     * 5464033
+     * 7028977
+     * 8616563
+     * 9999991
+     */
+
     // =========================================================================
     // String and numeric validation constants
     // =========================================================================
-    constexpr       int         SUCCESS_CODE        = 0;        ///< Sentinel return value for success
-    constexpr       int         ERROR_CODE          = -1;       ///< Sentinel return value for error
-    constexpr       int         IGNORED_ACTION_CODE = 1;        ///< Sentinel return value for ignored action
+    constexpr       int         SUCCESS_CODE        = 9999991;          ///< Sentinel return value for success
+    constexpr       int         ERROR_CODE          = -9999991;         ///< Sentinel return value for error
+    constexpr       int         IGNORED_ACTION_CODE = 1000003;          ///< Sentinel return value for ignored action
 
 
 
@@ -36,15 +54,15 @@ namespace CarScraper {
     // =========================================================================
     // String and numeric validation constants
     // =========================================================================
-    constexpr       int         DEFAULT_INT     = 9999;         ///< Sentinel default value for int
-    constexpr       int         ERROR_INT       = -1;           ///< Sentinel error value for int
+    constexpr       int         DEFAULT_INT     = 9999991;              ///< Sentinel default value for int (primanry number for unicity)
+    constexpr       int         ERROR_INT       = -9999991;             ///< Sentinel error value for int (negative primanry number for unicity)
 
-    constexpr       double      DEFAULT_DOUBLE  = 9999.0;       ///< Sentinel default value for double
-    constexpr       double      ERROR_DOUBLE    = -1.0;         ///< Sentinel error value for double
+    constexpr       double      DEFAULT_DOUBLE  = 0.9999991;            ///< Sentinel default value for double (. primanry number for unicity)
+    constexpr       double      ERROR_DOUBLE    = -0.9999991;           ///< Sentinel error value for double (negative . primanry number for unicity)
 
-    inline const    std::string DEFAULT_STR     = "#";          ///< Sentinel default value for string
-    inline const    std::string ERROR_STR       = "error";      ///< Sentinel error value for string
-    inline const    std::string NONE_STR        = "empty";      ///< Sentinel none value for string
+    inline const    std::string DEFAULT_STR     = "&1705141 - default"; ///< Sentinel default value for string (Symbole &xxx for unicity)
+    inline const    std::string ERROR_STR       = "&9999991 - error";   ///< Sentinel error value for string (Symbole &xxx for unicity)
+    inline const    std::string NONE_STR        = "&1000003 - none";    ///< Sentinel none value for string (Symbole &xxx for unicity)
 
 
 
