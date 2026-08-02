@@ -32,6 +32,7 @@ namespace CarScraper {
         ARGUS,      ///< Data from largus.fr
         CARADISIAC, ///< Data from caradisiac.com
         MIXED,      ///< Data from largus.fr and caradisiac.com
+        FILE,       ///< Data from a file (json)
         NA          ///< Unknown
     };
 
