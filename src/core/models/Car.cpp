@@ -102,7 +102,9 @@ namespace CarScraper {
         _brand = Validation::stringValidation(brand, this->getFullId(), "Brand", 100);
 
         // Normalize UTF-8 (NFC) then apply upper case if no error
-        if (_brand != CarScraper::ERROR_STR) {
+        if (_brand != CarScraper::DEFAULT_STR &&
+            _brand != CarScraper::NONE_STR &&
+            _brand != CarScraper::ERROR_STR) {
             this->_brand = una::cases::to_uppercase_utf8(una::norm::to_nfc_utf8(_brand));
         }
 
@@ -121,7 +123,9 @@ namespace CarScraper {
         _model = Validation::stringValidation(model, this->getFullId(), "Model", 200);
 
         // Normalize UTF-8 (NFC) then apply title case if no error
-        if (_model != CarScraper::ERROR_STR) {
+        if (_model != CarScraper::DEFAULT_STR &&
+            _model != CarScraper::NONE_STR &&
+            _model != CarScraper::ERROR_STR) {
             this->_model = una::cases::to_titlecase_utf8(una::norm::to_nfc_utf8(_model));
         }
 
@@ -140,7 +144,9 @@ namespace CarScraper {
         _generation = Validation::stringValidation(generation, this->getFullId(), "Generation", 50);
 
         // Normalize UTF-8 (NFC) only — generation is a technical identifier
-        if (_generation != CarScraper::ERROR_STR) {
+        if (_generation != CarScraper::DEFAULT_STR &&
+            _generation != CarScraper::NONE_STR &&
+            _generation != CarScraper::ERROR_STR) {
             this->_generation = una::norm::to_nfc_utf8(_generation);
         }
 
@@ -159,7 +165,9 @@ namespace CarScraper {
         _phase = Validation::stringValidation(phase, this->getFullId(), "Phase", 50);
 
         // Normalize UTF-8 (NFC) only — phase is a technical identifier
-        if (_phase != CarScraper::ERROR_STR) {
+        if (_phase != CarScraper::DEFAULT_STR &&
+            _phase != CarScraper::NONE_STR &&
+            _phase != CarScraper::ERROR_STR) {
             this->_phase = una::norm::to_nfc_utf8(_phase);
         }
 
@@ -178,7 +186,9 @@ namespace CarScraper {
         _engine = Validation::stringValidation(engine, this->getFullId(), "Engine", 200);
 
         // Normalize UTF-8 (NFC) only — engine is a technical identifier
-        if (_engine != CarScraper::ERROR_STR) {
+        if (_engine != CarScraper::DEFAULT_STR &&
+            _engine != CarScraper::NONE_STR &&
+            _engine != CarScraper::ERROR_STR) {
             this->_engine = una::norm::to_nfc_utf8(_engine);
         }
 
@@ -197,7 +207,9 @@ namespace CarScraper {
         _trim = Validation::stringValidation(trim, this->getFullId(), "Trim", 200);
 
         // Normalize UTF-8 (NFC) then apply title case if no error
-        if (_trim != CarScraper::ERROR_STR) {
+        if (_trim != CarScraper::DEFAULT_STR &&
+            _trim != CarScraper::NONE_STR &&
+            _trim != CarScraper::ERROR_STR) {
             this->_trim = una::cases::to_titlecase_utf8(una::norm::to_nfc_utf8(_trim));
         }
     
