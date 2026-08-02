@@ -691,7 +691,7 @@ namespace CarScraper {
             Logger::trace("[{}].set{} value: {}", this->getFullId(), "SourceFile", _sourceFile);
             return;
         }
-        
+
 
         // Checking if the file exists
         namespace fs = std::filesystem;
@@ -1131,6 +1131,9 @@ namespace CarScraper {
         std::string commercialisationEndStr = carJSON.value("commercialisationEnd", NONE_STR);
         _commercialisationEnd = Validation::parseDateDMY(commercialisationEndStr);
         _stillInSale = carJSON.value("stillInSale", false);
+
+        // Technical Data
+        _sourceFile = filePath;
         
 
         // Debug
