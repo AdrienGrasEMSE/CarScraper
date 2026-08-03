@@ -30,13 +30,18 @@ Ce qui a été réalisé et testé :
 &#8303;
 
 Ce qui reste à faire :
-1. Créer un tag technique pour Car, permettant de savoir de quel fichier les données proviennent. Créer un setter pour les dates utilisant des date en paramètres. Compléter la méthode Car.saveJSON
-2. Créer le service de scraping complet, qui télécharge les fiches technique depuis largus.fr et caradisiac.com en parrallèle, créer des objets Car et les combines.
-3. Créer la classe ExcelWritter capable de créer un fichier Excel affichant les infos d'une liste d'objet Car.
-4. Vérification d'objet Car sauvegardé, demande à l'utilisateur de retélécharger ou non.
-5. Créer le système de filtrage.
-6. Créer un service de mail automatique permettant d'informer l'utilisateur de la fin de l'exécution de l'application, avec en pièce jointe le fichier Excel généré.
-
+1. Créer le service de scraping complet, qui télécharge les fiches technique depuis largus.fr et caradisiac.com en parrallèle, créer des objets Car, les combines et les sauvegardes.
+2. Créer un service de suppression des doublons des Car sauvegardée
+3. Créer le service de filtrage, prenant en entrée une liste de Car et une série de filtre
+4. Créer la classe ExcelWritter capable de créer un fichier Excel affichant les infos d'une liste d'objet Car.
+5. Créer un service de mail automatique
+6. Créer un runner :
+    a. Prend en entrée des paramètres utilisateur (re-scraping forcé, marque, modele, filtres)
+    b. Scraping des fiches technique ciblées
+    c. Suppression des doublons
+    c. Filtrage des voitures
+    d. Export Excel
+    e. Notification email
 
 &#8303;
 ___
