@@ -42,7 +42,7 @@
 │   │   ├── logger
 │   │   │   ├── Logger.cpp
 │   │   │   └── Logger.hpp
-│   │   ├── mapper
+│   │   ├── mappers
 │   │   │   ├── ArgusMapper.cpp
 │   │   │   ├── ArgusMapper.hpp
 │   │   │   ├── CaradisiacMapper.cpp
@@ -56,7 +56,7 @@
 │   │   │   ├── Car.hpp
 │   │   │   ├── Entity.cpp
 │   │   │   └── Entity.hpp
-│   │   ├── scraper
+│   │   ├── scrapers
 │   │   │   ├── ArgusScraper.cpp
 │   │   │   ├── ArgusScraper.hpp
 │   │   │   ├── CaradisiacScraper.cpp

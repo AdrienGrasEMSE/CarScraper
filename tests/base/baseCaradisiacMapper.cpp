@@ -16,7 +16,7 @@
 #include <catch2/catch.hpp>
 #include <filesystem>
 #include <fstream>
-#include "core/mapper/CaradisiacMapper.hpp"
+#include "core/mappers/CaradisiacMapper.hpp"
 #include "core/utils/Constant.hpp"
 #include "core/enum/DataSource.hpp"
 #include "core/enum/GearboxType.hpp"

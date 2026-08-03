@@ -147,15 +147,15 @@ set(CORE_SOURCES
     src/core/models/Car.cpp
 
     # Core — Scraper
-    src/core/scraper/GenericCarScraper.cpp
-    src/core/scraper/ArgusScraper.cpp
-    src/core/scraper/CaradisiacScraper.cpp
+    src/core/scrapers/GenericCarScraper.cpp
+    src/core/scrapers/ArgusScraper.cpp
+    src/core/scrapers/CaradisiacScraper.cpp
 
     # Core — Mapper
-    src/core/mapper/ArgusMapper.cpp
-    src/core/mapper/CaradisiacMapper.cpp
-    src/core/mapper/CrossMapper.cpp
-    src/core/mapper/GenericCarMapper.cpp
+    src/core/mappers/ArgusMapper.cpp
+    src/core/mappers/CaradisiacMapper.cpp
+    src/core/mappers/CrossMapper.cpp
+    src/core/mappers/GenericCarMapper.cpp
 
     # IO — HttpClient
     src/io/httpClient/HttpClient.cpp

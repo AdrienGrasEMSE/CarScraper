@@ -13,7 +13,7 @@
 
 
 // Imports
-#include "core/scraper/GenericCarScraper.hpp"
+#include "core/scrapers/GenericCarScraper.hpp"
 
 
 /**

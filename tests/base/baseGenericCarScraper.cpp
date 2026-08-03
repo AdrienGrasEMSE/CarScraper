@@ -12,7 +12,7 @@
 
 // Imports
 #include <catch2/catch.hpp>
-#include "core/scraper/GenericCarScraper.hpp"
+#include "core/scrapers/GenericCarScraper.hpp"
 #include "core/utils/Constant.hpp"
 
 using namespace CarScraper;

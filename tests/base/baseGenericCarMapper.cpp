@@ -15,7 +15,7 @@
 #include <catch2/catch.hpp>
 #include <filesystem>
 #include <fstream>
-#include "core/mapper/GenericCarMapper.hpp"
+#include "core/mappers/GenericCarMapper.hpp"
 #include "core/utils/Constant.hpp"
 
 using namespace CarScraper;
