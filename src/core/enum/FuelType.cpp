@@ -128,44 +128,51 @@ namespace CarScraper {
 
 
         // EE : Essence électricité (hybride rechargeable)
-        if (lower == "hybride : essence/electrique") {
+        if (lower == "hybride : essence/electrique" ||
+            lower == "ee") {
             return FuelType::EE;
         }
 
 
         // EL : Electricité
-        if (lower == "electrique") {
+        if (lower == "electrique" ||
+            lower == "el") {
             return FuelType::EL;
         }
 
 
         // ES : Essence
-        if (lower == "essence") {
+        if (lower == "essence" ||
+            lower == "es") {
             return FuelType::ES;
         }
 
 
         // GL : Gazole-électricité (hybride rechargeable)
-        if (lower == "diesel/micro-hybride") {
+        if (lower == "diesel/micro-hybride" ||
+            lower == "gl") {
             return FuelType::GL;
         }
 
 
         // GO : Diesel
-        if (lower == "diesel") {
+        if (lower == "diesel" ||
+            lower == "go") {
             return FuelType::GO;
         }
 
 
         // GP : GPL
-        if (lower == "gpl") {
+        if (lower == "gpl" ||
+            lower == "gp") {
             return FuelType::GP;
         }
 
 
         // H2 : Hydrogène
         if (lower == "hydrogène" ||
-            lower == "hydrogene") {
+            lower == "hydrogene" ||
+            lower == "h2") {
             return FuelType::H2;
         }
 
