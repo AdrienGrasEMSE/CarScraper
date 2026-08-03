@@ -358,7 +358,7 @@ namespace CarScraper {
 
         // Log message
         if (_gearboxType == CarScraper::GearboxType::NA) {
-            Logger::error("[{}].set{} got an invalid value", this->getFullId(), "GearboxType");
+            Logger::error("[{}].set{} got an invalid value \"{}\"", this->getFullId(), "GearboxType", gearboxType);
         } else {
             Logger::trace("[{}].set{} value: {}", this->getFullId(),
                 "GearboxType", CarScraper::gearBoxTypeToString(_gearboxType));
@@ -416,7 +416,7 @@ namespace CarScraper {
 
         // Log message
         if (_fuelType == CarScraper::FuelType::NA) {
-            Logger::error("[{}].set{} got an invalid value", this->getFullId(), "FuelType");
+            Logger::error("[{}].set{} got an invalid value \"{}\"", this->getFullId(), "FuelType", fuelType);
         } else {
             Logger::trace("[{}].set{} value: {}", this->getFullId(),
                 "FuelType", CarScraper::fuelTypeToString(_fuelType));
@@ -526,7 +526,7 @@ namespace CarScraper {
 
         // Log message
         if (_co2Class == CarScraper::Co2Class::NA) {
-            Logger::error("[{}].set{} got an invalid value", this->getFullId(), "Co2Class");
+            Logger::error("[{}].set{} got an invalid value \"{}\"", this->getFullId(), "Co2Class", co2Class);
         } else {
             Logger::trace("[{}].set{} value: {}", this->getFullId(),
                 "Co2Class", CarScraper::co2ClassToString(_co2Class));
@@ -572,7 +572,7 @@ namespace CarScraper {
             Logger::trace("[{}].set{} value: \"{}\"", this->getFullId(),
                 "CommercialisationStart", Validation::formatDate(_commercialisationStart.value()));
         } else {
-            Logger::error("[{}].set{} got an invalid value", this->getFullId(), "CommercialisationStart");
+            Logger::error("[{}].set{} got an invalid value \"{}\"", this->getFullId(), "CommercialisationStart", commercialisationStart);
         }
 
     }
@@ -615,7 +615,7 @@ namespace CarScraper {
             Logger::trace("[{}].set{} value: \"{}\"", this->getFullId(),
                 "CommercialisationEnd", Validation::formatDate(_commercialisationEnd.value()));
         } else {
-            Logger::error("[{}].set{} got an invalid value", this->getFullId(), "CommercialisationEnd");
+            Logger::error("[{}].set{} got an invalid value \"{}\"", this->getFullId(), "CommercialisationEnd", commercialisationEnd );
         }
 
     }
@@ -666,7 +666,7 @@ namespace CarScraper {
 
         // Log message
         if (_dataSource == CarScraper::DataSource::NA) {
-            Logger::error("[{}].set{} got an invalid value", this->getFullId(), "DataSource");
+            Logger::error("[{}].set{} got an invalid value \"{}\"", this->getFullId(), "DataSource", dataSource);
         } else {
             Logger::trace("[{}].set{} value: {}", this->getFullId(),
                 "DataSource", CarScraper::dataSourceToString(_dataSource));
@@ -1092,54 +1092,52 @@ namespace CarScraper {
         // --- Parsing the JSON object and setting the car data -----------------------------------
 
         // General
-        _brand              = carJSON.value("brand", NONE_STR);
-        _model              = carJSON.value("model", NONE_STR);
-        _generation         = carJSON.value("generation", NONE_STR);
-        _phase              = carJSON.value("phase", NONE_STR);
-        _engine             = carJSON.value("engine", NONE_STR);
-        _trim               = carJSON.value("trim", NONE_STR);
-        _price              = carJSON.value("price", 0);
+        this->setBrand(         carJSON.value("brand",      NONE_STR));
+        this->setModel(         carJSON.value("model",      NONE_STR));
+        this->setGeneration(    carJSON.value("generation", NONE_STR));
+        this->setPhase(         carJSON.value("phase",      NONE_STR));
+        this->setEngine(        carJSON.value("engine",     NONE_STR));
+        this->setTrim(          carJSON.value("trim",       NONE_STR));
+        this->setPrice(         carJSON.value("price",      0));
 
         // Dimensions
-        _height             = carJSON.value("height", DEFAULT_DOUBLE);
-        _length             = carJSON.value("length", DEFAULT_DOUBLE);
-        _width              = carJSON.value("width", DEFAULT_DOUBLE);
-        _weight             = carJSON.value("weight", DEFAULT_INT);
+        this->setHeight(        carJSON.value("height",     DEFAULT_DOUBLE));
+        this->setLength(        carJSON.value("length",     DEFAULT_DOUBLE));
+        this->setWidth(         carJSON.value("width",      DEFAULT_DOUBLE));
+        this->setWeight(        carJSON.value("weight",     DEFAULT_INT));
 
         // Liveability
-        _trunkVolume        = carJSON.value("trunkVolume", DEFAULT_INT);
-        _doorCount          = carJSON.value("doorCount", DEFAULT_INT);
-        _seatCount          = carJSON.value("seatCount", DEFAULT_INT);
+        this->setTrunkVolume(   carJSON.value("trunkVolume",    DEFAULT_INT));
+        this->setDoorCount(     carJSON.value("doorCount",      DEFAULT_INT));
+        this->setSeatCount(     carJSON.value("seatCount",      DEFAULT_INT));
 
         // Transmission
-        _gearboxType        = CarScraper::gearBoxTypeFromString(carJSON.value("gearboxType", NONE_STR));
-        _gearCount          = carJSON.value("gearCount", DEFAULT_INT);
+        this->setGearboxType(   carJSON.value("gearboxType",    NONE_STR));
+        this->setGearCount(     carJSON.value("gearCount",      DEFAULT_INT));
 
         // Power
-        _fuelType           = CarScraper::fuelTypeFromString(carJSON.value("fuelType", NONE_STR));
-        _horsePower         = carJSON.value("horsePower", DEFAULT_INT);
-        _taxHorsePower      = carJSON.value("taxHorsePower", DEFAULT_INT);
+        this->setFuelType(      carJSON.value("fuelType",       NONE_STR));
+        this->setHorsePower(    carJSON.value("horsePower",     DEFAULT_INT));
+        this->setTaxHorsePower( carJSON.value("taxHorsePower",  DEFAULT_INT));
 
         // Consumption
-        _tankCapacity       = carJSON.value("tankCapacity", DEFAULT_INT);
-        _fuelConsumption    = carJSON.value("fuelConsumption", DEFAULT_DOUBLE);
-        _co2Emissions       = carJSON.value("co2Emissions", DEFAULT_INT);
-        _co2Class           = CarScraper::co2ClassFromString(carJSON.value("co2Class", NONE_STR));
+        this->setTankCapacity(      carJSON.value("tankCapacity",       DEFAULT_INT));
+        this->setFuelConsumption(   carJSON.value("fuelConsumption",    DEFAULT_DOUBLE));
+        this->setCo2Emissions(      carJSON.value("co2Emissions",       DEFAULT_INT));
+        this->setCo2Class(          carJSON.value("co2Class",           NONE_STR));
 
         // Commercialisation
-        std::string commercialisationStartStr = carJSON.value("commercialisationStart", NONE_STR);
-        _commercialisationStart = Validation::parseDateDMY(commercialisationStartStr);
-        std::string commercialisationEndStr = carJSON.value("commercialisationEnd", NONE_STR);
-        _commercialisationEnd = Validation::parseDateDMY(commercialisationEndStr);
-        _stillInSale = carJSON.value("stillInSale", false);
+        this->setStillInSale(           carJSON.value("stillInSale", false));
+        this->setCommercialisationStart(carJSON.value("commercialisationStart", NONE_STR));
+        this->setCommercialisationEnd(  carJSON.value("commercialisationEnd", NONE_STR));
 
         // Technical Data
-        _dataSource         = CarScraper::DataSource::FILE;
-        _sourceFile         = filePath;
+        _dataSource = CarScraper::DataSource::FILE;
+        _sourceFile = filePath;
         
 
         // Debug
-        Logger::debug("[{}].load({}) successful", this->getFullId(), filePath);
+        Logger::debug("[{}].load({}) successful {}", this->getFullId(), filePath, carJSON.value("fuelType", NONE_STR));
         return SUCCESS_CODE;
 
     }
