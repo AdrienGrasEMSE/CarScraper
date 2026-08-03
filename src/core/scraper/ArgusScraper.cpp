@@ -11,7 +11,7 @@
 // Imports
 #include "ArgusScraper.hpp"
 #include "core/logger/Logger.hpp"
-#include "io/htmlParser/HtmlParser.hpp"
+#include "io/htmlHandlers/HtmlParser.hpp"
 #include <regex>
 #include <numeric>
 

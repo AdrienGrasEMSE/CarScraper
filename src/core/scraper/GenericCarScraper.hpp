@@ -16,7 +16,7 @@
 #include "core/models/Entity.hpp"
 #include "core/enum/TextCase.hpp"
 #include "io/httpClient/HttpClient.hpp"
-#include "io/htmlSaver/HtmlSaver.hpp"
+#include "io/htmlHandlers/HtmlSaver.hpp"
 #include <string>
 #include <vector>
 #include <algorithm>

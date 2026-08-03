@@ -160,14 +160,14 @@ set(CORE_SOURCES
     # IO — HttpClient
     src/io/httpClient/HttpClient.cpp
 
-    # IO — HtmlSaver
-    src/io/htmlSaver/HtmlSaver.cpp
+    # IO — HtmlHandlers
+    src/io/htmlHandlers/HtmlParser.cpp
+    src/io/htmlHandlers/HtmlSaver.cpp
 
     # IO — ExcelReader
     src/io/excelReader/ExcelReader.cpp
 
     # IO — HtmlParser
-    src/io/htmlParser/HtmlParser.cpp
 
 )
 

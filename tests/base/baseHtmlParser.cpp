@@ -15,7 +15,7 @@
 #include <catch2/catch.hpp>
 #include <fstream>
 #include <sstream>
-#include "io/htmlParser/HtmlParser.hpp"
+#include "io/htmlHandlers/HtmlParser.hpp"
 
 using namespace CarScraper;
 
