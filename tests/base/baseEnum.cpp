@@ -227,17 +227,24 @@ TEST_CASE("fuelTypeExplained", "[enum][fueltype]") {
 TEST_CASE("fuelTypeFromString", "[enum][fueltype]") {
 
     SECTION("Parses each L'Argus label to its SIV code") {
-        REQUIRE(fuelTypeFromString("Essence")                  == FuelType::ES);
-        REQUIRE(fuelTypeFromString("Diesel")                   == FuelType::GO);
-        REQUIRE(fuelTypeFromString("Electrique")                == FuelType::EL);
-        REQUIRE(fuelTypeFromString("GPL")                       == FuelType::GP);
-        REQUIRE(fuelTypeFromString("Diesel/Micro-Hybride")      == FuelType::GL);
-        REQUIRE(fuelTypeFromString("Hybride : Essence/Electrique") == FuelType::EE);
+        REQUIRE(fuelTypeFromString("Essence")               == FuelType::ES);
+        REQUIRE(fuelTypeFromString("ES")                    == FuelType::ES);
+        REQUIRE(fuelTypeFromString("Diesel")                == FuelType::GO);
+        REQUIRE(fuelTypeFromString("GO")                    == FuelType::GO);
+        REQUIRE(fuelTypeFromString("Electrique")            == FuelType::EL);
+        REQUIRE(fuelTypeFromString("EL")                    == FuelType::EL);
+        REQUIRE(fuelTypeFromString("GPL")                   == FuelType::GP);
+        REQUIRE(fuelTypeFromString("GP")                    == FuelType::GP);
+        REQUIRE(fuelTypeFromString("Diesel/Micro-Hybride")  == FuelType::GL);
+        REQUIRE(fuelTypeFromString("GL")                    == FuelType::GL);
+        REQUIRE(fuelTypeFromString("Hybride : Essence/Electrique")  == FuelType::EE);
+        REQUIRE(fuelTypeFromString("EE")                            == FuelType::EE);
     }
 
     SECTION("Accepts both accented and non-accented spelling for Hydrogène") {
         REQUIRE(fuelTypeFromString("Hydrogène") == FuelType::H2);
         REQUIRE(fuelTypeFromString("Hydrogene") == FuelType::H2);
+        REQUIRE(fuelTypeFromString("H2")        == FuelType::H2);
     }
 
     SECTION("Is case-insensitive") {
