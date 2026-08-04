@@ -278,4 +278,95 @@ TEST_CASE("formatDate", "[validation][date][format]") {
         REQUIRE(dmy.value() == ymd.value());
         REQUIRE(dmy.value() == mdy.value());
     }
+
+}
+
+
+// =============================================================================
+// Tests — string helpers
+// =============================================================================
+
+TEST_CASE("toUpperCase / toLowerCase", "[caradisiacmapper][helper][case]") {
+
+    SECTION("toUpperCase converts ASCII letters") {
+        REQUIRE(toUpperCase("megane iii") == "MEGANE III");
+    }
+
+    SECTION("toLowerCase converts ASCII letters") {
+        REQUIRE(toLowerCase("MEGANE III") == "megane iii");
+    }
+
+    SECTION("toUpperCase on an already-uppercase string is a no-op") {
+        REQUIRE(toUpperCase("ABC") == "ABC");
+    }
+
+    SECTION("toLowerCase on an empty string returns an empty string") {
+        REQUIRE(toLowerCase("").empty());
+    }
+}
+
+
+TEST_CASE("CaradisiacMapper removePrefix", "[caradisiacmapper][helper][removePrefix]") {
+
+    SECTION("Removes a matching prefix, case-insensitively") {
+        REQUIRE(removePrefix("MEGANE III Business", "megane") == "III Business");
+    }
+
+    SECTION("Trims whitespace after removing the prefix") {
+        REQUIRE(removePrefix("Clio    V", "Clio") == "V");
+    }
+
+    SECTION("Returns ERROR_STR when the prefix does not match") {
+        REQUIRE(removePrefix("Megane III", "Clio") == ERROR_STR);
+    }
+
+    SECTION("Returns ERROR_STR when prefix is longer than the string") {
+        REQUIRE(removePrefix("Cl", "Clio") == ERROR_STR);
+    }
+}
+
+
+TEST_CASE("CaradisiacMapper removeSuffix", "[caradisiacmapper][helper][removeSuffix]") {
+
+    SECTION("Removes a matching suffix, case-insensitively") {
+        REQUIRE(removeSuffix("iii (2) 1.5 dci 110 business", "Business") == "iii (2) 1.5 dci 110");
+    }
+
+    SECTION("Trims whitespace before the removed suffix") {
+        REQUIRE(removeSuffix("Clio   V", "V") == "Clio");
+    }
+
+    SECTION("Returns ERROR_STR when the suffix does not match") {
+        REQUIRE(removeSuffix("Megane III", "Clio") == ERROR_STR);
+    }
+
+    SECTION("Returns ERROR_STR when suffix is longer than the string") {
+        REQUIRE(removeSuffix("V", "Clio V") == ERROR_STR);
+    }
+}
+
+
+TEST_CASE("CaradisiacMapper extractRomanNumbers / romanToInt", "[caradisiacmapper][helper][roman]") {
+
+    SECTION("Extracts a simple roman numeral") {
+        REQUIRE(extractRomanNumbers("megane iii business") == "III");
+    }
+
+    SECTION("Returns ERROR_STR when no roman numeral is present") {
+        REQUIRE(extractRomanNumbers("megane business") == ERROR_STR);
+    }
+
+    SECTION("romanToInt converts additive numerals") {
+        REQUIRE(romanToInt("III") == 3);
+        REQUIRE(romanToInt("VI")  == 6);
+    }
+
+    SECTION("romanToInt converts subtractive numerals") {
+        REQUIRE(romanToInt("IV") == 4);
+        REQUIRE(romanToInt("IX") == 9);
+    }
+
+    SECTION("romanToInt converts a mixed numeral") {
+        REQUIRE(romanToInt("XIV") == 14);
+    }
 }

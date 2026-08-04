@@ -14,6 +14,7 @@
 #include "core/logger/Logger.hpp"
 #include <sstream>
 #include <iomanip>
+#include <regex>
 
 
 /**
@@ -357,6 +358,170 @@ namespace CarScraper::Validation {
             << std::setw(2) << static_cast<unsigned>(date.month()) << "/"
             << std::setw(4) << static_cast<int>(date.year());
         return oss.str();
+    }
+
+
+
+
+
+    // =========================================================================
+    // String manipulations
+    // =========================================================================
+
+        /**
+     * @brief Converts a string to uppercase
+     * @param str The string to convert
+     * @return The uppercase string
+     */
+    std::string toUpperCase(const std::string& str) {
+        std::string upperStr = str;
+        std::transform(
+            upperStr.begin(), 
+            upperStr.end(), 
+            upperStr.begin(), 
+            ::toupper);
+        return upperStr;
+    }
+
+
+    /**
+     * @brief Converts a string to lowercase
+     * @param str The string to convert
+     * @return The lowercase string
+     */
+    std::string toLowerCase(const std::string& str) {
+        std::string lowerStr = str;
+        std::transform(
+            lowerStr.begin(), 
+            lowerStr.end(), 
+            lowerStr.begin(), 
+            ::tolower);
+        return lowerStr;
+    }
+
+
+    /**
+     * @brief Remove a prefix from a string
+     * @param str The base string
+     * @param prefix The prefix to remove
+     * @return The string without the prefix or ERROR_STR if the prefix is not found
+     * @note Case insensitive, also removes all whitespace at the beginning of the string
+     */
+    std::string removePrefix(const std::string& str, const std::string& prefix) {
+
+        // Detecting the prefix
+        if (toLowerCase(str).starts_with(toLowerCase(prefix))) {
+
+            // Deleting the prefix
+            std::string result = str.substr(prefix.size());
+
+
+            // Whitespace removing
+            while (!result.empty() && result.front() == ' ') {
+                result.erase(0, 1);
+            }
+            return result;
+            
+
+        } else {
+            return ERROR_STR;
+        }
+
+    }
+
+
+    /**
+     * @brief Remove a suffix from a string
+     * @param str The base string
+     * @param suffix The suffix to remove
+     * @return The string without the suffix or ERROR_STR if the suffix is not found
+     * @note Case insensitive, also removes all whitespace at the end of the string
+     */
+    std::string removeSuffix(const std::string& str, const std::string& suffix) {
+
+        // Checking the size
+        if (str.size() >= suffix.size()) {
+
+
+            // Getting the position of the trim in the title
+            auto pos = toLowerCase(str).rfind(toLowerCase(suffix));
+            if (pos != std::string::npos && pos + suffix.size() == str.size()) {
+
+                // Deleting the suffix
+                std::string result = str.substr(0, pos);
+
+
+                // Removing trailing spaces
+                while (!result.empty() && result.back() == ' ') {
+                    result.pop_back();
+                }
+                return result;
+                
+            }
+
+        }
+
+
+        // Error case
+        return ERROR_STR;
+
+    }
+
+    
+    /**
+     * @brief Extract a roman number from a string
+     * @param str The base string
+     * @return The roman number or ERROR_STR if nothing found
+     * @note Case insensitive (forced uppercase)
+     */
+    std::string extractRomanNumbers(const std::string& str) {
+
+        // Extracting the roman number
+        std::string upperStr = toUpperCase(str);
+        std::regex  pattern(R"(\b[IVXLCDM]+\b)");
+        std::smatch match;
+        if (std::regex_search(upperStr, match, pattern)) {
+            return match.str();
+        }
+        return ERROR_STR;
+
+    }
+
+
+    /**
+     * @brief Convert a roman number into a arabic one
+     * @param romanNumber The base string
+     * @return The converted arabic number
+     */
+    int romanToInt(const std::string& romanNumber) {
+
+        // Converter definition
+        static const std::unordered_map<char, int> valConverter = {
+            {'I', 1},
+            {'V', 5},
+            {'X', 10},
+            {'L', 50},
+            {'C', 100},
+            {'D', 500},
+            {'M', 1000}
+        };
+
+
+        // Calculating the value
+        int result = 0;
+        for (size_t i = 0; i < romanNumber.size(); ++i) {
+
+            // Adding or removing the current value found
+            int current = valConverter.at(romanNumber[i]);
+            if (i + 1 < romanNumber.size() && current < valConverter.at(romanNumber[i + 1])) {
+                result -= current;
+            }
+            else {
+                result += current;
+            }
+        }
+        return result;
+        
     }
 
 
