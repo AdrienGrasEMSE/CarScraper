@@ -129,11 +129,6 @@ endfunction()
 # ==============================================================================
 
 set(CORE_SOURCES
-    # Core — Logger
-    src/core/logger/Logger.cpp
-
-    # Core — Utils
-    src/core/utils/Validation.cpp
 
     # Core - Enum
     src/core/enum/Co2Class.cpp
@@ -141,6 +136,15 @@ set(CORE_SOURCES
     src/core/enum/FuelType.cpp
     src/core/enum/GearboxType.cpp
     src/core/enum/TextCase.cpp
+
+    # Core — Logger
+    src/core/logger/Logger.cpp
+
+    # Core — Mapper
+    src/core/mappers/ArgusMapper.cpp
+    src/core/mappers/CaradisiacMapper.cpp
+    src/core/mappers/CrossMapper.cpp
+    src/core/mappers/GenericCarMapper.cpp
 
     # Core — Models
     src/core/models/Entity.cpp
@@ -151,11 +155,11 @@ set(CORE_SOURCES
     src/core/scrapers/ArgusScraper.cpp
     src/core/scrapers/CaradisiacScraper.cpp
 
-    # Core — Mapper
-    src/core/mappers/ArgusMapper.cpp
-    src/core/mappers/CaradisiacMapper.cpp
-    src/core/mappers/CrossMapper.cpp
-    src/core/mappers/GenericCarMapper.cpp
+    # Core — Service
+    src/core/services/ScrapingService.cpp
+
+    # Core — Utils
+    src/core/utils/Validation.cpp
 
     # IO — HttpClient
     src/io/httpClient/HttpClient.cpp
@@ -166,8 +170,6 @@ set(CORE_SOURCES
 
     # IO — ExcelReader
     src/io/excelReader/ExcelReader.cpp
-
-    # IO — HtmlParser
 
 )
 
