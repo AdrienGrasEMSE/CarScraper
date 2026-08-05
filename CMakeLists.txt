@@ -156,6 +156,7 @@ set(CORE_SOURCES
     src/core/scrapers/CaradisiacScraper.cpp
 
     # Core — Service
+    src/core/services/CleanService.cpp
     src/core/services/ScrapingService.cpp
 
     # Core — Utils
