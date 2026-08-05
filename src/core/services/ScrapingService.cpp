@@ -35,40 +35,6 @@ namespace CarScraper {
 
 
 
-
-    // =========================================================================
-    // Internal helpers
-    // =========================================================================
-
-    /**
-     * @brief Filter a list of files by car brand and model
-     * @param files The list of files to filter
-     * @param brand The target car brand
-     * @param model The target car model
-     */
-    void ScrapingService::filterFilesByBrandAndModel(   std::vector<std::filesystem::path>& files,
-                                                        const std::string& brand,
-                                                        const std::string& model) {
-
-        // Running through the files
-        for (const auto& file : files) {
-
-            // Getting the file path
-            std::string filePath = file.string();
-
-            // Filtering files
-            if (filePath.find(brand) == std::string::npos || filePath.find(model) == std::string::npos) {
-                files.erase(std::remove(files.begin(), files.end(), file), files.end());
-                Logger::info("[{}].scrapModel : file removed : {}", getFullId(), file.string());
-            }
-
-        }
-
-    }
-
-
-
-
     
     // =========================================================================
     // Main logic
@@ -87,9 +53,12 @@ namespace CarScraper {
                                 const std::string& model,
                                 const std::string& startDateStr,
                                 const std::string& endDateStr) {
+        // Debug
+        Logger::info("[{}] : Starting to scrap \"{}\" \"{}\" bewteen \"{}\" and \"{}\"",
+            getFullId(), brand, model, startDateStr, endDateStr);
         
+
         // Creating scrapers
-        namespace fs = std::filesystem;
         ArgusScraper        argusScraper;
         CaradisiacScraper   caradisiacScraper;
 
@@ -108,56 +77,22 @@ namespace CarScraper {
 
         // Getting status code
         int statusArgus         = futureArgus.get();
-        int statusCaradisiac    = futureCaradisiac.get();
-
-
-        // Getting all the files in the save_html directory
-        std::vector<fs::path> argusFiles;
-        std::vector<fs::path> caradisiacFiles;
-        for (const auto& entry : fs::directory_iterator(HTML_DIR)) {
-
-            // Getting the file path
-            std::string filePath = entry.path().string();
-
-            // Filtering files by type
-            if (entry.is_regular_file()) {
-                if (filePath.find("ARGUS") != std::string::npos) {
-                    argusFiles.push_back(entry.path());
-                } else if (filePath.find("CARADISIAC") != std::string::npos) {
-                    caradisiacFiles.push_back(entry.path());
-                }
-            }
-
-        }
-
-
-        for (const auto& file : argusFiles) {
-            Logger::info("[{}].scrapModel : Argus file found : {}", getFullId(), file.string());
-        }
-        for (const auto& file : caradisiacFiles) {
-            Logger::info("[{}].scrapModel : Caradisiac file found : {}", getFullId(), file.string());
-        }
-
-
-        // Filtering files by brand and model
-        filterFilesByBrandAndModel(argusFiles, brand, model);
-        filterFilesByBrandAndModel(caradisiacFiles, brand, model);
-
-        
-        for (const auto& file : argusFiles) {
-            Logger::info("[{}].scrapModel : Argus file found : {}", getFullId(), file.string());
-        }
-        for (const auto& file : caradisiacFiles) {
-            Logger::info("[{}].scrapModel : Caradisiac file found : {}", getFullId(), file.string());
-        }
-
-
-
-        // Final status
+        int statusCaradisiac    = futureCaradisiac.get();// Final status
         if (statusArgus == SUCCESS_CODE && statusCaradisiac == SUCCESS_CODE) {
+
+            // Debug
+            Logger::info("[{}] : Scraping of \"{}\" \"{}\" bewteen \"{}\" and \"{}\" succesful",
+                getFullId(), brand, model, startDateStr, endDateStr);
             return SUCCESS_CODE;
+
+            
         } else {
+
+            // Debug
+            Logger::error("[{}] : Error while scraping of \"{}\" \"{}\" bewteen \"{}\" and \"{}\"",
+                getFullId(), brand, model, startDateStr, endDateStr);
             return ERROR_CODE;
+
         }
 
     }

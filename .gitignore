@@ -16,6 +16,7 @@ build/data/test_html/*
 
 
 # Data folder
+data/saved_link.json
 data/car/*
 !data/car/.gitkeep
 data/excel/*

@@ -15,9 +15,7 @@
 
 // Imports
 #include "core/models/Entity.hpp"
-#include <filesystem>
 #include <string>
-#include <vector>
 
 
 /**
@@ -32,29 +30,6 @@ namespace CarScraper {
      * targeted technical files, combine them into a completed one before saving.
      */
     class ScrapingService : public Entity {
-
-        // =========================================================================
-        // Public data and methods
-        // =========================================================================
-        private:
-
-            // -------------------------------------------------------------------------
-            // Internal helpers
-            // -------------------------------------------------------------------------
-
-            /**
-             * @brief Filter a list of files by car brand and model
-             * @param files The list of files to filter
-             * @param brand The target car brand
-             * @param model The target car model
-             */
-            void filterFilesByBrandAndModel(std::vector<std::filesystem::path>& files,
-                                            const std::string& brand,
-                                            const std::string& model);
-
-
-
-
 
         // =========================================================================
         // Public data and methods
