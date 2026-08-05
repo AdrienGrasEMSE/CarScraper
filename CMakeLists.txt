@@ -163,6 +163,9 @@ set(CORE_SOURCES
     # Core — Utils
     src/core/utils/Validation.cpp
 
+    # IO — ExcelReader
+    src/io/excelReader/ExcelReader.cpp
+
     # IO — HttpClient
     src/io/httpClient/HttpClient.cpp
 
@@ -170,8 +173,8 @@ set(CORE_SOURCES
     src/io/htmlHandlers/HtmlParser.cpp
     src/io/htmlHandlers/HtmlSaver.cpp
 
-    # IO — ExcelReader
-    src/io/excelReader/ExcelReader.cpp
+    # IO — RobotsPolicy
+    src/io/robotsPolicy/RobotsPolicy.cpp
 
 )
 
@@ -281,6 +284,11 @@ carscraper_configure_test(TestArgusMapper)
 # Test CaradisiacMapper
 add_executable(TestCaradisiacMapper tests/mono/testCaradisiacMapper.cpp)
 carscraper_configure_test(TestCaradisiacMapper)
+ 
+# Test RobotsPolicy
+add_executable(TestRobotsPolicy tests/mono/testRobotsPolicy.cpp)
+carscraper_configure_test(TestRobotsPolicy)
+# ./TestRobotsPolicy "[RobotsPolicy]" "~[network]"  -> to disable network tests (e.g., in CI)
 
 
 
