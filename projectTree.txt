@@ -1,22 +1,5 @@
 .
 ├── CMakeLists.txt
-├── data
-│   ├── save_car
-│   └── save_link
-│       └── saved_link.json
-├── docs
-├── Doxyfile
-├── generate_tree.sh
-├── libs
-│   ├── catch2
-│   │   └── catch.hpp
-│   ├── nlohmann
-│   │   └── json.hpp
-│   └── stduuid
-│       └── uuid.h
-├── logs
-│   └── log.txt
-├── projectTree.txt
 ├── README.md
 ├── src
 │   ├── cli
@@ -110,4 +93,4 @@
     │   └── testValidation.cpp
     └── testAll.cpp
 
-28 directories, 83 files
+19 directories, 75 files

@@ -23,6 +23,8 @@ data/excel/*
 !data/excel/.gitkeep
 data/html/*
 !data/html/.gitkeep
+!data/html/archive/
+!data/html/archive/.gitkeep
 
 
 # Documentation folder

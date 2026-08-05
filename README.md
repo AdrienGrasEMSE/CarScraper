@@ -27,17 +27,17 @@ Ce qui a été réalisé et testé :
 12. Class ArgusMapper et CaradisiacMapper capable de créer un objet Car à partir d'un HTML donné en entrée.
 13. Class CrossMapper capable de compléter un objet Car partiel en utilisant deux objets des deux sources largus.fr et caradisiac.com.
 14. Service de Clean, capable de lister les fichiers et sous-dossier d'un dossier parents, supprimer des chemins depuis une liste et réinitialiser le fichier de sauvegarde des liens déjà scrapé.
+15. Service de Scraping, capable de télécharger des fiches technique visée (marque, modèle, date début / fin) depuis largus.fr et caradisiac.com en parrallèle.
 
 &#8303;
 
 Ce qui reste à faire :
-1. Créer le service de scraping complet, qui télécharge les fiches technique depuis largus.fr et caradisiac.com en parrallèle.
-2. Créer un service de mapping des objets Car, en utilisant des fiches techniques déjà téléchargé, filtrés selon marque et modèles, combines les fiches technique pour sauvegarder des objet Car. Déplace les fiches techniques traitées dans HTML_DIR/archive.
-3. Créer un service de suppression des doublons des Car sauvegardée
-4. Créer le service de filtrage, prenant en entrée une liste de Car et une série de filtre
-5. Créer la classe ExcelWritter capable de créer un fichier Excel affichant les infos d'une liste d'objet Car.
-6. Créer un service de mail automatique
-7. Créer un runner :
+1. Créer un service de mapping des objets Car, en utilisant des fiches techniques déjà téléchargé, filtrés selon marque et modèles, combines les fiches technique pour sauvegarder des objet Car. Déplace les fiches techniques traitées dans HTML_DIR/archive.
+2. Créer un service de suppression des doublons des Car sauvegardée
+3. Créer le service de filtrage, prenant en entrée une liste de Car et une série de filtre
+4. Créer la classe ExcelWritter capable de créer un fichier Excel affichant les infos d'une liste d'objet Car.
+5. Créer un service de mail automatique
+6. Créer un runner :
     a. Prend en entrée des paramètres utilisateur (re-scraping forcé, marque, modele, filtres)
     b. Scraping des fiches technique ciblées
     c. Mapping des fiches techniques

@@ -1,5 +1,5 @@
 #!/bin/bash
 
-tree -I ".vscode|build|spdlog|uni_algo|.git|input_excel|save_html|test_save_html" > projectTree.txt
+tree -I ".vscode|.git|build|data|docs|Doxyfile|generate_tree.sh|libs|logs|projectTree.txt" > projectTree.txt
 
 echo "Project tree generated in projectTree.txt"
