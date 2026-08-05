@@ -141,6 +141,11 @@ namespace CarScraper {
             _client.setReferer(main_link);
             std::string year_link = "https://www.largus.fr/fiche-technique/"
                 + _carBrand + "/" + _carModel + "/" + std::to_string(year) + ".html";
+            std::string year_path = "/fiche-technique/" + _carBrand + "/" + _carModel + "/" + std::to_string(year) + ".html";
+            if (!_isPathAllowed("www.largus.fr", year_path)) {
+                current_year++;
+                continue;
+            }
             response = _client.get(year_link);
             if (response.statusCode == 200) {
 
@@ -166,11 +171,14 @@ namespace CarScraper {
 
                     // Constructing full link
                     _client.setReferer(year_link);
+                    std::string current_path = current_link;
                     current_link = "https://www.largus.fr" + current_link;
 
 
-                    // Skip already saved links
-                    if (_saver.alreadySaved(current_link)) {
+                     // Skip links disallowed by robots.txt, then already-saved links
+                    if (!_isPathAllowed("www.largus.fr", current_path)) {
+                        round++;
+                    } else if (_saver.alreadySaved(current_link)) {
                         Logger::trace("[{}].scrapModel : (Link {}/{}) ignoring already saved {}",
                             getFullId(), round, total_link, current_link);
                         round++;

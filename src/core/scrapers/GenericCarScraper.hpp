@@ -17,6 +17,7 @@
 #include "core/enum/TextCase.hpp"
 #include "io/httpClient/HttpClient.hpp"
 #include "io/htmlHandlers/HtmlSaver.hpp"
+#include "io/robotsPolicy/RobotsPolicy.hpp"
 #include <string>
 #include <vector>
 #include <algorithm>
@@ -43,6 +44,7 @@ namespace CarScraper {
             // Text case for the car brand and model
             CarScraper::TextCase        _carBrandCase;      ///< The text case for the car brand
             CarScraper::TextCase        _carModelCase;      ///< The text case for the car model
+            CarScraper::RobotsPolicy    _robots;            ///< robots.txt checker (fail-open, "*" group only)
 
 
 
@@ -100,6 +102,17 @@ namespace CarScraper {
                 std::mt19937        rng = std::mt19937(rd());
                 std::ranges::shuffle(vector, rng);
             }
+
+
+            /**
+             * @brief Checks whether a given full URL may be fetched according to the
+             *        target host's robots.txt ("*" group).
+             * @param host The domain (e.g. "www.largus.fr").
+             * @param path The path to check (e.g. "/fiche-technique/Peugeot/208.html").
+             * @return true if allowed (or if robots.txt is unreachable/absent), false if disallowed.
+             * @note Logs a warning when a link is skipped because of a robots.txt rule.
+             */
+            bool _isPathAllowed(const std::string& host, const std::string& path);
 
 
 

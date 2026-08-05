@@ -293,11 +293,14 @@ namespace CarScraper {
 
                         // Constructing full link
                         _client.setReferer(yearLink);
+                        std::string linkPath = link;
                         link = "https://www.caradisiac.com" + link;
 
 
-                        // Skip already saved links
-                        if (_saver.alreadySaved(link)) {
+                        // Skip links disallowed by robots.txt, then already-saved links
+                        if (!_isPathAllowed("www.caradisiac.com", linkPath)) {
+                            link_round++;
+                        } else if (_saver.alreadySaved(link)) {
                             Logger::trace("[{}].scrapModel : (Link {}/{}) ignoring already saved {}",
                                 getFullId(), link_round, total_link, link);
                             link_round++;

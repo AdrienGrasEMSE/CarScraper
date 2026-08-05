@@ -197,6 +197,33 @@ namespace CarScraper {
 
 
 
+
+    // =========================================================================
+    // Internal Helpers
+    // =========================================================================
+
+    /**
+     * @brief Checks whether a given full URL may be fetched according to the
+     *        target host's robots.txt ("*" group).
+     * @param host The domain (e.g. "www.largus.fr").
+     * @param path The path to check (e.g. "/fiche-technique/Peugeot/208.html").
+     * @return true if allowed (or if robots.txt is unreachable/absent), false if disallowed.
+     * @note Logs a warning when a link is skipped because of a robots.txt rule.
+     */
+    bool GenericCarScraper::_isPathAllowed(const std::string& host, const std::string& path) {
+        bool allowed = _robots.isAllowed(host, path);
+        if (!allowed) {
+            Logger::warn("[{}]._isPathAllowed({}, {}) → skipped, disallowed by robots.txt",
+                getFullId(), host, path);
+        }
+        return allowed;
+    }
+
+
+
+
+
+
     // =========================================================================
     // Main logic
     // =========================================================================
