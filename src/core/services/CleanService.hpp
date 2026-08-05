@@ -82,6 +82,7 @@ namespace CarScraper {
 
             /**
              * @brief Clean the saved link file
+             * @return SUCCESS_CODE or ERROR_CODE based on the result of the operation
              */
             int cleanLink();
 
