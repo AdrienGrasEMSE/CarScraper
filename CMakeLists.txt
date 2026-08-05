@@ -158,6 +158,7 @@ set(CORE_SOURCES
     # Core — Service
     src/core/services/CleanService.cpp
     src/core/services/MapService.cpp
+    src/core/services/ScrapService.cpp
 
     # Core — Utils
     src/core/utils/Validation.cpp
