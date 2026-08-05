@@ -2,13 +2,6 @@
 ├── CMakeLists.txt
 ├── data
 │   ├── save_car
-│   │   └── RENAULT
-│   │       └── Fluence
-│   │           └── 2009
-│   │               ├── RENAULT-Fluence-1.5 dCi85-Expression-1.json
-│   │               ├── RENAULT-Fluence-1.5 dCi85-Expression-2.json
-│   │               ├── RENAULT-Fluence-1.5 dCi85-Expression-3.json
-│   │               └── RENAULT-Fluence-1.5 dCi85-Expression.json
 │   └── save_link
 │       └── saved_link.json
 ├── docs
@@ -63,6 +56,11 @@
 │   │   │   ├── CaradisiacScraper.hpp
 │   │   │   ├── GenericCarScraper.cpp
 │   │   │   └── GenericCarScraper.hpp
+│   │   ├── services
+│   │   │   ├── CleanService.cpp
+│   │   │   ├── CleanService.hpp
+│   │   │   ├── ScrapingService.cpp
+│   │   │   └── ScrapingService.hpp
 │   │   └── utils
 │   │       ├── Constant.hpp
 │   │       ├── Validation.cpp
@@ -112,4 +110,4 @@
     │   └── testValidation.cpp
     └── testAll.cpp
 
-30 directories, 83 files
+28 directories, 83 files
