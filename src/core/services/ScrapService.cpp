@@ -1,5 +1,5 @@
 /**
- * @file ScrapingService.cpp
+ * @file ScrapService.cpp
  * 
  * @brief This file implements a scraping service, which represents a service able to scrap car technical sheets from
  * largus.fr and caradisiac.com.
@@ -10,7 +10,7 @@
 
 
 // Imports
-#include "ScrapingService.hpp"
+#include "ScrapService.hpp"
 #include "core/logger/Logger.hpp"
 #include "core/scrapers/ArgusScraper.hpp"
 #include "core/scrapers/CaradisiacScraper.hpp"
@@ -30,7 +30,7 @@ namespace CarScraper {
     /**
      * @brief Default Constructor
      */
-    ScrapingService::ScrapingService() : Entity("SCRAP-SERVICE") {}
+    ScrapService::ScrapService() : Entity("SCRAP-SERVICE") {}
 
 
 
@@ -49,7 +49,7 @@ namespace CarScraper {
      * @return ERROR_CODE / SUCCESS_CODE wheter the method is succesful or not
      * @note The accepted date format is "AAAA"
      */
-    int ScrapingService::run(   const std::string& brand,
+    int ScrapService::run(   const std::string& brand,
                                 const std::string& model,
                                 const std::string& startDateStr,
                                 const std::string& endDateStr) {

@@ -1,5 +1,5 @@
 /**
- * @file ScrapingService.hpp
+ * @file ScrapService.hpp
  * 
  * @brief This file declares a scraping service, which represents a service able to scrap car technical sheets from
  * largus.fr and caradisiac.com.
@@ -24,12 +24,12 @@
 namespace CarScraper {
 
     /**
-     * @class ScrapingService
+     * @class ScrapService
      * 
      * @brief A service able to complete the full scraping job on largus.fr and caradisiac.com. It scraps all
      * targeted technical files, combine them into a completed one before saving.
      */
-    class ScrapingService : public Entity {
+    class ScrapService : public Entity {
 
         // =========================================================================
         // Public data and methods
@@ -43,7 +43,7 @@ namespace CarScraper {
             /**
              * @brief Default Constructor
              */
-            ScrapingService();
+            ScrapService();
 
 
 
