@@ -616,7 +616,7 @@ namespace CarScraper {
             /**
              * @brief Saves the car data to a file in JSON format
              * @return The path of the saved file
-             * @note This method will create a folder BRAND in the CAR_SAVE directory. Then a model folder and a generation folder.
+             * @note This method will create a folder BRAND in the CAR_DIR directory. Then a model folder and a generation folder.
              * The file will be named with the car full name : YEAR-BRAND-MODEL-GENERATION-PHASE-ENGINE-TRIM (+ a number in case)
              */
             int save() const;

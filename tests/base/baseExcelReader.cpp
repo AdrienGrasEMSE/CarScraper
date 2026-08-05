@@ -53,8 +53,8 @@ namespace CarScraper {
     {
         SECTION("Valid path sets filePath")
         {
-            ExcelReader reader("data/input_excel/ExcelReaderTest.xlsx");
-            REQUIRE(reader.getFilePath() == "data/input_excel/ExcelReaderTest.xlsx");
+            ExcelReader reader(XLSX_DIR + "ExcelReaderTest.xlsx");
+            REQUIRE(reader.getFilePath() == XLSX_DIR + "ExcelReaderTest.xlsx");
         }
 
         SECTION("Invalid path keeps DEFAULT_STR")
@@ -75,8 +75,8 @@ namespace CarScraper {
 
         SECTION("Valid path is accepted")
         {
-            reader.setFilePath("data/input_excel/ExcelReaderTest.xlsx");
-            REQUIRE(reader.getFilePath() == "data/input_excel/ExcelReaderTest.xlsx");
+            reader.setFilePath(XLSX_DIR + "ExcelReaderTest.xlsx");
+            REQUIRE(reader.getFilePath() == XLSX_DIR + "ExcelReaderTest.xlsx");
         }
 
         SECTION("Non-existent path resets to DEFAULT_STR")
@@ -160,16 +160,16 @@ namespace CarScraper {
             REQUIRE(reader.getLinkList().empty());
         }
 
-        SECTION("linkList is not empty after reading")
+        SECTION("linkList is not empty after reading") 
         {
-            ExcelReader reader("data/input_excel/ExcelReaderTest.xlsx");
+            ExcelReader reader(XLSX_DIR + "ExcelReaderTest.xlsx");
             reader.excelReadLinkList();
             REQUIRE_FALSE(reader.getLinkList().empty());
         }
 
         SECTION("linkList resets on each call")
         {
-            ExcelReader reader("data/input_excel/ExcelReaderTest.xlsx");
+            ExcelReader reader(XLSX_DIR + "ExcelReaderTest.xlsx");
             reader.excelReadLinkList();
             const std::size_t firstCount = reader.getLinkList().size();
             reader.excelReadLinkList();
@@ -189,7 +189,7 @@ namespace CarScraper {
 
         SECTION("All links start with https:// after read + clean")
         {
-            ExcelReader reader("data/input_excel/ExcelReaderTest.xlsx");
+            ExcelReader reader(XLSX_DIR + "ExcelReaderTest.xlsx");
             reader.excelReadLinkList();
             reader.cleanLinkList();
             for (const std::string& link : reader.getLinkList())
@@ -200,7 +200,7 @@ namespace CarScraper {
 
         SECTION("clean reduces or keeps list size")
         {
-            ExcelReader reader("data/input_excel/ExcelReaderTest.xlsx");
+            ExcelReader reader(XLSX_DIR + "ExcelReaderTest.xlsx");
             reader.excelReadLinkList();
             const std::size_t beforeClean = reader.getLinkList().size();
             reader.cleanLinkList();

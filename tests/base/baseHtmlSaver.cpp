@@ -15,6 +15,7 @@
 #include <catch2/catch.hpp>
 #include <filesystem>
 #include <fstream>
+#include <iostream>
 #include <sstream>
 #include <nlohmann/json.hpp>
 #include "io/htmlHandlers/HtmlSaver.hpp"
@@ -25,7 +26,7 @@ using namespace CarScraper;
 namespace fs = std::filesystem;
 
 static const std::string TEST_HTML_DIR  = "data/test_save_html/";
-static const std::string TEST_LINK_DIR  = "data/test_save_link/";
+static const std::string TEST_LINK_FILE = "data/test_save_link.json";
 static const std::string TEST_NET_DIR   = "data/test_html/";
 static const std::string EXAMPLE_URL    = "https://www.example.org";
 static const std::string EXAMPLE_FILE   = TEST_NET_DIR + "example_org.txt";
@@ -44,12 +45,18 @@ static std::string readFile(const std::string& path) {
 
 static void prepareDirectories() {
     fs::create_directories(TEST_HTML_DIR);
-    fs::create_directories(TEST_LINK_DIR);
+    std::ofstream file(TEST_LINK_FILE);
+    if (file.is_open()) {
+        file << R"([
+            "https://example.com"
+        ])";
+        file.close();
+    }
 }
 
 static void cleanDirectories() {
     fs::remove_all(TEST_HTML_DIR);
-    fs::remove_all(TEST_LINK_DIR);
+    fs::remove(TEST_LINK_FILE);
 }
 
 
@@ -64,11 +71,10 @@ TEST_CASE("HtmlSaver Constructor", "[HtmlSaver][Constructor]") {
     SECTION("Default constructor") {
         HtmlSaver saver;
 
-        REQUIRE(saver.getName()          == DEFAULT_STR);
-        REQUIRE(saver.getContent()       == DEFAULT_STR);
-        REQUIRE(saver.getOutputDir()     == HTML_DIR);
-        REQUIRE(saver.getInputLinkDir()  == LINK_DIR);
-        REQUIRE(saver.getOutputLinkDir() == LINK_DIR);
+        REQUIRE(saver.getName()         == DEFAULT_STR);
+        REQUIRE(saver.getContent()      == DEFAULT_STR);
+        REQUIRE(saver.getOutputDir()    == HTML_DIR);
+        REQUIRE(saver.getLinkFile()     == LINK_FILE);
     }
 
     SECTION("Parameterized constructor") {
@@ -77,16 +83,14 @@ TEST_CASE("HtmlSaver Constructor", "[HtmlSaver][Constructor]") {
             "<html>Hello</html>",
             "https://example.com",
             TEST_HTML_DIR,
-            TEST_LINK_DIR,
-            TEST_LINK_DIR
+            TEST_LINK_FILE
         );
 
-        REQUIRE(saver.getName()          == "page");
-        REQUIRE(saver.getContent()       == "<html>Hello</html>");
-        REQUIRE(saver.getLink()          == "https://example.com");
-        REQUIRE(saver.getOutputDir()     == TEST_HTML_DIR);
-        REQUIRE(saver.getInputLinkDir()  == TEST_LINK_DIR);
-        REQUIRE(saver.getOutputLinkDir() == TEST_LINK_DIR);
+        REQUIRE(saver.getName()         == "page");
+        REQUIRE(saver.getContent()      == "<html>Hello</html>");
+        REQUIRE(saver.getLink()         == "https://example.com");
+        REQUIRE(saver.getOutputDir()    == TEST_HTML_DIR);
+        REQUIRE(saver.getLinkFile()     == TEST_LINK_FILE);
     }
 
     cleanDirectories();
@@ -128,24 +132,14 @@ TEST_CASE("HtmlSaver Setters", "[HtmlSaver][Setters]") {
         REQUIRE(saver.getOutputDir() == HTML_DIR);
     }
 
-    SECTION("setInputLinkDir — valid directory") {
-        saver.setInputLinkDir(TEST_LINK_DIR);
-        REQUIRE(saver.getInputLinkDir() == TEST_LINK_DIR);
+    SECTION("setLinkFile — valid file") {
+        saver.setLinkFile(TEST_LINK_FILE);
+        REQUIRE(saver.getLinkFile() == TEST_LINK_FILE);
     }
 
-    SECTION("setInputLinkDir — invalid directory falls back to LINK_DIR") {
-        saver.setInputLinkDir("nonexistent/path/");
-        REQUIRE(saver.getInputLinkDir() == LINK_DIR);
-    }
-
-    SECTION("setOutputLinkDir — valid directory") {
-        saver.setOutputLinkDir(TEST_LINK_DIR);
-        REQUIRE(saver.getOutputLinkDir() == TEST_LINK_DIR);
-    }
-
-    SECTION("setOutputLinkDir — invalid directory falls back to LINK_DIR") {
-        saver.setOutputLinkDir("nonexistent/path/");
-        REQUIRE(saver.getOutputLinkDir() == LINK_DIR);
+    SECTION("setLinkFile — invalid file falls back to LINK_FILE") {
+        saver.setLinkFile("nonexistent/path/");
+        REQUIRE(saver.getLinkFile() == LINK_FILE);
     }
 
     cleanDirectories();
@@ -187,8 +181,7 @@ TEST_CASE("HtmlSaver save()", "[HtmlSaver][Save]") {
             "<html>Hello</html>",
             "https://example.com",
             TEST_HTML_DIR,
-            TEST_LINK_DIR,
-            TEST_LINK_DIR
+            TEST_LINK_FILE
         );
 
         REQUIRE(saver.save() == SUCCESS_CODE);
@@ -202,8 +195,7 @@ TEST_CASE("HtmlSaver save()", "[HtmlSaver][Save]") {
             "<html>Hello</html>",
             DEFAULT_STR,
             TEST_HTML_DIR,
-            TEST_LINK_DIR,
-            TEST_LINK_DIR
+            TEST_LINK_FILE
         );
 
         REQUIRE(saver.save() == ERROR_CODE);
@@ -215,8 +207,7 @@ TEST_CASE("HtmlSaver save()", "[HtmlSaver][Save]") {
             "<html>Hello</html>",
             "https://example.com",
             TEST_HTML_DIR,
-            TEST_LINK_DIR,
-            TEST_LINK_DIR
+            TEST_LINK_FILE
         );
 
         REQUIRE(saver.save() == SUCCESS_CODE);
@@ -231,8 +222,7 @@ TEST_CASE("HtmlSaver save()", "[HtmlSaver][Save]") {
             "<html>First</html>",
             "https://example.com/first",
             TEST_HTML_DIR,
-            TEST_LINK_DIR,
-            TEST_LINK_DIR
+            TEST_LINK_FILE
         );
         REQUIRE(saver1.save() == SUCCESS_CODE);
         REQUIRE(fs::exists(TEST_HTML_DIR + "page.txt"));
@@ -243,8 +233,7 @@ TEST_CASE("HtmlSaver save()", "[HtmlSaver][Save]") {
             "<html>Second</html>",
             "https://example.com/second",
             TEST_HTML_DIR,
-            TEST_LINK_DIR,
-            TEST_LINK_DIR
+            TEST_LINK_FILE
         );
         REQUIRE(saver2.save() == SUCCESS_CODE);
 
@@ -270,8 +259,7 @@ TEST_CASE("HtmlSaver save()", "[HtmlSaver][Save]") {
             "<html>Third</html>",
             "https://example.com/third",
             TEST_HTML_DIR,
-            TEST_LINK_DIR,
-            TEST_LINK_DIR
+            TEST_LINK_FILE
         );
         REQUIRE(saver.save() == SUCCESS_CODE);
 
@@ -304,8 +292,7 @@ TEST_CASE("HtmlSaver alreadySaved()", "[HtmlSaver][AlreadySaved]") {
         "<html>Hello</html>",
         "https://example.com",
         TEST_HTML_DIR,
-        TEST_LINK_DIR,
-        TEST_LINK_DIR
+        TEST_LINK_FILE
     );
 
     REQUIRE_FALSE(saver.alreadySaved("https://example.com"));
@@ -331,16 +318,15 @@ TEST_CASE("HtmlSaver exportSavedLink()", "[HtmlSaver][Export]") {
         "<html>Hello</html>",
         "https://example.com",
         TEST_HTML_DIR,
-        TEST_LINK_DIR,
-        TEST_LINK_DIR
+        TEST_LINK_FILE
     );
 
     saver.save();
 
     REQUIRE(saver.exportSavedLink() == SUCCESS_CODE);
-    REQUIRE(fs::exists(TEST_LINK_DIR + "saved_link.json"));
+    REQUIRE(fs::exists(TEST_LINK_FILE));
 
-    std::ifstream file(TEST_LINK_DIR + "saved_link.json");
+    std::ifstream file(TEST_LINK_FILE);
     nlohmann::json json;
     file >> json;
 
@@ -366,7 +352,7 @@ TEST_CASE("HtmlSaver importSavedLink()", "[HtmlSaver][Import]") {
             "https://google.com"
         };
 
-        std::ofstream file(TEST_LINK_DIR + "saved_link.json");
+        std::ofstream file(TEST_LINK_FILE);
         file << json.dump(4);
         file.close();
 
@@ -375,26 +361,12 @@ TEST_CASE("HtmlSaver importSavedLink()", "[HtmlSaver][Import]") {
             "<html>Hello</html>",
             "https://dummy.com",
             TEST_HTML_DIR,
-            TEST_LINK_DIR,
-            TEST_LINK_DIR
+            TEST_LINK_FILE
         );
 
         REQUIRE(saver.importSavedLink() == SUCCESS_CODE);
         REQUIRE(saver.alreadySaved("https://example.com"));
         REQUIRE(saver.alreadySaved("https://google.com"));
-    }
-
-    SECTION("Missing json file") {
-        HtmlSaver saver(
-            "page",
-            "<html>Hello</html>",
-            "https://dummy.com",
-            TEST_HTML_DIR,
-            TEST_LINK_DIR,
-            TEST_LINK_DIR
-        );
-
-        REQUIRE(saver.importSavedLink() == ERROR_CODE);
     }
 
     cleanDirectories();
@@ -409,7 +381,7 @@ TEST_CASE("HtmlSaver importSavedLink()", "[HtmlSaver][Import]") {
 TEST_CASE("HtmlSaver save() with real HTTP content from example.org", "[HtmlSaver][network]") {
 
     fs::create_directories(TEST_NET_DIR);
-    fs::create_directories(TEST_LINK_DIR);
+    fs::create_directories(TEST_LINK_FILE);
 
     // --- Fetch the page ------------------------------------------------------
     HttpClient client;
@@ -424,8 +396,7 @@ TEST_CASE("HtmlSaver save() with real HTTP content from example.org", "[HtmlSave
         response.body,
         EXAMPLE_URL,
         TEST_NET_DIR,
-        TEST_LINK_DIR,
-        TEST_LINK_DIR
+        TEST_LINK_FILE
     );
 
     REQUIRE(saver.save() == SUCCESS_CODE);
@@ -449,5 +420,5 @@ TEST_CASE("HtmlSaver save() with real HTTP content from example.org", "[HtmlSave
     // Note: TEST_NET_DIR is intentionally NOT cleaned — the file persists at
     // data/test_html/example_org.txt for manual inspection and for
     // baseHtmlParser tests that may want real-world HTML.
-    fs::remove_all(TEST_LINK_DIR);
+    fs::remove_all(TEST_LINK_FILE);
 }

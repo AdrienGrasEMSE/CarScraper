@@ -39,9 +39,8 @@ namespace CarScraper {
             std::string                     _name;          ///< File Name                      | ex : "SaveHtml1"
             std::string                     _content;       ///< HTML Content                   | ex : "File which contains a very interesting content..."
             std::string                     _link;          ///< Link to the HTML               | ex : "https://example.com/"
-            std::string                     _outputDir;     ///< Output Directory Path          | ex : "/data/save_html/"
-            std::string                     _inputLinkDir;  ///< Input Directory Path for link  | ex : "/data/save_link/"
-            std::string                     _outputLinkDir; ///< Output Directory Path for link | ex : "/data/save_link/"
+            std::string                     _outputDir;     ///< Output Directory Path          | ex : "/data/html/"
+            std::string                     _linkFile;      ///< Link File Path                 | ex : "/data/saved_link.json"
             std::unordered_set<std::string> _savedLink;     ///< All link to already saved HTML | ex : {"https://example.com/", "https://example.net/"}
 
 
@@ -77,8 +76,7 @@ namespace CarScraper {
                         const std::string& content,
                         const std::string& link,
                         const std::string& outputDir        = HTML_DIR,
-                        const std::string& inputLinkDir     = LINK_DIR,
-                        const std::string& outputLinkDir    = LINK_DIR
+                        const std::string& linkFile         = LINK_FILE
                     );
 
 
@@ -118,17 +116,10 @@ namespace CarScraper {
 
 
             /**
-             * @brief Gets the input directory path for the saved link
-             * @return The input directory path for the saved link
+             * @brief Gets the link file path
+             * @return The link file path
              */
-            const std::string& getInputLinkDir() const { return _inputLinkDir; }
-
-
-            /**
-             * @brief Gets the output directory path for the saved link
-             * @return The output directory path for the saved link
-             */
-            const std::string& getOutputLinkDir() const { return _outputLinkDir; }
+            const std::string& getLinkFile() const { return _linkFile; }
 
 
             /**
@@ -175,19 +166,11 @@ namespace CarScraper {
 
 
             /**
-             * @brief Set the input directory path for the saved link
-             * @param inputLinkDir The input directory path for the saved link
-             * @note checks if the directory exists
+             * @brief Set the link file
+             * @param linkFile The link file path
+             * @note checks if the file exists
              */
-            void setInputLinkDir(const std::string& inputLinkDir);
-
-
-            /**
-             * @brief Set the output directory path for the saved link
-             * @param outputLinkDir The output directory path for the saved link
-             * @note checks if the directory exists
-             */
-            void setOutputLinkDir(const std::string& outputLinkDir);
+            void setLinkFile(const std::string& linkFile);
 
 
 

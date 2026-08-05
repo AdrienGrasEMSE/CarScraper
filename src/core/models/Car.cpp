@@ -933,7 +933,7 @@ namespace CarScraper {
     /**
      * @brief Saves the car data to a file in JSON format
      * @return The path of the saved file
-     * @note This method will create a folder BRAND in the CAR_SAVE directory. Then a model folder, a generation folder (named MODEL-GENERATION) and finnaly a year folder.
+     * @note This method will create a folder BRAND in the CAR_DIR directory. Then a model folder, a generation folder (named MODEL-GENERATION) and finnaly a year folder.
      * The file will be named with the car full name : BRAND-MODEL-GENERATION-PHASE-ENGINE-TRIM (+ a number in case)
      */
     int Car::save() const {
@@ -962,9 +962,9 @@ namespace CarScraper {
         namespace fs = std::filesystem;
         fs::path directory;
         if (_generation == NONE_STR || _generation == DEFAULT_STR || _generation == ERROR_STR) {
-            directory = CAR_SAVE + _brand + "/" + _model + "/" + yearStr;
+            directory = CAR_DIR + _brand + "/" + _model + "/" + yearStr;
         } else {
-            directory = CAR_SAVE + _brand + "/" + _model + "/" + _model + "-" + _generation + "/" + yearStr;
+            directory = CAR_DIR + _brand + "/" + _model + "/" + _model + "-" + _generation + "/" + yearStr;
         }
 
 

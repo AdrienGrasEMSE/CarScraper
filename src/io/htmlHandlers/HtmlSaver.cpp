@@ -34,8 +34,7 @@ namespace CarScraper {
         _name           = DEFAULT_STR;
         _content        = DEFAULT_STR;
         _outputDir      = HTML_DIR;
-        _inputLinkDir   = LINK_DIR;
-        _outputLinkDir  = LINK_DIR;
+        _linkFile       = LINK_FILE;
     }
 
 
@@ -46,8 +45,7 @@ namespace CarScraper {
                             const std::string& content,
                             const std::string& link,
                             const std::string& outputDir,
-                            const std::string& inputLinkDir,
-                            const std::string& outputLinkDir
+                            const std::string& linkFile
                         ) : HtmlSaver() {
 
         // File details
@@ -55,8 +53,7 @@ namespace CarScraper {
         _content        = content;
         _link           = link;
         this->setOutputDir(outputDir);
-        this->setInputLinkDir(inputLinkDir);
-        this->setOutputLinkDir(outputLinkDir);
+        this->setLinkFile(linkFile);
 
     }
 
@@ -98,63 +95,26 @@ namespace CarScraper {
     
     
     /**
-     * @brief Set the input directory path for the saved link
-     * @param inputLinkDir The input directory path for the saved link
-     * @note checks if the directory exists
+     * @brief Set the link file
+     * @param linkFile The link file path
+     * @note checks if the file exists
     */
-    void HtmlSaver::setInputLinkDir(const std::string& inputLinkDir) {
+    void HtmlSaver::setLinkFile(const std::string& linkFile) {
 
         // Getting namespace
         namespace fs = std::filesystem;
 
 
-        // Checking if the directory exists
-        if (fs::exists(inputLinkDir)) {
-            _inputLinkDir = inputLinkDir;
+        // Checking if the file exists
+        if (fs::exists(linkFile)) {
+            _linkFile = linkFile;
         } else {
-            _inputLinkDir = LINK_DIR;
-            Logger::debug("[{}].setInputLinkDir : Directory {} does not exists", getFullId(), inputLinkDir);
+            _linkFile = LINK_FILE;
+            Logger::debug("[{}].setLinkFile : File {} does not exist", getFullId(), linkFile);
         }
-        Logger::trace("[{}].setInputLinkDir : {}", getFullId(), _inputLinkDir);
-
-
-        // If needed, adding the final /
-        if (_inputLinkDir.back() != '/') {
-            _inputLinkDir.push_back('/');
-        }
+        Logger::trace("[{}].setLinkFile : {}", getFullId(), _linkFile);
         
     }
-
-
-    /**
-     * @brief Set the output directory path for the saved link
-     * @param outputLinkDir The output directory path for the saved link
-     * @note checks if the directory exists
-    */
-    void HtmlSaver::setOutputLinkDir(const std::string& outputLinkDir) {
-
-        // Getting namespace
-        namespace fs = std::filesystem;
-
-
-        // Checking if the directory exists
-        if (fs::exists(outputLinkDir)) {
-            _outputLinkDir = outputLinkDir;
-        } else {
-            _outputLinkDir = LINK_DIR;
-            Logger::debug("[{}].setOutputLinkDir : Directory {} does not exists", getFullId(), outputLinkDir);
-        }
-        Logger::trace("[{}].setOutputLinkDir : {}", getFullId(), _outputLinkDir);
-
-
-        // If needed, adding the final /
-        if (_outputLinkDir.back() != '/') {
-            _outputLinkDir.push_back('/');
-        }
-        
-    }
-
-
 
 
 
@@ -222,14 +182,10 @@ namespace CarScraper {
      */
     int HtmlSaver::importSavedLink() {
         
-        // Create file path
-        const std::string path = _inputLinkDir + "saved_link.json";
-
-
         // File opening and error handling
-        std::ifstream file(path);
+        std::ifstream file(_linkFile);
         if (!file.is_open()) {
-            Logger::warn("[{}].importSavedLink() unable to open file {}", this->getFullId(), path);
+            Logger::warn("[{}].importSavedLink() unable to open file {}", this->getFullId(), _linkFile);
             return ERROR_CODE;
         }
 
@@ -241,7 +197,7 @@ namespace CarScraper {
 
         // Checking JSON format
         if (!jsonFile.is_array()) {
-            Logger::error("[{}].importSavedLink() : File {} is not a JSON array", this->getFullId(), path);
+            Logger::error("[{}].importSavedLink() : File {} is not a JSON array", this->getFullId(), _linkFile);
             return ERROR_CODE;
         }
 
@@ -251,7 +207,7 @@ namespace CarScraper {
 
             // Cheking if the entry is a string
             if (!item.is_string()) {
-                Logger::warn("[{}].importSavedLink() : non string entry ignored", this->getFullId(), path);
+                Logger::warn("[{}].importSavedLink() : non string entry ignored", this->getFullId(), _linkFile);
             } else {
                 _savedLink.insert(item.get<std::string>());
             }
@@ -260,7 +216,7 @@ namespace CarScraper {
 
 
         // Debug
-        Logger::trace("[{}].importSavedLink() : import success", this->getFullId(), path);
+        Logger::trace("[{}].importSavedLink() : import success", this->getFullId(), _linkFile);
         return SUCCESS_CODE;
 
     }
@@ -283,14 +239,10 @@ namespace CarScraper {
         }
 
 
-        // Create file path
-        const std::string path = _outputLinkDir + "saved_link.json";
-
-
         // File opening and error handling
-        std::ofstream file(path);
+        std::ofstream file(_linkFile);
         if (!file.is_open()) {
-            Logger::error("[{}].exportSavedLink() unable to open file {}", this->getFullId(), path);
+            Logger::error("[{}].exportSavedLink() unable to open file {}", this->getFullId(), _linkFile);
             return ERROR_CODE;
         }
 
@@ -301,7 +253,8 @@ namespace CarScraper {
             Logger::error("[{}].exportSavedLink() error during writting", this->getFullId());
             return ERROR_CODE;
         }
-        Logger::trace("[{}].exportSavedLink() the file has been written and saved ({})", this->getFullId(), path);
+        Logger::trace("[{}].exportSavedLink() the file has been written and saved ({})",
+            this->getFullId(), _linkFile);
         return SUCCESS_CODE;
 
     }

@@ -72,9 +72,9 @@ namespace CarScraper {
     // Default directory path
     // =========================================================================
 
-    inline const    std::string HTML_DIR        = "data/save_html/";    ///< Default path for the saved html directory
-    inline const    std::string LINK_DIR        = "data/save_link/";    ///< Default path for the saved link directory
-    inline const    std::string CAR_SAVE        = "data/save_car/";     ///< Default path for the saved car directory
-    inline const    std::string IN_XLSX_DIR     = "data/input_excel/";  ///< Default path for the excel input directory
+    inline const    std::string HTML_DIR        = "data/html/";             ///< Default path for the saved html directory
+    inline const    std::string LINK_FILE       = "data/saved_link.json";   ///< Default path for the saved link file
+    inline const    std::string CAR_DIR         = "data/car/";              ///< Default path for the saved car directory
+    inline const    std::string XLSX_DIR        = "data/excel/";            ///< Default path for the excel directory
 
 } // namespace CarScraper

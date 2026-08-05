@@ -6,25 +6,22 @@ src/main.cpp
 build/*
 !build/data/
 build/data/*
-!build/data/input_excel/
+!build/data/saved_link.json
+!build/data/excel/
+build/data/excel/*
+!build/data/excel/ExcelReaderTest.xlsx
 !build/data/test_html/
-build/data/input_excel/*
-!build/data/input_excel/ExcelReaderTest.xlsx
 build/data/test_html/*
 !build/data/test_html/htmlparser_test.html
 
 
 # Data folder
-data/save_car/*
-!data/save_car/.gitkeep
-data/input_excel/*
-!data/input_excel/.gitkeep
-data/save_html/*
-!data/save_html/.gitkeep
-data/save_link/*
-!data/save_link/.gitkeep
-data/test_save_html/*
-!data/test_save_html/.gitkeep
+data/car/*
+!data/car/.gitkeep
+data/excel/*
+!data/excel/.gitkeep
+data/html/*
+!data/html/.gitkeep
 
 
 # Documentation folder

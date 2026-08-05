@@ -123,11 +123,11 @@ namespace CarScraper {
     int CleanService::cleanLink() {
 
         // Debug
-        Logger::debug("[{}].cleanLink : start cleaning \"{}\"", getFullId(), LINK_DIR + "saved_link.json");
+        Logger::debug("[{}].cleanLink : start cleaning \"{}\"", getFullId(), LINK_FILE);
 
 
         // Reset saved link file
-        std::ofstream file(LINK_DIR + "saved_link.json", std::ios::trunc);
+        std::ofstream file(LINK_FILE, std::ios::trunc);
         try {
             if (file) {
                 file << "[\n]";
@@ -140,7 +140,7 @@ namespace CarScraper {
         
 
         // Debug
-        Logger::debug("[{}].cleanLink : finnich cleaning \"{}\"", getFullId(), LINK_DIR + "saved_link.json");
+        Logger::debug("[{}].cleanLink : finnich cleaning \"{}\"", getFullId(), LINK_FILE);
         return SUCCESS_CODE;
 
     }
