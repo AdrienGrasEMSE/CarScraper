@@ -43,6 +43,27 @@ static std::string readFile(const std::string& path) {
     return ss.str();
 }
 
+void deleteAllButNot(const std::string& fileToKeep) {
+    fs::path fileKept = fs::canonical(fileToKeep);
+    fs::path directory = fileKept.parent_path();
+    for (const auto& entry : fs::directory_iterator(directory)) {
+        if (!entry.is_regular_file())
+            continue;
+
+        if (fs::canonical(entry.path()) != fileKept) {
+            fs::remove(entry.path());
+        }
+    }
+}
+
+void deleteAll(const std::string& directory) {
+    for (const auto& entry : fs::directory_iterator(directory)) {
+        if (!entry.is_regular_file())
+            continue;
+        fs::remove(entry.path());
+    }
+}
+
 static void prepareDirectories() {
     fs::create_directories(TEST_HTML_DIR);
     std::ofstream file(TEST_LINK_FILE);
@@ -57,6 +78,7 @@ static void prepareDirectories() {
 static void cleanDirectories() {
     fs::remove_all(TEST_HTML_DIR);
     fs::remove(TEST_LINK_FILE);
+    deleteAllButNot(TEST_NET_DIR + "htmlparser_test.html");
 }
 
 
@@ -216,6 +238,8 @@ TEST_CASE("HtmlSaver save()", "[HtmlSaver][Save]") {
 
     SECTION("Filename collision — second file saved under dp_ name") {
 
+        deleteAll(TEST_HTML_DIR);
+
         // First save : crée page.txt
         HtmlSaver saver1(
             "page",
@@ -237,8 +261,8 @@ TEST_CASE("HtmlSaver save()", "[HtmlSaver][Save]") {
         );
         REQUIRE(saver2.save() == SUCCESS_CODE);
 
-        // Le fichier original ne doit pas avoir été écrasé
-        REQUIRE(readFile(TEST_HTML_DIR + "page.txt") == "<html>First</html>");
+        // Le fichier original doit pas avoir été renommé
+        REQUIRE(readFile(TEST_HTML_DIR + "dp_page_0.txt") == "<html>First</html>");
 
         // Le fichier de repli doit exister et contenir le bon contenu
         REQUIRE(fs::exists(TEST_HTML_DIR + "dp_page_1.txt"));
@@ -248,34 +272,51 @@ TEST_CASE("HtmlSaver save()", "[HtmlSaver][Save]") {
         REQUIRE(saver2.getName() == "page");
     }
 
-    SECTION("Filename collision — deux collisions successives") {
+    SECTION("Filename collision — plusieurs collisions successives") {
 
-        // Crée page.txt et dp_page_1.txt manuellement
-        { std::ofstream f(TEST_HTML_DIR + "page.txt");     f << "original"; }
-        { std::ofstream f(TEST_HTML_DIR + "dp_page_1.txt"); f << "first dp"; }
+        deleteAll(TEST_HTML_DIR);
 
+        // Crée page.txt manuellement
+        { std::ofstream f(TEST_HTML_DIR + "page.txt");     f << "dp0"; }
+
+        // Sauvegarde 3 fois
         HtmlSaver saver(
             "page",
-            "<html>Third</html>",
-            "https://example.com/third",
+            "dp1",
+            "https://example.com/1",
             TEST_HTML_DIR,
             TEST_LINK_FILE
         );
         REQUIRE(saver.save() == SUCCESS_CODE);
 
-        // Les deux fichiers existants sont intacts
-        REQUIRE(readFile(TEST_HTML_DIR + "page.txt")      == "original");
-        REQUIRE(readFile(TEST_HTML_DIR + "dp_page_1.txt") == "first dp");
+        saver.setContent("dp2");
+        saver.setLink("https://example.com/2");
+        REQUIRE(saver.save() == SUCCESS_CODE);
 
-        // Le troisième fichier atterrit en dp_page_2
+        saver.setContent("dp3");
+        saver.setLink("https://example.com/3");
+        REQUIRE(saver.save() == SUCCESS_CODE);
+
+        // Le fichier existant est renommé mais son contenu intact
+        REQUIRE(readFile(TEST_HTML_DIR + "dp_page_0.txt") == "dp0");
+
+        // Le 1er fichier atterrit en dp_page_1
+        REQUIRE(fs::exists(TEST_HTML_DIR + "dp_page_1.txt"));
+        REQUIRE(readFile(TEST_HTML_DIR + "dp_page_1.txt") == "dp1");
+
+        // Le 1er fichier atterrit en dp_page_2
         REQUIRE(fs::exists(TEST_HTML_DIR + "dp_page_2.txt"));
-        REQUIRE(readFile(TEST_HTML_DIR + "dp_page_2.txt") == "<html>Third</html>");
+        REQUIRE(readFile(TEST_HTML_DIR + "dp_page_2.txt") == "dp2");
+
+        // Le 1er fichier atterrit en dp_page_3
+        REQUIRE(fs::exists(TEST_HTML_DIR + "dp_page_3.txt"));
+        REQUIRE(readFile(TEST_HTML_DIR + "dp_page_3.txt") == "dp3");
 
         // _name toujours intact
         REQUIRE(saver.getName() == "page");
     }
 
-    cleanDirectories();
+    // cleanDirectories();
 }
 
 

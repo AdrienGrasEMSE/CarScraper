@@ -11,6 +11,7 @@
 // Imports
 #include "HtmlSaver.hpp"
 #include "core/logger/Logger.hpp"
+#include "core/utils/Validation.hpp"
 #include <nlohmann/json.hpp>
 #include <fstream>
 #include <filesystem>
@@ -136,24 +137,46 @@ namespace CarScraper {
             return ERROR_CODE;
         }
         if (_savedLink.contains(_link)) {
-            Logger::warn("[{}].save() HTML from {} already saved, action ignored", this->getFullId(), _link);
+            Logger::warn("[{}].save() HTML from \"{}\" already saved, action ignored", this->getFullId(), _link);
             return IGNORED_ACTION_CODE;
         }
 
 
         // Gettign and checking file path
         std::string effectiveName = _name;
-        std::string path          = _outputDir + effectiveName + ".txt";
+        std::string path          = effectiveName + ".txt";
         int         nb_dp         = 1;
-        while (std::filesystem::exists(path)) {
+        while (std::filesystem::exists(_outputDir + path) ||
+            std::filesystem::exists(_outputDir + "dp_" + Validation::removeSuffix(path, ".txt") + "_0.txt")) {
+
+            // Checking if it's the first collision with this file
+            if (nb_dp == 1 && !path.starts_with("dp_")) {
+
+                // Renaming the base file
+                std::string newPath = _outputDir + "dp_" + Validation::removeSuffix(path, ".txt") + "_0.txt";
+                try {
+                    std::filesystem::rename(_outputDir + path, newPath);
+                    Logger::warn("[{}].save() renamed \"{}\" into \"{}\"",
+                        this->getFullId(), _outputDir + path, newPath);
+                } catch (const std::filesystem::filesystem_error& e) {
+                    Logger::warn("[{}].save() unable to rename \"{}\" into \"{}\"",
+                        this->getFullId(), _outputDir + path, newPath);
+                }
+
+            }
+
+
+            // Updating current name
             effectiveName = "dp_" + _name + "_" + std::to_string(nb_dp);
-            path          = _outputDir + effectiveName + ".txt";
+            path          = effectiveName + ".txt";
             nb_dp++;
+
         }
         if (path != this->getFilePath()) {
-            Logger::warn("[{}].save() filename collision on {}, saving as {}",
-                this->getFullId(), this->getFilePath(), path);
+            Logger::warn("[{}].save() filename collision on \"{}\", saving as \"{}\"",
+            this->getFullId(), this->getFilePath(), _outputDir + path);
         }
+        path = _outputDir + path;
 
 
         // File opening and error handling
@@ -166,7 +189,7 @@ namespace CarScraper {
 
         // File writting and close
         file << _content;
-        Logger::trace("[{}].save() the file has been written and saved ({})", this->getFullId(), path);
+        Logger::trace("[{}].save() the file has been written and saved (\"{}\")", this->getFullId(), path);
 
 
         // Saving the link
