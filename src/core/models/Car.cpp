@@ -1175,53 +1175,104 @@ namespace CarScraper {
      */
     bool Car::isEqualTo(const Car& other) const {
         return
+
             // General
-            _brand              == other._brand             &&
-            _model              == other._model             &&
-            _generation         == other._generation        &&
-            _phase              == other._phase             &&
-            _engine             == other._engine            &&
-            _trim               == other._trim              &&
-            _price              == other._price             &&
+            this->_brand              == other._brand             &&
+            this->_model              == other._model             &&
+            this->_generation         == other._generation        &&
+            this->_phase              == other._phase             &&
+            this->_engine             == other._engine            &&
+            this->_trim               == other._trim              &&
+            this->_price              == other._price             &&
 
             // Dimensions
-            _height             == other._height            &&
-            _length             == other._length            &&
-            _width              == other._width             &&
-            _weight             == other._weight            &&
+            this->_height             == other._height            &&
+            this->_length             == other._length            &&
+            this->_width              == other._width             &&
+            this->_weight             == other._weight            &&
 
             // Liveability
-            _trunkVolume        == other._trunkVolume       &&
-            _doorCount          == other._doorCount         &&
-            _seatCount          == other._seatCount         &&
+            this->_trunkVolume        == other._trunkVolume       &&
+            this->_doorCount          == other._doorCount         &&
+            this->_seatCount          == other._seatCount         &&
 
             // Transmission
-            _gearboxType        == other._gearboxType       &&
-            _gearCount          == other._gearCount         &&
+            this->_gearboxType        == other._gearboxType       &&
+            this->_gearCount          == other._gearCount         &&
 
             // Power
-            _fuelType           == other._fuelType          &&
-            _horsePower         == other._horsePower        &&
-            _taxHorsePower      == other._taxHorsePower     &&
+            this->_fuelType           == other._fuelType          &&
+            this->_horsePower         == other._horsePower        &&
+            this->_taxHorsePower      == other._taxHorsePower     &&
 
             // Consumption
-            _tankCapacity       == other._tankCapacity      &&
-            _fuelConsumption    == other._fuelConsumption   &&
-            _co2Emissions       == other._co2Emissions      &&
-            _co2Class           == other._co2Class;
+            this->_tankCapacity       == other._tankCapacity      &&
+            this->_fuelConsumption    == other._fuelConsumption   &&
+            this->_co2Emissions       == other._co2Emissions      &&
+            this->_co2Class           == other._co2Class;
     }
 
 
     /**
      * @brief checks if two car object likely represent the same car model
-     * @details Uses brand, model, dimensions, gearboxType, fuelType, taxHorsePower and commercialisation start (only the year)
-     * to determine if the two object are equivalent. The horsePower is more precise on largus and writtings like trim or engine
-     * are not exactly the same.
+     * @details Brands, models, heights, widths, lenghts, seatCount, gearboxType, fuelType, taxHorsePower and commercialisation
+     * start (only the year) must be at least equals to determine if the two object are equivalent. But it needs one more
+     * check to be true, from the most precise to the less one :
+     * - equal trims
+     * - equal engines
+     * - equal horsePower (5 hp allowance)
+     * - equal weight (50 kg allowance)
+     * - equal prices (500 € allowance)
      * @return true or false wheter the two cars are equivalent
-     * @note The horse power attributes is used but with a margin error of 5 hp
+     * @note String comparaison are case insensitive
      */
     bool Car::isEquivalentTo(const Car& other) const {
-        return this->isEqualTo(other);
+
+        // Checking basic attributes
+        bool base =
+            Validation::toLowerCase(this->_brand) == Validation::toLowerCase(other._brand) &&
+            Validation::toLowerCase(this->_model) == Validation::toLowerCase(other._model) &&
+            this->_height           == other._height        &&
+            this->_length           == other._length        &&
+            this->_width            == other._width         &&
+            this->_seatCount        == other._seatCount     &&
+            this->_gearboxType      == other._gearboxType   &&
+            this->_fuelType         == other._fuelType      &&
+            this->_taxHorsePower    == other._taxHorsePower;
+
+        
+        // If the basic check is valid, and the two object have the same commercialisation start year, we can suppose they are likely the same
+        if (base && this->_commercialisationStart && other._commercialisationStart &&
+            this->_commercialisationStart->year() == other._commercialisationStart->year()) {
+
+            // If trim are written the same way, then the two cars are definitly the same
+            if (Validation::toLowerCase(this->_trim) == Validation::toLowerCase(other._trim)) {
+                return true;
+            }
+
+            // If engines are written the same way, then the two cars are definitly the same
+            if (Validation::toLowerCase(this->_engine) == Validation::toLowerCase(other._engine)) {
+                return true;
+            }
+
+            // If the horse power are the same (within a margin error), then the two cars are the same
+            if (abs(this->_horsePower - other._horsePower) <= 5) {
+                return true;
+            }
+
+            // If the weight are the same (within a margin error), then the two cars are the same
+            if (abs(this->_weight - other._weight) <= 50) {
+                return true;
+            }
+
+            // If prices are the same (within a margin error), then the two cars are the same
+            if (abs(this->_price - other._price) <= 500) {
+                return true;
+            }
+
+        }
+        return false;
+
     }
 
 

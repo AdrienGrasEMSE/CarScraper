@@ -1397,3 +1397,205 @@ TEST_CASE("Car operator isEqual, == and !=", "[car][operator][equalities]") {
     }
 
 }
+
+TEST_CASE("Car operator isEquivalent", "[car][operator][equivalence]") {
+
+    // ---- Same car ------------------------------------------------------------------------------
+    SECTION("isEquivalent is true when cars are the same") {
+        Car c1 = buildValidCar();
+        Car c2 = c1;
+        REQUIRE(c1.isEquivalentTo(c2));
+        REQUIRE(c2.isEquivalentTo(c1));
+    }
+
+    SECTION("isEquivalent is case insensitve with brand and model") {
+        Car c1 = buildValidCar();
+        Car c2 = c1;
+        c2.setBrand("ToyOTa");
+        REQUIRE(c1.isEquivalentTo(c2));
+        c2.setModel("corOLLa");
+        REQUIRE(c1.isEquivalentTo(c2));
+    }
+
+
+    // ---- Equivalent cars -----------------------------------------------------------------------
+    SECTION("isEquivalent spots two car with the same trim (case-insensitive)") {
+        Car c1 = buildValidCar();
+        Car c2;
+        c2.setBrand                  ("Toyota");
+        c2.setModel                  ("Corolla");
+        c2.setTrim                   ("DYNAMIC");
+        c2.setHeight                 (1.43);
+        c2.setLength                 (4.37);
+        c2.setWidth                  (1.79);
+        c2.setSeatCount              (5);
+        c2.setGearboxType            (GearboxType::AUTOMATIC);
+        c2.setFuelType               (FuelType::EE);
+        c2.setTaxHorsePower          (6);
+        c2.setCommercialisationStart ("01/01/2019");
+        REQUIRE(c1.isEquivalentTo(c2));
+    }
+
+    SECTION("isEquivalent spots two car with the same egine (case-insensitive)") {
+        Car c1 = buildValidCar();
+        Car c2;
+        c2.setBrand                  ("Toyota");
+        c2.setModel                  ("Corolla");
+        c2.setEngine                 ("1.8L HYBRID");
+        c2.setHeight                 (1.43);
+        c2.setLength                 (4.37);
+        c2.setWidth                  (1.79);
+        c2.setSeatCount              (5);
+        c2.setGearboxType            (GearboxType::AUTOMATIC);
+        c2.setFuelType               (FuelType::EE);
+        c2.setTaxHorsePower          (6);
+        c2.setCommercialisationStart ("01/01/2019");
+        REQUIRE(c1.isEquivalentTo(c2));
+    }
+
+    SECTION("isEquivalent spots two car with the same horsePower (5 hp allowance)") {
+        Car c1 = buildValidCar();
+        Car c2;
+        c2.setBrand                  ("Toyota");
+        c2.setModel                  ("Corolla");
+        c2.setHeight                 (1.43);
+        c2.setLength                 (4.37);
+        c2.setWidth                  (1.79);
+        c2.setSeatCount              (5);
+        c2.setGearboxType            (GearboxType::AUTOMATIC);
+        c2.setFuelType               (FuelType::EE);
+        c2.setHorsePower             (122);
+        c2.setTaxHorsePower          (6);
+        c2.setCommercialisationStart ("01/01/2019");
+        REQUIRE(c1.isEquivalentTo(c2));
+        c2.setHorsePower(127);
+        REQUIRE(c1.isEquivalentTo(c2));
+        c2.setHorsePower(117);
+        REQUIRE(c1.isEquivalentTo(c2));
+    }
+
+    SECTION("isEquivalent spots two car with the same weight (50 kg allowance)") {
+        Car c1 = buildValidCar();
+        Car c2;
+        c2.setBrand                  ("Toyota");
+        c2.setModel                  ("Corolla");
+        c2.setEngine                 ("1.8L HYBRID");
+        c2.setHeight                 (1.43);
+        c2.setLength                 (4.37);
+        c2.setWidth                  (1.79);
+        c2.setWeight                 (1375);
+        c2.setSeatCount              (5);
+        c2.setGearboxType            (GearboxType::AUTOMATIC);
+        c2.setFuelType               (FuelType::EE);
+        c2.setTaxHorsePower          (6);
+        c2.setCommercialisationStart ("01/01/2019");
+        REQUIRE(c1.isEquivalentTo(c2));
+        c2.setWeight(1325);
+        REQUIRE(c1.isEquivalentTo(c2));
+        c2.setWeight(1425);
+        REQUIRE(c1.isEquivalentTo(c2));
+    }
+
+    SECTION("isEquivalent spots two car with the same price (500 € allowance)") {
+        Car c1 = buildValidCar();
+        Car c2;
+        c2.setBrand                  ("Toyota");
+        c2.setModel                  ("Corolla");
+        c2.setEngine                 ("1.8L HYBRID");
+        c2.setPrice                  (25000);
+        c2.setHeight                 (1.43);
+        c2.setLength                 (4.37);
+        c2.setWidth                  (1.79);
+        c2.setSeatCount              (5);
+        c2.setGearboxType            (GearboxType::AUTOMATIC);
+        c2.setFuelType               (FuelType::EE);
+        c2.setTaxHorsePower          (6);
+        c2.setCommercialisationStart ("01/01/2019");
+        REQUIRE(c1.isEquivalentTo(c2));
+        c2.setPrice(24500);
+        REQUIRE(c1.isEquivalentTo(c2));
+        c2.setPrice(25500);
+        REQUIRE(c1.isEquivalentTo(c2));
+    }
+
+
+    // ---- Not equivalent cars -------------------------------------------------------------------
+    SECTION("isEquivalent is false when not enough info") {
+        Car c1 = buildValidCar();
+        Car c2;
+        c2.setBrand                  ("Toyota");
+        c2.setModel                  ("Corolla");
+        c2.setHeight                 (1.43);
+        c2.setLength                 (4.37);
+        c2.setWidth                  (1.79);
+        c2.setSeatCount              (5);
+        c2.setGearboxType            (GearboxType::AUTOMATIC);
+        c2.setFuelType               (FuelType::EE);
+        c2.setTaxHorsePower          (6);
+        c2.setCommercialisationStart ("01/01/2019");
+        REQUIRE_FALSE(c1.isEquivalentTo(c2));
+        REQUIRE_FALSE(c2.isEquivalentTo(c1));
+    }
+
+    SECTION("isEquivalent is false when year are different") {
+        Car c1 = buildValidCar();
+        Car c2;
+        c2.setBrand                  ("Toyota");
+        c2.setModel                  ("Corolla");
+        c2.setTrim                   ("DYNAMIC");
+        c2.setHeight                 (1.43);
+        c2.setLength                 (4.37);
+        c2.setWidth                  (1.79);
+        c2.setSeatCount              (5);
+        c2.setGearboxType            (GearboxType::AUTOMATIC);
+        c2.setFuelType               (FuelType::EE);
+        c2.setTaxHorsePower          (6);
+        c2.setCommercialisationStart ("01/01/2018");
+        REQUIRE_FALSE(c1.isEquivalentTo(c2));
+    }
+
+    SECTION("isEquivalent does not throw when date is not set and is false") {
+        Car c1 = buildValidCar();
+        Car c2;
+        c2.setBrand                  ("Toyota");
+        c2.setModel                  ("Corolla");
+        c2.setTrim                   ("DYNAMIC");
+        c2.setHeight                 (1.43);
+        c2.setLength                 (4.37);
+        c2.setWidth                  (1.79);
+        c2.setSeatCount              (5);
+        c2.setGearboxType            (GearboxType::AUTOMATIC);
+        c2.setFuelType               (FuelType::EE);
+        c2.setTaxHorsePower          (6);
+        REQUIRE_NOTHROW(c1.isEquivalentTo(c2));
+        REQUIRE_NOTHROW(c2.isEquivalentTo(c1));
+        REQUIRE_FALSE(c1.isEquivalentTo(c2));
+    }
+
+    SECTION("isEquivalent is false when basic check not true") {
+        Car c1 = buildValidCar();
+        Car c2 = c1;
+        REQUIRE(c1.isEquivalentTo(c2));
+        c2.setBrand("Toyot");
+        REQUIRE_FALSE(c1.isEquivalentTo(c2));
+        c2.setBrand("Toyota");
+        c2.setModel("Coroll");
+        REQUIRE_FALSE(c1.isEquivalentTo(c2));
+        c2.setModel("Corolla");
+        c2.setHeight(1.42);
+        REQUIRE_FALSE(c1.isEquivalentTo(c2));
+        c2.setHeight(1.43);
+        c2.setSeatCount(4);
+        REQUIRE_FALSE(c1.isEquivalentTo(c2));
+        c2.setSeatCount(5);
+        c2.setGearboxType(GearboxType::MANUAL);
+        REQUIRE_FALSE(c1.isEquivalentTo(c2));
+        c2.setGearboxType(GearboxType::AUTOMATIC);
+        c2.setFuelType(FuelType::GO);
+        REQUIRE_FALSE(c1.isEquivalentTo(c2));
+        c2.setFuelType(FuelType::EE);
+        c2.setTaxHorsePower(5);
+        REQUIRE_FALSE(c1.isEquivalentTo(c2));
+    }
+
+}
