@@ -99,6 +99,7 @@ namespace CarScraper {
             // Technical Data
             CarScraper::DataSource  _dataSource;        ///< Car data source                    | ex: ARGUS / CARADISIAC
             std::string             _sourceFile;        ///< Car source file                    | ex: "data/save_car/RENAULT/Fluence/2009/RENAULT-Fluence-1.5 dCi85-Expression.json"
+            bool                    _duplicatedSource;  ///< Is from a duplicated source ?      | ex: true
 
 
 
@@ -295,6 +296,12 @@ namespace CarScraper {
              *  @return The source file of the car
              */
             const std::string& getSourceFile() const { return _sourceFile; }
+
+
+            /** @brief Gets whether the car is from a duplicated source
+             *  @return Whether the car from a duplicated source
+             */
+            bool isFromDuplicatedSource() const { return _duplicatedSource; }
 
 
 
@@ -583,6 +590,13 @@ namespace CarScraper {
              * exist, an error message is logged and the value is not set.
              */
             void setSourceFile(const std::string& sourceFile);
+
+
+            /**
+             * @brief Sets the from duplicated source value
+             * @param duplicatedSource The from duplicated source value
+             */
+            void setFromDuplicatedSource(bool duplicatedSource);
 
 
 

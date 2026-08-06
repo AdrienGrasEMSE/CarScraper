@@ -81,6 +81,8 @@ namespace CarScraper {
 
         // Technical Data
         _dataSource         = CarScraper::DataSource::NA;
+        _sourceFile         = NONE_STR;
+        _duplicatedSource   = false;
 
     }
 
@@ -703,6 +705,15 @@ namespace CarScraper {
             Logger::trace("[{}].set{} value: {}", this->getFullId(), "SourceFile", _sourceFile);
         }
 
+    }
+
+
+    /**
+     * @brief Sets the from duplicated source value
+     * @param duplicatedSource The from duplicated source value
+     */
+    void Car::setFromDuplicatedSource(bool duplicatedSource) {
+        this->_duplicatedSource = duplicatedSource;
     }
 
 
