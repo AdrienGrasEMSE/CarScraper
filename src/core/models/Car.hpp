@@ -627,6 +627,14 @@ namespace CarScraper {
             std::string toString() const;
 
 
+
+
+
+            // =========================================================================
+            // JSON
+            // =========================================================================
+
+
             /**
              * @brief Saves the car data to a file in JSON format
              * @return The path of the saved file
@@ -642,6 +650,20 @@ namespace CarScraper {
              * @return SUCCESS_CODE or ERROR_CODE wheter the load is successful or not
              */
             int load(const std::string& filePath);
+
+
+
+
+
+            // =========================================================================
+            // Class-internal Operators
+            // =========================================================================
+
+            /**
+             * @brief Operator == overload
+             * @note Checks all attributes except commercialisation and technical data
+             */
+            bool operator==(const Car& other) const;
 
     };
 

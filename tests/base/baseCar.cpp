@@ -13,6 +13,7 @@
 
 // Imports
 #include <catch2/catch.hpp>
+#include "core/enum/DataSource.hpp"
 #include "core/enum/FuelType.hpp"
 #include "core/enum/GearboxType.hpp"
 #include "core/enum/Co2Class.hpp"
@@ -59,6 +60,8 @@ static Car buildValidCar() {
     c.setCommercialisationStart ("01/01/2019");
     c.setStillInSale            (true);
     c.setDataSource             (DataSource::ARGUS);
+    c.setSourceFile             ("Some source");
+    c.setFromDuplicatedSource   (true);
     return c;
 }
 
@@ -1220,7 +1223,7 @@ TEST_CASE("Car isComplete and isValid", "[car][utilities]") {
 
 
 // =============================================================================
-// Tests — toString / operator<<
+// Tests — toString
 // =============================================================================
 
 TEST_CASE("Car toString", "[car][tostring]") {
@@ -1296,7 +1299,13 @@ TEST_CASE("Car toString", "[car][tostring]") {
 }
 
 
-TEST_CASE("Car operator<<", "[car][tostring][operator]") {
+
+
+// =============================================================================
+// Tests — Operator << / ==
+// =============================================================================
+
+TEST_CASE("Car operator<<", "[car][operator][stream]") {
 
     SECTION("Stream insertion produces the same output as toString()") {
         Car c = buildValidCar();
@@ -1321,4 +1330,56 @@ TEST_CASE("Car operator<<", "[car][tostring][operator]") {
         REQUIRE(s.find("--- end ---") != std::string::npos);
         REQUIRE(s.find(c.getFullId()) != std::string::npos);
     }
+
+}
+
+
+TEST_CASE("Car operator ==", "[car][operator][equal]") {
+
+    SECTION("== Identifies two identic cars") {
+        Car c1 = buildValidCar();
+        Car c2 = buildValidCar();
+        REQUIRE(c1 == c2);
+    }
+
+
+    SECTION("== Ignore Commercialisation") {
+        Car c1 = buildValidCar();
+        Car c2 = buildValidCar();
+        Car c3 = buildValidCar();
+        c2.setCommercialisationStart("01/01/2009");
+        c2.setCommercialisationEnd("01/01/2023");
+        REQUIRE(c1 == c2);
+        REQUIRE(c1 == c3);
+        REQUIRE(c2 == c3);
+    }
+
+
+    SECTION("== Ignore Commercialisation") {
+        Car c1 = buildValidCar();
+        Car c2 = buildValidCar();
+        Car c3 = buildValidCar();
+        c2.setCommercialisationStart("01/01/2009");
+        c2.setCommercialisationEnd("01/01/2023");
+        REQUIRE(c1 == c2);
+        REQUIRE(c1 == c3);
+        REQUIRE(c2 == c3);
+    }
+
+
+    SECTION("== Ignore Technical Data") {
+        Car c1 = buildValidCar();
+        Car c2 = buildValidCar();
+        Car c3 = buildValidCar();
+        Car c4 = buildValidCar();
+        c2.setDataSource(DataSource::CARADISIAC);
+        c2.setSourceFile("Another file");
+        REQUIRE(c1 == c2);
+        REQUIRE(c1 == c3);
+        REQUIRE(c1 == c4);
+        REQUIRE(c2 == c3);
+        REQUIRE(c2 == c4);
+        REQUIRE(c3 == c4);
+    }
+
 }

@@ -941,6 +941,13 @@ namespace CarScraper {
     }
 
 
+
+
+
+    // =========================================================================
+    // JSON
+    // =========================================================================
+
     /**
      * @brief Saves the car data to a file in JSON format
      * @return The path of the saved file
@@ -1154,9 +1161,56 @@ namespace CarScraper {
     }
 
 
+
+
+
     // =========================================================================
     // Operator overload
     // =========================================================================
+
+    /**
+     * @brief Operator == overload
+     * @note Checks all attributes except commercialisation and technical data
+     */
+    bool Car::operator==(const Car& other) const {
+        return
+            // General
+            _brand              == other._brand             &&
+            _model              == other._model             &&
+            _generation         == other._generation        &&
+            _phase              == other._phase             &&
+            _engine             == other._engine            &&
+            _trim               == other._trim              &&
+            _price              == other._price             &&
+
+            // Dimensions
+            _height             == other._height            &&
+            _length             == other._length            &&
+            _width              == other._width             &&
+            _weight             == other._weight            &&
+
+            // Liveability
+            _trunkVolume        == other._trunkVolume       &&
+            _doorCount          == other._doorCount         &&
+            _seatCount          == other._seatCount         &&
+
+            // Transmission
+            _gearboxType        == other._gearboxType       &&
+            _gearCount          == other._gearCount         &&
+
+            // Power
+            _fuelType           == other._fuelType          &&
+            _horsePower         == other._horsePower        &&
+            _taxHorsePower      == other._taxHorsePower     &&
+
+            // Consumption
+            _tankCapacity       == other._tankCapacity      &&
+            _fuelConsumption    == other._fuelConsumption   &&
+            _co2Emissions       == other._co2Emissions      &&
+            _co2Class           == other._co2Class;
+            
+    }
+
 
     /**
      * @brief Operator << overload for the stream compatibility (uses the Car.toString() method)
