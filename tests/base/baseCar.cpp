@@ -60,7 +60,6 @@ static Car buildValidCar() {
     c.setCommercialisationStart ("01/01/2019");
     c.setStillInSale            (true);
     c.setDataSource             (DataSource::ARGUS);
-    c.setSourceFile             ("Some source");
     c.setFromDuplicatedSource   (true);
     return c;
 }
@@ -1302,7 +1301,7 @@ TEST_CASE("Car toString", "[car][tostring]") {
 
 
 // =============================================================================
-// Tests — Operator << / ==
+// Tests — Operators
 // =============================================================================
 
 TEST_CASE("Car operator<<", "[car][operator][stream]") {
@@ -1334,31 +1333,50 @@ TEST_CASE("Car operator<<", "[car][operator][stream]") {
 }
 
 
-TEST_CASE("Car operator ==", "[car][operator][equal]") {
+TEST_CASE("Car operator isEqual, == and !=", "[car][operator][equalities]") {
 
+    SECTION("isEqual Identifies two identic cars") {
+        Car c1 = buildValidCar();
+        Car c2 = c1;
+        REQUIRE(c1.isEqualTo(c2));
+    }
+
+    SECTION("isEqual Identifies two different cars") {
+        Car c1 = buildValidCar();
+        Car c2 = c1;
+        c2.setBrand("Another");
+        REQUIRE_FALSE(c1.isEqualTo(c2));
+        c2 = c1;
+        c2.setHeight(4);
+        REQUIRE_FALSE(c1.isEqualTo(c2));
+        c2 = c1;
+        c2.setGearboxType(GearboxType::MANUAL);
+        REQUIRE_FALSE(c1.isEqualTo(c2));
+    }
+    
     SECTION("== Identifies two identic cars") {
         Car c1 = buildValidCar();
-        Car c2 = buildValidCar();
+        Car c2 = c1;
         REQUIRE(c1 == c2);
     }
 
-
-    SECTION("== Ignore Commercialisation") {
+    SECTION("!= Identifies two different cars") {
         Car c1 = buildValidCar();
-        Car c2 = buildValidCar();
-        Car c3 = buildValidCar();
-        c2.setCommercialisationStart("01/01/2009");
-        c2.setCommercialisationEnd("01/01/2023");
-        REQUIRE(c1 == c2);
-        REQUIRE(c1 == c3);
-        REQUIRE(c2 == c3);
+        Car c2 = c1;
+        c2.setBrand("Another");
+        REQUIRE(c1 != c2);
+        c2 = c1;
+        c2.setHeight(4);
+        REQUIRE(c1 != c2);
+        c2 = c1;
+        c2.setGearboxType(GearboxType::MANUAL);
+        REQUIRE(c1 != c2);
     }
 
-
     SECTION("== Ignore Commercialisation") {
         Car c1 = buildValidCar();
-        Car c2 = buildValidCar();
-        Car c3 = buildValidCar();
+        Car c2 = c1;
+        Car c3 = c1;
         c2.setCommercialisationStart("01/01/2009");
         c2.setCommercialisationEnd("01/01/2023");
         REQUIRE(c1 == c2);
@@ -1369,17 +1387,13 @@ TEST_CASE("Car operator ==", "[car][operator][equal]") {
 
     SECTION("== Ignore Technical Data") {
         Car c1 = buildValidCar();
-        Car c2 = buildValidCar();
-        Car c3 = buildValidCar();
-        Car c4 = buildValidCar();
+        Car c2 = c1;
+        Car c3 = c1;
         c2.setDataSource(DataSource::CARADISIAC);
-        c2.setSourceFile("Another file");
+        c3.setFromDuplicatedSource(false);
         REQUIRE(c1 == c2);
         REQUIRE(c1 == c3);
-        REQUIRE(c1 == c4);
         REQUIRE(c2 == c3);
-        REQUIRE(c2 == c4);
-        REQUIRE(c3 == c4);
     }
 
 }

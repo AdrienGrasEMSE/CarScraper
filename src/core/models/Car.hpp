@@ -660,10 +660,40 @@ namespace CarScraper {
             // =========================================================================
 
             /**
+             * @brief checks if a Car is strictly identic to another one
+             * @return true or false wheter the two cars are the same
+             * @note Ignore commercialisation and technical attributes
+             */
+            bool isEqualTo(const Car& other) const;
+
+
+            /**
+             * @brief checks if two car object likely represent the same car model
+             * @details Uses brand, model, dimensions, gearboxType, fuelType, taxHorsePower and commercialisation start (only the year)
+             * to determine if the two object are equivalent. The horsePower is more precise on largus and writtings like trim or engine
+             * are not exactly the same.
+             * @return true or false wheter the two cars are equivalent
+             * @note The horse power attributes is used but with a margin error of 5 hp
+             */
+            bool isEquivalentTo(const Car& other) const;
+
+
+            /**
              * @brief Operator == overload
-             * @note Checks all attributes except commercialisation and technical data
+             * @details Uses Car::isEqualTo()
+             * @return true or false wheter the two cars are the same
+             * @note Ignore commercialisation and technical attributes
              */
             bool operator==(const Car& other) const;
+
+
+            /**
+             * @brief Operator != overload
+             * @details Uses Car::isEqualTo()
+             * @return true or false wheter the two cars are not the same
+             * @note Ignore commercialisation and technical attributes
+             */
+            bool operator!=(const Car& other) const;
 
     };
 
