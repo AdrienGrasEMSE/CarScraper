@@ -183,16 +183,16 @@ namespace CarScraper {
     // Main logic
     // =========================================================================
 
-    /**
-     * @brief Maps the technical sheet to a Car entity
-     * @return ERROR_CODE / SUCCESS_CODE wheter the method is succesful or not
-     * @note Generic method to implement
-     */
-    int GenericCarMapper::mapToCar() {
+    // /**
+    //  * @brief Maps the technical sheet to a Car entity
+    //  * @return ERROR_CODE / SUCCESS_CODE wheter the method is succesful or not
+    //  * @note Generic method to implement
+    //  */
+    // int GenericCarMapper::mapToCar() {
 
-        Logger::error("[{}].mapToCar : to implement", getFullId());
-        return IGNORED_ACTION_CODE;
+    //     Logger::error("[{}].mapToCar : to implement", getFullId());
+    //     return IGNORED_ACTION_CODE;
 
-    }
+    // }
 
 } // namespace CarScraper

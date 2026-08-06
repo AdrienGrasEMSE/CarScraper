@@ -41,6 +41,7 @@ public:
     int         toIntPublic(std::optional<std::string>& str)    { return toInt(str); }
     double      toDoublePublic(std::optional<std::string>& str) { return toDouble(str); }
     std::string readFilePublic(const std::string& path) { return readFile(path); }
+    int         mapToCar() override {return 0;}
 };
 
 
@@ -87,6 +88,7 @@ TEST_CASE("GenericCarMapper Entity Inheritance", "[genericmapper][entity]") {
     SECTION("Default GenericCarMapper prefix (no arg) is MAPPER") {
         class DefaultMapper : public GenericCarMapper {
             public: DefaultMapper() : GenericCarMapper() {}
+            int mapToCar() override {return 0;}
         };
         DefaultMapper mapper;
         REQUIRE(mapper.getPrefix() == "MAPPER");
@@ -380,11 +382,6 @@ TEST_CASE("GenericCarMapper readFile", "[genericmapper][helper][readFile]") {
 
 TEST_CASE("GenericCarMapper mapToCar", "[genericmapper][mapToCar]") {
 
-    SECTION("Base mapToCar returns IGNORED_ACTION_CODE") {
-        TestMapper mapper;
-        REQUIRE(mapper.mapToCar() == IGNORED_ACTION_CODE);
-    }
-
     SECTION("Base mapToCar does not throw") {
         TestMapper mapper;
         REQUIRE_NOTHROW(mapper.mapToCar());
@@ -395,10 +392,5 @@ TEST_CASE("GenericCarMapper mapToCar", "[genericmapper][mapToCar]") {
         mapper.mapToCar();
         REQUIRE_FALSE(mapper.getCar().isComplete());
     }
-
-    SECTION("Base mapToCar without an input file still returns IGNORED_ACTION_CODE") {
-        TestMapper mapper;
-        REQUIRE(mapper.getInputFile() == DEFAULT_STR);
-        REQUIRE(mapper.mapToCar() == IGNORED_ACTION_CODE);
-    }
+    
 }

@@ -105,6 +105,9 @@ namespace CarScraper {
             GenericCarMapper(const std::string& prefix);
 
 
+            virtual ~GenericCarMapper() = default;
+
+
 
 
             
@@ -153,7 +156,7 @@ namespace CarScraper {
              * @return ERROR_CODE / SUCCESS_CODE wheter the method is succesful or not
              * @note Generic method to implement
              */
-            virtual int mapToCar();
+            virtual int mapToCar() = 0;
 
     };
 
