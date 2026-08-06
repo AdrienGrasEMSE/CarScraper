@@ -28,6 +28,7 @@
 #include "base/baseGenericCarMapper.cpp"
 #include "base/baseArgusMapper.cpp"
 #include "base/baseCaradisiacMapper.cpp"
+#include "base/baseRobotsPolicy.cpp"
 
 
 // =============================================================================
